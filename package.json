@@ -38,6 +38,7 @@
     "@nestjs/throttler": "^5.1.2",
     "@prisma/client": "5.12.1",
     "@types/ua-parser-js": "^0.7.39",
+    "antd-style": "^3.6.2",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "bull": "^4.12.2",
