@@ -1,7 +1,7 @@
 /*
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-05-20 18:34:10
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-06-27 10:40:44
  * @FilePath: \meimei-prisma-vue3\meimei-admin\src\modules\common\upload\upload.module.ts
  * @Description:

@@ -1,7 +1,7 @@
 <!--
- * @Author: sheng.jiang 87789771@qq.com
+ * @Author: sheng.jiang 491623426@qq.com
  * @Date: 2024-02-19 15:23:14
- * @LastEditors: sheng.jiang 87789771@qq.com
+ * @LastEditors: sheng.jiang 491623426@qq.com
  * @LastEditTime: 2024-02-21 14:08:59
  * @FilePath: /耗材前端/src/views/basicData/hospitalManagement/hospitalInformation/index.vue
  * @Description: 医院基本信息

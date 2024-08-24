@@ -1,7 +1,7 @@
 /*
- * @Author: sheng.jiang 87789771@qq.com
+ * @Author: sheng.jiang 491623426@qq.com
  * @Date: 2023-06-30 08:34:42
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-18 11:57:42
  * @FilePath: /meimei-new-vue/vite/plugins/index.js
  * @Description: 

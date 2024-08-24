@@ -1,7 +1,7 @@
 /*
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-05-11 20:53:17
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-15 17:22:44
  * @FilePath: \meimei-new\src\modules\sys\sys-notice\sys-notice.controller.ts
  * @Description:

@@ -1,16 +1,16 @@
 /*
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-05-16 16:11:52
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-18 15:53:39
  * @FilePath: /meimei-new/src/modules/monitor/online/online.controller.ts
  * @Description:
  *
  */
 /*
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-05-16 16:11:52
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-16 17:01:09
  * @FilePath: \meimei-new\src\modules\monitor\online\online.controller.ts
  * @Description:

@@ -1,7 +1,7 @@
 <!--
- * @Author: sheng.jiang 87789771@qq.com
+ * @Author: sheng.jiang 491623426@qq.com
  * @Date: 2024-02-19 15:23:14
- * @LastEditors: sheng.jiang 87789771@qq.com
+ * @LastEditors: sheng.jiang 491623426@qq.com
  * @LastEditTime: 2024-02-28 16:29:26
  * @FilePath: /耗材前端/src/views/basicData/supplierManagement/supplierCompare/index.vue
  * @Description: 供应商商品

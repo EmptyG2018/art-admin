@@ -2,9 +2,9 @@ import { IsOptional, IsString } from 'class-validator';
 import { Excel } from 'src/modules/common/excel/excel.decorator';
 
 /*
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-04-28 10:26:49
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-17 10:25:34
  * @FilePath: \meimei-new\src\common\dto\data-base.dto.ts
  * @Description: 基础类型

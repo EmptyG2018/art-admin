@@ -1,7 +1,7 @@
 /*
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-04-27 16:58:02
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-04-28 22:58:59
  * @FilePath: /meimei-new/src/common/dto/params.dto.ts
  * @Description:

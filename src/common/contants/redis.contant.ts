@@ -1,7 +1,7 @@
 /*
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-04-24 21:57:34
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-17 20:11:34
  * @FilePath: /meimei-new/src/common/contants/redis.contant.ts
  * @Description: reids缓存信息的key前缀

@@ -1,7 +1,7 @@
 /*
- * @Author: jiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-03-11 10:32:26
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-03-30 12:39:07
  * @FilePath: /耗材前端/src/permission.js
  * @Description: 

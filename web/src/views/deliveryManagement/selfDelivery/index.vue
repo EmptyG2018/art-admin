@@ -1,7 +1,7 @@
 <!--
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-04-03 08:50:45
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-04-03 09:03:10
  * @FilePath: \耗材前端\src\views\deliveryManagement\selfDelivery\index.vue
  * @Description: 

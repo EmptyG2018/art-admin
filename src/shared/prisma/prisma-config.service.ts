@@ -1,7 +1,7 @@
 /*
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-04-25 13:26:28
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-16 21:57:48
  * @FilePath: /meimei-new/src/shared/prisma/prisma-config.service.ts
  * @Description: 使用类来构建prisma

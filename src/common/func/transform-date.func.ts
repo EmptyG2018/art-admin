@@ -1,7 +1,7 @@
 /*
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-04-28 23:24:32
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-04-28 23:25:38
  * @FilePath: /meimei-new/src/common/func/transform-date.func.ts
  * @Description: 讲时间段转化为符合数据库查询使用的格式

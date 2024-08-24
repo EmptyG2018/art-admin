@@ -1,7 +1,7 @@
 <!--
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2023-09-16 14:29:35
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-08-23 08:44:44
  * @FilePath: \meimei-prisma-vue3\meimei-ui-vue3\src\components\Table\seting.vue
  * @Description: 表格列设置组件

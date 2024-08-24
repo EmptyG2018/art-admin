@@ -1,7 +1,7 @@
 <!--
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-03-11 10:32:26
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-11 16:55:23
  * @FilePath: \耗材前端\src\components\DictTag\index.vue
  * @Description: 

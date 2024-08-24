@@ -1,7 +1,7 @@
 <!--
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2023-10-02 15:50:59
- * @LastEditors: jiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-03-14 13:59:31
  * @FilePath: \耗材前端\src\views\basicData\goodsManagement\goodsMessage\index.vue
  * @Description: 

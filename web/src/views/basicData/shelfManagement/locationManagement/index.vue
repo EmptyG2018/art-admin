@@ -1,7 +1,7 @@
 <!--
- * @Author: jiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-03-14 15:45:48
- * @LastEditors: jiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-03-15 15:03:34
  * @FilePath: \耗材前端\src\views\basicData\shelfManagement\locationManagement\index.vue
  * @Description: 库位管理

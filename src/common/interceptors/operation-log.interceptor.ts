@@ -1,7 +1,7 @@
 /*
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-04-23 18:59:25
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-07-11 20:09:22
  * @FilePath: \meimei-prisma-vue3\meimei-admin\src\common\interceptors\operation-log.interceptor.ts
  * @Description: 接口访问日志拦截器

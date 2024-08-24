@@ -2,7 +2,7 @@
  * @Author: Sheng.Jiang
  * @Date: 2021-12-09 14:30:28
  * @LastEditTime: 2024-05-12 16:53:25
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @Description: 登录守卫 ，可进行登录日志记录
  * @FilePath: /meimei-new/src/common/guards/local-auth.guard.ts
  * You can you up，no can no bb！！

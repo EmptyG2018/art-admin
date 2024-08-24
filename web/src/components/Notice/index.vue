@@ -1,7 +1,7 @@
 <!--
  * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
  * @Date: 2024-03-12 11:17:10
- * @LastEditors: jiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-03-12 15:52:46
  * @FilePath: \耗材前端\src\components\Notice\index.vue
  * @Description: 

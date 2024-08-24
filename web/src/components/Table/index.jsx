@@ -1,7 +1,7 @@
 /*
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2023-09-15 22:19:14
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-01-14 10:20:38
  * @FilePath: /耗材前端/src/components/Table/index.jsx
  * @Description: 自定义表格

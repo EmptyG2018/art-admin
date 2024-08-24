@@ -1,7 +1,7 @@
 /*
- * @Author: sheng.jiang 87789771@qq.com
+ * @Author: sheng.jiang 491623426@qq.com
  * @Date: 2023-09-11 10:39:20
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-18 11:39:17
  * @FilePath: /meimei-new-前端/src/router/index.js
  * @Description: 

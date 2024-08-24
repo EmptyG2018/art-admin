@@ -2,7 +2,7 @@
  * @Author: Sheng.Jiang
  * @Date: 2021-12-08 20:20:53
  * @LastEditTime: 2024-04-27 17:45:47
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @Description: 分页器管道
  * @FilePath: /meimei-new/src/common/pipes/pagination.pipe.ts
  * You can you up，no can no bb！！

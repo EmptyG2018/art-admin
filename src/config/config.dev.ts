@@ -1,7 +1,7 @@
 /*
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-04-22 19:22:42
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-04-24 09:57:22
  * @FilePath: \meimei-new\src\config\config.dev.ts
  * @Description: 开发环境配置文件

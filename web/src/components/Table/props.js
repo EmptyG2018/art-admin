@@ -1,7 +1,7 @@
 /*
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2023-09-16 08:15:46
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2023-09-16 09:15:45
  * @FilePath: /ruoyi-ui-3.0-print/src/components/Table/props.js
  * @Description: 表格组件参数

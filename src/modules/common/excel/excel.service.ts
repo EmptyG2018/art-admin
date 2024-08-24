@@ -1,7 +1,7 @@
 /*
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-04-30 14:43:37
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-15 16:01:09
  * @FilePath: \meimei-new\src\modules\common\excel\excel.service.ts
  * @Description: 公共导出模块

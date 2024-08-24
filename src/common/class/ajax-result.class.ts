@@ -1,7 +1,7 @@
 /*
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-04-23 09:25:47
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-04-23 16:03:51
  * @FilePath: \meimei-new\src\common\class\ajax-result.class.ts
  * @Description:

@@ -1,7 +1,7 @@
 <!--
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-03-30 13:40:22
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-04-03 15:57:02
  * @FilePath: \耗材前端\src\components\Json2Excel\index.vue
  * @Description: 

@@ -2,7 +2,7 @@
  * @Author: Sheng.Jiang
  * @Date: 2022-01-29 11:12:00
  * @LastEditTime: 2024-04-23 15:22:27
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @Description: 是否演示环境守卫
  * @FilePath: \meimei-new\src\common\guards\demo-environment.guard.ts
  * You can you up，no can no bb！！

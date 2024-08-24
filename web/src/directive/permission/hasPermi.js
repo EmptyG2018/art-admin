@@ -1,7 +1,7 @@
 /*
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2023-09-18 21:08:47
- * @LastEditors: jiang.sheng 87789771@qq.com
+ * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2023-10-04 23:26:06
  * @FilePath: /耗材物流前端/src/directive/permission/hasPermi.js
  * @Description: 自定义权限指令

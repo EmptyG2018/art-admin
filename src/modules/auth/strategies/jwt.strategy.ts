@@ -1,7 +1,7 @@
 /*
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-04-24 08:35:55
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-04-24 11:35:05
  * @FilePath: \meimei-new\src\modules\auth\strategies\jwt.strategy.ts
  * @Description:

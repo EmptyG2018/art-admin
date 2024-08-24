@@ -1,7 +1,7 @@
 /*
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-04-27 22:07:09
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-11 16:36:10
  * @FilePath: \meimei-new\src\modules\monitor\oper-log\dto\res-oper-log.dto.ts
  * @Description:

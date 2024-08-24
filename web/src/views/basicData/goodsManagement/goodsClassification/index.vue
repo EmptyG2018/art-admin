@@ -1,7 +1,7 @@
 <!--
- * @Author: jiang.sheng 87789771@qq.com
+ * @Author: hu.chao 491623426@qq.com
  * @Date: 2023-10-02 15:50:59
- * @LastEditors: jiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-03-15 10:09:28
  * @FilePath: \耗材前端\src\views\basicData\goodsManagement\goodsClassification\index.vue
  * @Description: 商品分类信息

@@ -1,7 +1,7 @@
 /*
- * @Author: JiangSheng 87789771@qq.com
+ * @Author: HuChao 491623426@qq.com
  * @Date: 2024-05-10 14:34:58
- * @LastEditors: JiangSheng 87789771@qq.com
+ * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-11 09:39:57
  * @FilePath: \meimei-new\src\modules\sys\sys-dict\dto\req-sys-dict.dto.ts
  * @Description:
