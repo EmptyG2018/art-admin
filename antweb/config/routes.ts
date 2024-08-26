@@ -12,22 +12,83 @@
  */
 export default [
   {
-    name: 'login',
+    name: 'menu.login',
     path: '/login',
     component: './Login',
     layout: false,
   },
   {
+    title: 'menu.welcome',
     path: '/welcome',
-    name: 'welcome',
-    icon: 'smile',
+    icon: 'Smile',
     component: './Welcome',
   },
   {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './Table',
+    title: 'menu.system',
+    icon: 'Setting',
+    path: '/system',
+    routes: [
+      {
+        path: '/system',
+        redirect: '/system/user',
+      },
+      {
+        title: 'menu.system.user',
+        path: '/system/user',
+        component: './System/User',
+      },
+      {
+        title: 'menu.system.role',
+        path: '/system/role',
+        component: './System/Role',
+      },
+      {
+        title: 'menu.system.menu',
+        path: '/system/menu',
+        component: './System/Menu',
+      },
+      {
+        title: 'menu.system.dept',
+        path: '/system/dept',
+        component: './System/Dept',
+      },
+      {
+        title: 'menu.system.post',
+        path: '/system/post',
+        component: './System/Post',
+      },
+      {
+        title: 'menu.system.dict',
+        path: '/system/dict',
+        component: './System/Dict',
+      },
+      {
+        title: 'menu.system.notice',
+        path: '/system/notice',
+        component: './System/Notice',
+      },
+    ],
+  },
+  {
+    title: 'menu.log',
+    icon: 'FileSearch',
+    path: '/log',
+    routes: [
+      {
+        path: '/log',
+        redirect: '/log/operlog',
+      },
+      {
+        title: 'menu.log.operlog',
+        path: '/log/operlog',
+        component: './Log/OperLog',
+      },
+      {
+        title: 'menu.log.loginlog',
+        path: '/log/loginlog',
+        component: './Log/LoginLog',
+      },
+    ],
   },
   {
     path: '/',

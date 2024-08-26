@@ -3,7 +3,7 @@
  * @Date: 2024-01-06 14:56:02
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-18 23:47:23
- * @FilePath: /meimei-nestjs-admin/meimei-prisma-vue3/meimei-ui-vue3/vite.config.ts
+ * @FilePath: /meimei-nestjs-admin/admin-prisma-vue3/meimei-ui-vue3/vite.config.ts
  * @Description:
  *
  */

@@ -22,8 +22,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:pull": "prisma db pull",
     "db:m": "prisma migrate dev --name inte",
-    "db:g": "prisma generate",
-    "pro create": "cd ~/desktop && pro create antweb"
+    "db:g": "prisma generate"
   },
   "dependencies": {
     "@nestjs-modules/ioredis": "^2.0.2",

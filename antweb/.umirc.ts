@@ -43,7 +43,10 @@ export default defineConfig({
    */
   locale: {
     default: 'zh-CN',
+    antd: true,
     baseSeparator: '-',
+    baseNavigator: true,
+    title: true,
   },
 
   /**
