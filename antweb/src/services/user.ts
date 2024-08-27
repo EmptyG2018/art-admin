@@ -10,9 +10,17 @@ export async function loginForAccount(
   },
   options?: { [key: string]: any },
 ) {
-  return request<any>('/login', {
+  return request<any>('/api/login', {
     method: 'POST',
     data: body,
+    ...(options || {}),
+  });
+}
+
+// 用户信息
+export async function getInfo(options?: { [key: string]: any }) {
+  return request<any>('/api/getInfo', {
+    method: 'GET',
     ...(options || {}),
   });
 }

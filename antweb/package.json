@@ -2,13 +2,14 @@
   "private": true,
   "author": "EmptyG2018 <Empty.G.2018@Gmail.com>",
   "scripts": {
-    "dev": "max dev",
+    "dev": "cross-env UMI_ENV=dev max dev",
+    "test": "cross-env UMI_ENV=test max dev",
+    "pre": "cross-env UMI_ENV=pre max dev",
     "build": "max build",
     "format": "prettier --cache --write .",
     "prepare": "husky",
     "postinstall": "max setup",
-    "setup": "max setup",
-    "start": "npm run dev"
+    "setup": "max setup"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
+    "cross-env": "^7.0.3",
     "husky": "^9",
     "lint-staged": "^13.2.0",
     "prettier": "^2.8.7",

@@ -6,13 +6,14 @@ import {
   Question,
   SelectLang,
 } from '@/components';
+import { getInfo } from '@/services/user';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import type { RunTimeLayoutConfig } from '@umijs/max';
+import type { RequestConfig, RunTimeLayoutConfig } from '@umijs/max';
 import { Link } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.UMI_ENV === 'dev';
 
 // 全局初始化数据配置，用于 Layout 用户信息和权限初始化
 // 更多信息见文档：https://umijs.org/docs/api/runtime-config#getinitialstate
@@ -20,11 +21,26 @@ export async function getInitialState(): Promise<{
   name: string;
   settings?: Partial<LayoutSettings>;
 }> {
+  const user = await getInfo();
+
   return {
     name: '@umijs/max',
     settings: defaultSettings as Partial<LayoutSettings>,
   };
 }
+
+// request请求配置
+// 更多信息见文档：https://umijs.org/docs/max/requ
+export const request: RequestConfig = {
+  timeout: 1000,
+  // other axios options you want
+  errorConfig: {
+    errorHandler() {},
+    errorThrower() {},
+  },
+  requestInterceptors: [],
+  responseInterceptors: [],
+};
 
 export const layout: RunTimeLayoutConfig = ({
   initialState,

@@ -1,8 +1,11 @@
 import { Footer } from '@/components';
+import { queryCaptchaImage } from '@/services/auth';
+import { loginForAccount } from '@/services/user';
 import {
   AlipayCircleOutlined,
   LockOutlined,
   MobileOutlined,
+  SafetyOutlined,
   TaobaoCircleOutlined,
   UserOutlined,
   WeiboCircleOutlined,
@@ -20,8 +23,9 @@ import {
   SelectLang,
   useIntl,
   useModel,
+  useRequest,
 } from '@umijs/max';
-import { Alert, message, Tabs } from 'antd';
+import { Alert, Button, message, Space, Tabs } from 'antd';
 import { createStyles } from 'antd-style';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
@@ -50,6 +54,11 @@ const useStyles = createStyles(({ token }) => {
       ':hover': {
         backgroundColor: token.colorBgTextHover,
       },
+    },
+    captchaImage: {
+      paddingTop: 0,
+      paddingBottom: 0,
+      overflow: 'hidden',
     },
     container: {
       display: 'flex',
@@ -84,7 +93,8 @@ const ActionIcons = () => {
   );
 };
 
-const Lang = () => {
+// 国际化语言
+const Lang: React.FC = () => {
   const { styles } = useStyles();
 
   return (
@@ -94,6 +104,7 @@ const Lang = () => {
   );
 };
 
+// 登录提示信息
 const LoginMessage: React.FC<{
   content: string;
 }> = ({ content }) => {
@@ -109,10 +120,54 @@ const LoginMessage: React.FC<{
   );
 };
 
+//  图形验证码
+const CaptchaImage: React.FC<{
+  onSuccess: (uuid: string) => void;
+}> = ({ onSuccess }) => {
+  const { styles } = useStyles();
+  const { refresh, data, loading, error } = useRequest(queryCaptchaImage, {
+    onSuccess(res) {
+      res.uuid && onSuccess(res.uuid);
+    },
+  });
+
+  if (error)
+    return (
+      <Button
+        className={styles.captchaImage}
+        size="large"
+        danger
+        onClick={refresh}
+      >
+        <FormattedMessage
+          id="pages.login.captcha.getCaptchaText"
+          defaultMessage="重新获取"
+        />
+      </Button>
+    );
+
+  if (loading)
+    return (
+      <Button className={styles.captchaImage} size="large" loading>
+        <FormattedMessage id="pages.loading" defaultMessage="正在加载" />
+      </Button>
+    );
+
+  return (
+    <Button className={styles.captchaImage} size="large" onClick={refresh}>
+      <div
+        style={{ width: '100%', height: '100%' }}
+        dangerouslySetInnerHTML={{ __html: data.img }}
+      />
+    </Button>
+  );
+};
+
 const LoginPage: React.FC = () => {
   const [userLoginState, setUserLoginState] = useState<any>({});
   const { initialState, setInitialState } = useModel('@@initialState');
   const [type, setType] = useState<string>('account');
+  const [uuid, setUUID] = useState('');
   const { styles } = useStyles();
   const intl = useIntl();
   const { status, type: loginType } = userLoginState;
@@ -130,19 +185,18 @@ const LoginPage: React.FC = () => {
   };
 
   const handleSubmit = async (values: any) => {
+    const { autoLogin, ...rest } = values;
     try {
       // 登录
-      // const msg = await login({ ...values, type });
+      const res = await loginForAccount({ ...rest, uuid });
 
-      const msg = { status: 'ok' };
-
-      if (msg.status === 'ok') {
+      if (res.code === 200) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
+        // await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
         return;
@@ -164,7 +218,7 @@ const LoginPage: React.FC = () => {
         <title>
           {intl.formatMessage({
             id: 'menu.login',
-            defaultMessage: '登录页',
+            defaultMessage: '登录',
           })}
           - {Settings.title}
         </title>
@@ -228,7 +282,7 @@ const LoginPage: React.FC = () => {
             <LoginMessage
               content={intl.formatMessage({
                 id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误(admin/ant.design)',
+                defaultMessage: '账户或密码错误',
               })}
             />
           )}
@@ -242,7 +296,7 @@ const LoginPage: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.username.placeholder',
-                  defaultMessage: '用户名: admin or user',
+                  defaultMessage: '用户名',
                 })}
                 rules={[
                   {
@@ -264,7 +318,7 @@ const LoginPage: React.FC = () => {
                 }}
                 placeholder={intl.formatMessage({
                   id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
+                  defaultMessage: '密码',
                 })}
                 rules={[
                   {
@@ -278,6 +332,31 @@ const LoginPage: React.FC = () => {
                   },
                 ]}
               />
+              <Space direction="horizontal" align="start">
+                <ProFormText
+                  name="code"
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <SafetyOutlined />,
+                  }}
+                  placeholder={intl.formatMessage({
+                    id: 'pages.login.captcha.placeholder',
+                    defaultMessage: '请输入验证码！',
+                  })}
+                  rules={[
+                    {
+                      required: true,
+                      message: (
+                        <FormattedMessage
+                          id="pages.login.captcha.required"
+                          defaultMessage="验证码是必填项！"
+                        />
+                      ),
+                    },
+                  ]}
+                />
+                <CaptchaImage onSuccess={(uuid) => setUUID(uuid)} />
+              </Space>
             </>
           )}
 
@@ -354,12 +433,6 @@ const LoginPage: React.FC = () => {
                   },
                 ]}
                 onGetCaptcha={async (phone) => {
-                  // const result = await getFakeCaptcha({
-                  //   phone,
-                  // });
-                  // if (!result) {
-                  //   return;
-                  // }
                   message.success('获取验证码成功！验证码为：1234');
                 }}
               />

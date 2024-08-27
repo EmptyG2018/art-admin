@@ -1,6 +1,9 @@
 import { defineConfig } from '@umijs/max';
 import defaultSettings from './config/defaultSettings';
+import proxy from './config/proxy';
 import routes from './config/routes';
+
+const { UMI_ENV = 'dev' } = process.env;
 
 export default defineConfig({
   /**
@@ -31,11 +34,22 @@ export default defineConfig({
   initialState: {},
 
   /**
+   * @name 代理配置
+   * @description 可以让你的本地服务器代理到你的服务器上，这样你就可以访问服务器的数据了
+   * @see 要注意以下 代理只能在本地开发时使用，build 之后就无法使用了。
+   * @doc 代理介绍 https://umijs.org/docs/guides/proxy
+   * @doc 代理配置 https://umijs.org/docs/api/config#proxy
+   */
+  proxy: proxy[UMI_ENV as keyof typeof proxy],
+
+  /**
    * @name 网络请求配置
    * @description 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
    * @doc https://umijs.org/docs/max/request
    */
-  request: {},
+  request: {
+    dataField: '',
+  },
 
   /**
    * @name 国际化插件
