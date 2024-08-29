@@ -1,0 +1,15 @@
+export default {
+  'menu.login': '登录',
+  'menu.welcome': '欢迎',
+  'menu.system': '系统管理',
+  'menu.system.user': '用户管理',
+  'menu.system.role': '角色管理',
+  'menu.system.menu': '菜单管理',
+  'menu.system.dept': '部门管理',
+  'menu.system.post': '岗位管理',
+  'menu.system.dict': '字典管理',
+  'menu.system.notice': '通知管理',
+  'menu.log': '日志管理',
+  'menu.log.operlog': '操作日志',
+  'menu.log.loginlog': '登录日志',
+};
