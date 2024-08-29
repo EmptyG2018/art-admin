@@ -1,14 +1,26 @@
-import Login from "./pages/Login";
-import NoFound from "./pages/404";
-import { createBrowserRouter } from "react-router-dom";
+import { Admin } from '@/layouts';
+import Login from './pages/Login';
+import NoFound from './pages/404';
+import Welcome from './pages/Welcome';
+import { createBrowserRouter } from 'react-router-dom';
 
 const routes = createBrowserRouter([
   {
-    path: "/",
+    path: '/login',
     element: <Login />,
   },
   {
-    path: "*",
+    path: '/',
+    element: <Admin />,
+    children: [
+      {
+        path: '/weclome',
+        element: <Welcome />,
+      },
+    ],
+  },
+  {
+    path: '*',
     element: <NoFound />,
   },
 ]);

@@ -1,84 +1,160 @@
-import storage from 'store';
+import cookie from 'js-cookie';
 import axios from 'axios';
-import { message } from 'antd';
+import cache from '@/utils/cache';
+import { tansParams } from '@/utils/parameter';
 
-const resMap = {
-  json: (response) => {
-    response.use(
-      async (response) => {
-        if (response.status === 200 && response.data?.code === 200)
-          return response.data.result;
-        return Promise.reject(response?.data);
-      },
-      (error) => {
-        if (error.response.status === 401) {
-          setTimeout(() => {
-            storage.remove('token');
-            location.href = '/login';
-          }, 1000);
-          message.error({
-            key: 'system',
-            content: error.response.data.message,
-          });
-        } else {
-          message.error({
-            key: 'system',
-            content: error.response.message,
-          });
-        }
+// 是否显示重新登录
+export let isRelogin = { show: false };
 
-        return Promise.reject({
-          code: error.response.status,
-          message: error.message,
-        });
-      },
-    );
-  },
-  download: (response) => {
-    response.use(
-      async (response) => {
-        if (response.status === 200) return response.data;
-        return Promise.reject(response?.data);
-      },
-      (error) => {
-        return Promise.reject({
-          code: error.response.status,
-          message: '下载失败',
-        });
-      },
-    );
-  },
+// 错误信息
+const ERROR_MESSAGES: Record<string, string> = {
+  '401': '认证失败，无法访问系统资源',
+  '403': '当前操作没有权限',
+  '404': '访问资源不存在',
+  default: '系统未知错误，请反馈给管理员',
 };
 
-const carryMap = {
-  auth: (config) => {
-    config.headers['Accesstoken'] = storage.get('token') || '';
-  },
-  site: (config) => {
-    config.headers['Proxytoken'] = storage.get('agent')?.id;
-  },
-};
+// 限制存放数据5M
+const LIMIT_SIZE = 5 * 1024 * 1024;
 
-const request = (axiosOption, option = {}) => {
-  const defaultResponseDataType = 'json';
-  const { responseDataType = defaultResponseDataType, carry = [] } = option;
-
+const request = (url: string, option: any) => {
   const instance = axios.create({
     baseURL: import.meta.env.VITE_APP_URL,
+    timeout: import.meta.env.VITE_TIMEOUT,
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Content-Type': 'application/json;charset=utf-8',
     },
   });
 
-  instance.interceptors.request.use((config) => {
-    carry.forEach((item) => carryMap[item] && carryMap[item](config));
-    return config;
+  instance.interceptors.request.use(
+    (config) => {
+      config.url = url;
+
+      const token = cookie.get('Admin-Token');
+      if (token && !config.headers.public) {
+        // 请求携带token
+        config.headers['Authorization'] = 'Bearer ' + token;
+      }
+
+      // get请求映射params参数
+      if (config.method === 'get' && config.params) {
+        let url = config.url + '?' + tansParams(config.params);
+        url = url.slice(0, -1);
+        config.params = {};
+        config.url = url;
+      }
+
+      // 是否需要防止数据重复提交
+      const isRepeatSubmit = config.headers.repeatSubmit === false;
+      if (
+        !isRepeatSubmit &&
+        (config.method === 'post' || config.method === 'put')
+      ) {
+        const payload = {
+          url: config.url,
+          data:
+            typeof config.data === 'object'
+              ? JSON.stringify(config.data)
+              : config.data,
+          time: new Date().getTime(),
+        };
+        // 请求数据大小
+        const payloadSize = Object.keys(JSON.stringify(payload)).length;
+        if (payloadSize >= LIMIT_SIZE) {
+          console.warn(
+            `[${config.url}]: ` +
+              '请求数据大小超出允许的5M限制，无法进行防重复提交验证。',
+          );
+          return config;
+        }
+
+        const sessionObj = cache.session.getJSON('sessionObj');
+        if (
+          sessionObj === undefined ||
+          sessionObj === null ||
+          sessionObj === ''
+        ) {
+          cache.session.setJSON('sessionObj', payload);
+        } else {
+          const s_url = sessionObj.url; // 请求地址
+          const s_data = sessionObj.data; // 请求数据
+          const s_time = sessionObj.time; // 请求时间
+          const interval = 1000; // 间隔时间(ms)，小于此时间视为重复提交
+          if (
+            s_data === payload.data &&
+            payload.time - s_time < interval &&
+            s_url === payload.url
+          ) {
+            const message = '数据正在处理，请勿重复提交';
+            console.warn(`[${s_url}]: ` + message);
+            return Promise.reject(new Error(message));
+          } else {
+            cache.session.setJSON('sessionObj', payload);
+          }
+        }
+      }
+
+      return config;
+    },
+    (error) => {
+      console.log(error);
+      Promise.reject(error);
+    },
+  );
+
+  instance.interceptors.response.use((response) => {
+    // 未设置状态码则默认成功状态
+    const code = response.data.code || 200;
+    // 获取错误信息
+    const msg =
+      ERROR_MESSAGES[code] || response.data.msg || ERROR_MESSAGES['default'];
+    // 二进制数据则直接返回
+    if (
+      response.request.responseType === 'blob' ||
+      response.request.responseType === 'arraybuffer'
+    ) {
+      return response.data;
+    }
+    if (code === 401) {
+      if (!isRelogin.show) {
+        isRelogin.show = true;
+        // ElMessageBox.confirm(
+        //   '登录状态已过期，您可以继续留在该页面，或者重新登录',
+        //   '系统提示',
+        //   {
+        //     confirmButtonText: '重新登录',
+        //     cancelButtonText: '取消',
+        //     type: 'warning',
+        //   },
+        // )
+        //   .then(() => {
+        //     isRelogin.show = false;
+        //     useUserStore()
+        //       .logOut()
+        //       .then(() => {
+        //         location.reload();
+        //       });
+        //   })
+        //   .catch(() => {
+        //     isRelogin.show = false;
+        //   });
+      }
+      return Promise.reject('无效的会话，或者会话已过期，请重新登录。');
+    } else if (code === 500) {
+      // ElMessage({ message: msg, type: 'error' });
+      return Promise.reject(new Error(msg));
+    } else if (code === 601) {
+      // ElMessage({ message: msg, type: 'warning' });
+      return Promise.reject(new Error(msg));
+    } else if (code !== 200) {
+      // ElNotification.error({ title: msg });
+      return Promise.reject('error');
+    } else {
+      return Promise.resolve(response.data);
+    }
   });
 
-  resMap[responseDataType]
-    ? resMap[responseDataType](instance.interceptors.response)
-    : resMap[defaultResponseDataType](instance.interceptors.response);
-  return instance(axiosOption);
+  return instance(option);
 };
 
 export default request;
