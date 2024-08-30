@@ -1,8 +1,6 @@
 import { GithubFilled, LogoutOutlined } from '@ant-design/icons';
 import type { ProSettings } from '@ant-design/pro-components';
 import {
-  PageContainer,
-  ProCard,
   ProConfigProvider,
   ProLayout,
   SettingDrawer,
@@ -10,12 +8,12 @@ import {
 import { ConfigProvider, Dropdown } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { SelectLang } from '@/components/Layout';
+import { Loading, SelectLang } from '@/components/Layout';
 import defaultProps from './_defaultProps';
 import { getUserInfo } from '@/services/user';
 import { getSystemConfig, getMenus } from '@/services/system';
 
-export default () => {
+const Layout = () => {
   const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
     fixSiderbar: true,
     layout: 'mix',
@@ -143,41 +141,6 @@ export default () => {
             {...settings}
           >
             <Outlet />
-            {/* <PageContainer
-              token={{
-                paddingInlinePageContainerContent: num,
-              }}
-              extra={[
-                <Button key="3">操作</Button>,
-                <Button key="2">操作</Button>,
-                <Button
-                  key="1"
-                  type="primary"
-                  onClick={() => {
-                    setNum(num > 0 ? 0 : 40);
-                  }}
-                >
-                  主操作
-                </Button>,
-              ]}
-              subTitle="简单的描述"
-              footer={[
-                <Button key="3">重置</Button>,
-                <Button key="2" type="primary">
-                  提交
-                </Button>,
-              ]}
-            >
-              <ProCard
-                style={{
-                  height: '200vh',
-                  minHeight: 800,
-                }}
-              >
-                <div />
-              </ProCard>
-            </PageContainer> */}
-
             <SettingDrawer
               pathname={pathname}
               enableDarkTheme
@@ -194,6 +157,23 @@ export default () => {
           </ProLayout>
         </ConfigProvider>
       </ProConfigProvider>
+    </div>
+  );
+};
+
+export default () => {
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    Promise.all([getUserInfo(), getSystemConfig(), getMenus()]).then(() => {
+      setInitialized(true);
+    });
+  }, []);
+
+  if (initialized) return <Layout />;
+  return (
+    <div style={{ height: '100vh' }}>
+      <Loading />
     </div>
   );
 };

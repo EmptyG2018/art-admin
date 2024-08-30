@@ -25,7 +25,7 @@ const Root = () => {
   //   }
 
   //   setInitialized(true);
-  // }, [user, location]);
+  // }, []);
 
   if (true) return <Outlet />;
   return <span>sss</span>;

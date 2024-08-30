@@ -7,23 +7,17 @@ import NoFound from './pages/404';
 const routes = createBrowserRouter([
   {
     path: '/',
-    element: <Root />,
+    element: <Admin />,
     children: [
       {
-        path: '/',
-        element: <Admin />,
-        children: [
-          {
-            path: '/weclome',
-            element: <Welcome />,
-          },
-        ],
-      },
-      {
-        path: '/login',
-        element: <Login />,
+        path: '/weclome',
+        element: <Welcome />,
       },
     ],
+  },
+  {
+    path: '/login',
+    element: <Login />,
   },
   {
     path: '*',

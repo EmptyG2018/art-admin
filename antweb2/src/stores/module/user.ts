@@ -1,4 +1,5 @@
 import storage from 'store';
+import cookie from 'js-cookie';
 import { useSelector } from 'react-redux';
 import type { StoreState } from '..';
 import { loginForAccount, getUserInfo } from '@/services/user';
@@ -14,13 +15,15 @@ const useUserStore = () => {
 
   // 登录账号
   const loginAccount = async (account: API.LoginAccountParams) => {
-    const { token } = await loginForAccount(account);
-    storage.set('token', token);
+    const res = await loginForAccount(account);
+    cookie.set('token', res.token);
+
+    return res;
   };
 
   // 退出账号
   const logoutAccount = () => {
-    storage.set('token', null);
+    cookie.remove('token');
   };
 
   return { user, getProfile, loginAccount, logoutAccount };

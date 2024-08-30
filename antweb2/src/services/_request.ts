@@ -34,7 +34,7 @@ const request = <T = any>(
     (config) => {
       config.url = url;
 
-      const token = cookie.get('Admin-Token');
+      const token = cookie.get('token');
       if (token && !config.headers.public) {
         // 请求携带token
         config.headers['Authorization'] = 'Bearer ' + token;
