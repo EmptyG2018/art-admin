@@ -6,6 +6,8 @@
  * @param props
  */
 export default (props: any) => {
+  return <span>loading.</span>;
+
   // const access = useAccess();
   // const currentHref = window.location.href;
   // // 已登录或已在登录页，直接展示内容

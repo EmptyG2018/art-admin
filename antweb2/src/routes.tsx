@@ -1,21 +1,27 @@
-import { Admin } from '@/layouts';
+import { createBrowserRouter } from 'react-router-dom';
+import { Root, Admin } from '@/layouts';
+import Welcome from './pages/Welcome';
 import Login from './pages/Login';
 import NoFound from './pages/404';
-import Welcome from './pages/Welcome';
-import { createBrowserRouter } from 'react-router-dom';
 
 const routes = createBrowserRouter([
   {
-    path: '/login',
-    element: <Login />,
-  },
-  {
     path: '/',
-    element: <Admin />,
+    element: <Root />,
     children: [
       {
-        path: '/weclome',
-        element: <Welcome />,
+        path: '/',
+        element: <Admin />,
+        children: [
+          {
+            path: '/weclome',
+            element: <Welcome />,
+          },
+        ],
+      },
+      {
+        path: '/login',
+        element: <Login />,
       },
     ],
   },

@@ -1,5 +1,6 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import cache from '@/utils/cache';
 import { tansParams } from '@/utils/parameter';
 
@@ -17,7 +18,10 @@ const ERROR_MESSAGES: Record<string, string> = {
 // 限制存放数据5M
 const LIMIT_SIZE = 5 * 1024 * 1024;
 
-const request = (url: string, option: any) => {
+const request = <T = any>(
+  url: string,
+  option: Omit<AxiosRequestConfig, 'url'>,
+): Promise<T> => {
   const instance = axios.create({
     baseURL: import.meta.env.VITE_APP_URL,
     timeout: import.meta.env.VITE_TIMEOUT,

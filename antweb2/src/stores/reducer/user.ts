@@ -1,9 +1,11 @@
-import storage from "store";
-import { createSlice } from "@reduxjs/toolkit";
+import store from 'store';
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState: User.UserInfo = store.get('profile') || null;
 
 const userSlice = createSlice({
-  name: "user",
-  initialState: storage.get("userInfo") || null,
+  name: 'user',
+  initialState,
   reducers: {
     setUserInfo: (_, action) => {
       return {

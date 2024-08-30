@@ -8,10 +8,12 @@ import {
   SettingDrawer,
 } from '@ant-design/pro-components';
 import { ConfigProvider, Dropdown } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { SelectLang } from '@/components/Layout';
 import defaultProps from './_defaultProps';
+import { getUserInfo } from '@/services/user';
+import { getSystemConfig, getMenus } from '@/services/system';
 
 export default () => {
   const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
@@ -21,12 +23,12 @@ export default () => {
   });
 
   const [pathname, setPathname] = useState('/weclome');
-  if (typeof document === 'undefined') {
-    return <div />;
-  }
+
+  if (typeof document === 'undefined') return <div />;
+
   return (
     <div
-      id="test-pro-layout"
+      id="admin-template"
       style={{
         height: '100vh',
         overflow: 'auto',
@@ -35,7 +37,7 @@ export default () => {
       <ProConfigProvider hashed={false}>
         <ConfigProvider
           getTargetContainer={() => {
-            return document.getElementById('test-pro-layout') || document.body;
+            return document.getElementById('admin-template') || document.body;
           }}
         >
           <ProLayout

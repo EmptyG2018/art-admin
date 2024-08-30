@@ -1,31 +1,29 @@
-import storage from "store";
-import { useSelector } from "react-redux";
-import { setUserInfo } from "../reducer/user";
-import { LoginAccount } from "@services/user";
-import store from "..";
+import storage from 'store';
+import { useSelector } from 'react-redux';
+import type { StoreState } from '..';
+import { loginForAccount, getUserInfo } from '@/services/user';
 
 const useUserStore = () => {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state: StoreState) => state.user);
+
+  // 用户信息
+  const getProfile = async () => {
+    const { code, msg, ...userInfo } = await getUserInfo();
+    storage.set('profile', userInfo);
+  };
 
   // 登录账号
-  const loginAccount = async (account) => {
-    const { token, userInfo } = await LoginAccount(account);
-
-    storage.set("token", token);
-    storage.set("userInfo", userInfo);
-
-    store.dispatch(setUserInfo(userInfo));
+  const loginAccount = async (account: API.LoginAccountParams) => {
+    const { token } = await loginForAccount(account);
+    storage.set('token', token);
   };
 
   // 退出账号
   const logoutAccount = () => {
-    storage.set("token", null);
-    storage.set("userInfo", null);
-
-    storage.dispatch(setUserInfo(null));
+    storage.set('token', null);
   };
 
-  return { user, isAdmin: user?.isAdmin === 1, loginAccount, logoutAccount };
+  return { user, getProfile, loginAccount, logoutAccount };
 };
 
 export default useUserStore;

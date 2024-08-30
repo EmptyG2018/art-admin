@@ -10,7 +10,7 @@ export async function loginForAccount(
   },
   options?: { [key: string]: any },
 ) {
-  return request<any>('/api/login', {
+  return request<API.LoginAccountResult>('/api/login', {
     method: 'POST',
     headers: {
       public: true,
@@ -21,8 +21,8 @@ export async function loginForAccount(
 }
 
 // 用户信息
-export async function getInfo(options?: { [key: string]: any }) {
-  return request<any>('/api/getInfo', {
+export async function getUserInfo(options?: { [key: string]: any }) {
+  return request<API.UserInfoResult>('/api/getInfo', {
     method: 'GET',
     ...(options || {}),
   });

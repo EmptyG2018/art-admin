@@ -5,7 +5,8 @@
 /**
  * 布局组件
  */
-import SelectLang from "./SelectLang";
-import Footer from "./Footer";
+import SelectLang from './SelectLang';
+import Footer from './Footer';
+import Loading from './Loading';
 
-export { SelectLang, Footer };
+export { SelectLang, Footer, Loading };
