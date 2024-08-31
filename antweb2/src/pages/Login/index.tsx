@@ -173,7 +173,6 @@ const LoginPage: React.FC = () => {
       // 登录
       const res = await loginAccount({ ...rest, uuid });
 
-      console.log('xxx', res);
       if (res.code === 200) {
         
         const defaultLoginSuccessMessage = intl.formatMessage({
