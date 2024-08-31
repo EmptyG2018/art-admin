@@ -1,11 +1,10 @@
 import React, { useState, StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { IntlProvider } from 'react-intl';
-import { RouterProvider } from 'react-router-dom';
 import { Provider as StoreProvider } from 'react-redux';
-import { App, ConfigProvider as AntdProvier } from 'antd';
+import { App as AntdContext, ConfigProvider as AntdProvier } from 'antd';
 import stores from '@/stores';
-import routes from './routes';
+import AppRoutes from './routes';
 import { LocaleContext, loadLocale } from './locales';
 import './App.css';
 
@@ -31,9 +30,9 @@ createRoot(document.getElementById('root')!).render(
     <LocaleProvider>
       <StoreProvider store={stores}>
         <AntdProvier>
-          <App>
-            <RouterProvider router={routes} />
-          </App>
+          <AntdContext>
+            <AppRoutes />
+          </AntdContext>
         </AntdProvier>
       </StoreProvider>
     </LocaleProvider>

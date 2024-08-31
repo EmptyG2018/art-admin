@@ -7,20 +7,27 @@ import {
 } from '@ant-design/pro-components';
 import { ConfigProvider, Dropdown } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Loading, SelectLang } from '@/components/Layout';
 import defaultProps from './_defaultProps';
 import { getUserInfo } from '@/services/user';
-import { getSystemConfig, getMenus } from '@/services/system';
+import { getSystemConfig, getSystemMenus } from '@/services/system';
+import storage from 'store';
 
 const Layout = () => {
+  const location = useLocation();
   const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
     fixSiderbar: true,
     layout: 'mix',
-    splitMenus: true,
+    splitMenus: false,
+    navTheme: 'light',
+    contentWidth: 'Fluid',
+    colorPrimary: '#1677FF',
+    siderMenuType: 'sub',
+    fixedHeader: true,
   });
 
-  const [pathname, setPathname] = useState('/weclome');
+  // const [pathname, setPathname] = useState('/weclome');
 
   if (typeof document === 'undefined') return <div />;
 
@@ -62,7 +69,7 @@ const Layout = () => {
             ]}
             {...defaultProps}
             location={{
-              pathname,
+              pathname: location.pathname,
             }}
             token={{
               header: {
@@ -141,7 +148,7 @@ const Layout = () => {
             {...settings}
           >
             <Outlet />
-            <SettingDrawer
+            {/* <SettingDrawer
               pathname={pathname}
               enableDarkTheme
               getContainer={(e: any) => {
@@ -153,7 +160,7 @@ const Layout = () => {
                 setSetting(changeSetting);
               }}
               disableUrlParams={false}
-            />
+            /> */}
           </ProLayout>
         </ConfigProvider>
       </ProConfigProvider>
@@ -164,11 +171,13 @@ const Layout = () => {
 export default () => {
   const [initialized, setInitialized] = useState(false);
 
-  useEffect(() => {
-    Promise.all([getUserInfo(), getSystemConfig(), getMenus()]).then(() => {
-      setInitialized(true);
-    });
-  }, []);
+  // useEffect(() => {
+  //   storage.set('profile', {});
+  //   Promise.all([getUserInfo(), getSystemConfig(), getSystemMenus()]).then(() => {
+  //     storage.set('profile', {});
+  //     setInitialized(true);
+  //   });
+  // }, []);
 
   if (initialized) return <Layout />;
   return (

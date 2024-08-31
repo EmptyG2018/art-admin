@@ -1,20 +1,28 @@
-import store from 'store';
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState: User.UserInfo = store.get('profile') || null;
+const initialState: any = {
+  config: null,
+  menus: [],
+};
 
 const systemSlice = createSlice({
-  name: 'user',
+  name: 'system',
   initialState,
   reducers: {
-    setMenus: (_, action) => {
+    setConfig: (state, action) => {
       return {
-        ...action.payload,
+        ...state,
+        config: action.payload,
+      };
+    },
+    setMenus: (state, action) => {
+      return {
+        ...state,
+        menus: action.payload,
       };
     },
   },
 });
 
-export const { setMenus } = systemSlice.actions;
+export const { setConfig, setMenus } = systemSlice.actions;
 export default systemSlice.reducer;
-

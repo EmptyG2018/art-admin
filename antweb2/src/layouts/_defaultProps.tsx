@@ -73,7 +73,4 @@ export default {
       },
     ],
   },
-  location: {
-    pathname: '/',
-  },
 };
