@@ -1,29 +1,136 @@
-import { useEffect, useMemo } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { FetchRouterLoading } from '@/components/Router';
-import { Admin } from '@/layouts';
-import ProtectedRoute from '@/components/Router/RrotectedRoute';
+import { lazy, Suspense, useMemo } from 'react';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Outlet,
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
+import { FetchRouterLoading, RrotectedRoute } from '@/components/Router';
+import { Root, Admin } from '@/layouts';
 import useSystemStore from '@/stores/module/system';
 import Login from './pages/Login';
 import NoFound from './pages/404';
 
-const LayoutMap: Record<string, React.ReactNode> = {
-  Layout: <Admin />,
-};
+const User = lazy(() => import('./pages/System/User/index'));
 
+const CONST_ROUTES = [
+  {
+    alwaysShow: true,
+    component: 'Admin',
+    redirect: 'noRedirect',
+    hidden: false,
+    name: 'System',
+    query: null,
+    path: '/system',
+    meta: {
+      icon: 'system',
+      link: null,
+      noCache: false,
+      title: '系统管理',
+    },
+    children: [
+      {
+        component: '/System/User/index',
+        hidden: false,
+        name: 'User',
+        query: null,
+        path: '/system/user',
+        meta: {
+          icon: 'user',
+          link: null,
+          noCache: false,
+          title: '用户管理',
+        },
+      },
+      {
+        component: '/System/Role/index',
+        hidden: false,
+        name: 'Role',
+        query: null,
+        path: '/system/role',
+        meta: {
+          icon: 'peoples',
+          link: null,
+          noCache: false,
+          title: '角色管理',
+        },
+      },
+      {
+        component: '/System/Menu/index',
+        hidden: false,
+        name: 'Menu',
+        query: null,
+        path: '/system/menu',
+        meta: {
+          icon: 'tree-table',
+          link: null,
+          noCache: false,
+          title: '菜单管理',
+        },
+      },
+      {
+        component: '/System/Dept/index',
+        hidden: false,
+        name: 'Dept',
+        query: null,
+        path: '/system/dept',
+        meta: {
+          icon: 'tree',
+          link: null,
+          noCache: false,
+          title: '部门管理',
+        },
+      },
+      {
+        component: '/System/Post/index',
+        hidden: false,
+        name: 'Post',
+        query: null,
+        path: '/system/post',
+        meta: {
+          icon: 'post',
+          link: null,
+          noCache: false,
+          title: '岗位管理',
+        },
+      },
+      {
+        component: '/System/Dict/index',
+        hidden: false,
+        name: 'Dict',
+        query: null,
+        path: '/system/dict',
+        meta: {
+          icon: 'dict',
+          link: null,
+          noCache: false,
+          title: '字典管理',
+        },
+      },
+    ],
+  },
+];
+
+const LayoutMap: Record<string, React.ReactNode> = {
+  Admin: <Admin />,
+};
 const layoutElement = (element: string) => LayoutMap[element] || <div />;
 
 const deepGenerateRoutes = (routes) => {
-  if (routes?.length) return null;
+  if (!routes?.length) return null;
 
   return routes.map((route) => {
-    const isSubMenu = !!route?.children.length;
+    const isSubMenu = !!route?.children;
 
     return (
       <Route
         path={route.path}
         element={
-          isSubMenu ? layoutElement(route.component) : <span>{route.path}</span>
+          isSubMenu
+            ? layoutElement(route.component)
+            : lazy(() => import(`./pages/System/User/index`))
         }
         children={deepGenerateRoutes(route?.children)}
       />
@@ -35,24 +142,40 @@ const AppRoutes = () => {
   const { system } = useSystemStore();
 
   const dynamicRoutesRender = useMemo(() => {
-    return deepGenerateRoutes(system.menus);
-  }, [system.menus]);
+    return deepGenerateRoutes(CONST_ROUTES);
+  }, []);
 
-  useEffect(() => {
-    console.log('menus', system.menus);
-  }, [system.menus]);
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Root />,
+      loader: rootLoader,
+      children: [
+        {
+          path: 'team',
+          element: <Team />,
+          loader: teamLoader,
+        },
+      ],
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 
   return (
     <BrowserRouter>
-      <Routes>
-        {!system.menus.length ? (
-          <Route path="/" element={<FetchRouterLoading />} />
-        ) : (
-          dynamicRoutesRender
-        )}
-        <Route path="/login" element={<ProtectedRoute element={<Login />} />} />
-        <Route path="*" element={<NoFound />} />
-      </Routes>
+      <Suspense fallback={<div>loading...</div>}>
+        <Routes>
+          <Route
+            path="/login"
+            element={<RrotectedRoute element={<Login />} />}
+          />
+          <Route path="/" element={<Root />}>
+            {dynamicRoutesRender}
+          </Route>
+          <Route path="*" element={<NoFound />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 };

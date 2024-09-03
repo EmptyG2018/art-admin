@@ -15,7 +15,11 @@ const ProtectedRoute: React.FC<{ element: React.ReactNode }> = ({
   }
 
   if (!user && !WHITELIST.includes(location.pathname)) {
-    return <Navigate to={`/login?redirect=`} />;
+    return (
+      <Navigate
+        to={`/login?redirect=${encodeURIComponent(location.pathname + location.search)}`}
+      />
+    );
   }
 
   return element;

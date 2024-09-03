@@ -14,7 +14,7 @@ import { getUserInfo } from '@/services/user';
 import { getSystemConfig, getSystemMenus } from '@/services/system';
 import storage from 'store';
 
-const Layout = () => {
+const Admin = () => {
   const location = useLocation();
   const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
     fixSiderbar: true,
@@ -168,21 +168,4 @@ const Layout = () => {
   );
 };
 
-export default () => {
-  const [initialized, setInitialized] = useState(false);
-
-  // useEffect(() => {
-  //   storage.set('profile', {});
-  //   Promise.all([getUserInfo(), getSystemConfig(), getSystemMenus()]).then(() => {
-  //     storage.set('profile', {});
-  //     setInitialized(true);
-  //   });
-  // }, []);
-
-  if (initialized) return <Layout />;
-  return (
-    <div style={{ height: '100vh' }}>
-      <Loading />
-    </div>
-  );
-};
+export default Admin;

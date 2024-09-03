@@ -174,13 +174,11 @@ const LoginPage: React.FC = () => {
       const res = await loginAccount({ ...rest, uuid });
 
       if (res.code === 200) {
-        
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
         app.message.success(defaultLoginSuccessMessage);
-        // await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
         navigate(urlParams.get('redirect') || '/');
         return;

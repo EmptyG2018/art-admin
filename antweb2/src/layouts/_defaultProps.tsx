@@ -10,14 +10,14 @@ export default {
         icon: <SmileFilled />,
       },
       {
-        path: '/admin',
+        path: '/system',
         name: '管理页',
         icon: <CrownFilled />,
         access: 'canAdmin',
         routes: [
           {
-            path: '/admin/sub-page1',
-            name: '一级页面',
+            path: '/system/user',
+            name: '用户管理',
             icon: 'https://gw.alipayobjects.com/zos/antfincdn/upvrAjAPQX/Logo_Tech%252520UI.svg',
           },
           {

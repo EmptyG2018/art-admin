@@ -1,34 +1,29 @@
 import { useState, useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import { Loading } from '@/components/Layout';
+import { RrotectedRoute } from '@/components/Router';
 import useUserStore from '@/stores/module/user';
-
-// 落地页
-const ENTRYPAGE = '/';
-
-// 免登录白名单
-export const WHITELIST = ['/login'];
+import useSystemStore from '@/stores/module/system';
 
 const Root = () => {
-  const location = useLocation();
-  const { user } = useUserStore();
+  const { getProfile } = useUserStore();
+  const { getConfig, getMenus } = useSystemStore();
   const [initialized, setInitialized] = useState(false);
 
-  // useEffect(() => {
-  //   if (!!user && WHITELIST.includes(location.pathname)) {
-  //     window.location.href = ENTRYPAGE;
-  //     return;
-  //   }
+  useEffect(() => {
+    Promise.all([getProfile(), getConfig(), getMenus()]).then(() => {
+      setInitialized(true);
+    });
+  }, []);
 
-  //   if (!user && !WHITELIST.includes(location.pathname)) {
-  //     window.location.href = ENTRYPAGE;
-  //     return;
-  //   }
+  if (!initialized)
+    return (
+      <div style={{ height: '100vh' }}>
+        <Loading />
+      </div>
+    );
 
-  //   setInitialized(true);
-  // }, []);
-
-  if (true) return <Outlet />;
-  return <span>sss</span>;
+  return <RrotectedRoute element={<Outlet />} />;
 };
 
 export default Root;
