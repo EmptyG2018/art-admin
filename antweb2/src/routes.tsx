@@ -1,19 +1,10 @@
-import { lazy, Suspense, useMemo } from 'react';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Outlet,
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
+import { lazy, useMemo } from 'react';
+import { Route, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { FetchRouterLoading, RrotectedRoute } from '@/components/Router';
 import { Root, Admin } from '@/layouts';
 import useSystemStore from '@/stores/module/system';
 import Login from './pages/Login';
 import NoFound from './pages/404';
-
-const User = lazy(() => import('./pages/System/User/index'));
 
 const CONST_ROUTES = [
   {
@@ -149,35 +140,18 @@ const AppRoutes = () => {
     {
       path: '/',
       element: <Root />,
-      loader: rootLoader,
-      children: [
-        {
-          path: 'team',
-          element: <Team />,
-          loader: teamLoader,
-        },
-      ],
+    },
+    {
+      path: '/login',
+      element: <Login />,
+    },
+    {
+      path: '*',
+      element: <NoFound />,
     },
   ]);
 
   return <RouterProvider router={router} />;
-
-  return (
-    <BrowserRouter>
-      <Suspense fallback={<div>loading...</div>}>
-        <Routes>
-          <Route
-            path="/login"
-            element={<RrotectedRoute element={<Login />} />}
-          />
-          <Route path="/" element={<Root />}>
-            {dynamicRoutesRender}
-          </Route>
-          <Route path="*" element={<NoFound />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
-  );
 };
 
 export default AppRoutes;
