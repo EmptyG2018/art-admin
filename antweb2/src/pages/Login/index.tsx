@@ -156,7 +156,7 @@ const CaptchaImage: React.FC<{
   );
 };
 
-const LoginPage: React.FC = () => {
+export const Component: React.FC = () => {
   const app = App.useApp();
   const { loginAccount } = useUserStore();
   const [userLoginState, setUserLoginState] = useState<any>({});
@@ -449,4 +449,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+Component.displayName = 'LoginPage';

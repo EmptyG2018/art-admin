@@ -1,40 +1,74 @@
-import React, { useState, StrictMode } from 'react';
+import React, { useState, StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { IntlProvider } from 'react-intl';
+import {
+  RawIntlProvider,
+  createIntl,
+  createIntlCache,
+  IntlShape,
+} from 'react-intl';
 import { Provider as StoreProvider } from 'react-redux';
-import { App as AntdContext, ConfigProvider as AntdProvier } from 'antd';
+import {
+  App as AntdContext,
+  ConfigProvider as AntdProvier,
+  ConfigProviderProps,
+} from 'antd';
+import { getLang, locales } from './locales';
 import stores from '@/stores';
 import AppRoutes from './routes';
-import { LocaleContext, loadLocale } from './locales';
+import dayjs from 'dayjs';
 import './App.css';
 
-function LocaleProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocale] = useState('zh-CN');
-  const messages = loadLocale(locale).messages;
+type Locale = ConfigProviderProps['locale'];
 
-  const changeLocale = (newLocale: string) => {
-    setLocale(newLocale);
-  };
+function AppProvider({ children }: { children: React.ReactNode }) {
+  const [locale, setLocale] = useState<Locale>();
+  const [intl, setIntl] = useState<IntlShape>();
+
+  useEffect(() => {
+    const lang = getLang();
+    const locale = locales[lang] || locales['zh-CN'];
+
+    // 加载 dayjs 语言包
+    locale.dayjs.messages().then(() => {
+      dayjs.locale(locale.dayjs.lang);
+    });
+
+    // 加载 antd 语言包
+    locale.antd().then((messages) => {
+      setLocale(messages.default);
+    });
+
+    // 加载 app 语言包
+    locale.messages().then((messages) => {
+      setIntl(
+        createIntl(
+          {
+            locale: lang,
+            messages: messages.default,
+          },
+          createIntlCache(),
+        ),
+      );
+    });
+  }, []);
+
+  if (!intl || !locale) return;
 
   return (
-    <LocaleContext.Provider value={{ locale, changeLocale }}>
-      <IntlProvider locale={locale} messages={messages}>
-        {children}
-      </IntlProvider>
-    </LocaleContext.Provider>
+    <AntdProvier locale={locale}>
+      <AntdContext>
+        <RawIntlProvider value={intl}>{children}</RawIntlProvider>
+      </AntdContext>
+    </AntdProvier>
   );
 }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <LocaleProvider>
-      <StoreProvider store={stores}>
-        <AntdProvier>
-          <AntdContext>
-            <AppRoutes />
-          </AntdContext>
-        </AntdProvier>
-      </StoreProvider>
-    </LocaleProvider>
+    <StoreProvider store={stores}>
+      <AppProvider>
+        <AppRoutes />
+      </AppProvider>
+    </StoreProvider>
   </StrictMode>,
 );

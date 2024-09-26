@@ -5,7 +5,6 @@
 /**
  * 布局组件
  */
-import FetchRouterLoading from './FetchRouterLoading';
 import RrotectedRoute from './RrotectedRoute';
 
-export { FetchRouterLoading, RrotectedRoute };
+export { RrotectedRoute };

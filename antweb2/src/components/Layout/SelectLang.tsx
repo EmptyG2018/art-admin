@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { Dropdown } from "antd";
-import { getLocales, LocaleContext } from "@/locales";
-import { createStyles } from "antd-style";
+import { useState } from 'react';
+import { Dropdown } from 'antd';
+import { getLang, changeLocale, getLocales } from '@/locales';
+import { createStyles } from 'antd-style';
 
 const useStyles = createStyles(({ css }) => ({
   lang: css`
@@ -32,20 +32,24 @@ const useStyles = createStyles(({ css }) => ({
 }));
 
 const SelectLang = () => {
+  const initlang = getLang();
+  const [lang, changeLange] = useState(initlang);
   const { styles } = useStyles();
-  const { locale, changeLocale } = useContext(LocaleContext);
 
   const items = getLocales().map((locale) => ({
     key: locale.lang,
-    label: locale.icon + " " + locale.label,
+    label: locale.icon + ' ' + locale.label,
   }));
 
   return (
     <Dropdown
       menu={{
-        selectedKeys: [locale],
+        selectedKeys: [lang],
         items,
-        onClick: ({ key }) => changeLocale(key),
+        onClick: ({ key }) => {
+          changeLange(key);
+          changeLocale(key);
+        },
       }}
     >
       <span className={styles.lang}>

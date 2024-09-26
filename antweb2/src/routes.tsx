@@ -1,10 +1,15 @@
-import { lazy, useMemo } from 'react';
-import { Route, createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { FetchRouterLoading, RrotectedRoute } from '@/components/Router';
+import { useMemo } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RrotectedRoute } from '@/components/Router';
+import { Loading } from './components/Layout';
 import { Root, Admin } from '@/layouts';
 import useSystemStore from '@/stores/module/system';
-import Login from './pages/Login';
+import { Component as Login } from './pages/Login';
 import NoFound from './pages/404';
+
+const LayoutMap: Record<string, React.ReactNode> = {
+  Admin: <Admin />,
+};
 
 const CONST_ROUTES = [
   {
@@ -103,47 +108,59 @@ const CONST_ROUTES = [
     ],
   },
 ];
+const modules = import.meta.glob('./pages/**/*.tsx');
 
-const LayoutMap: Record<string, React.ReactNode> = {
-  Admin: <Admin />,
+const loadPage = (page: string) => {
+  for (const path in modules) {
+    const dir = path.split('/pages')[1].split('.tsx')[0];
+    if (dir === page) return () => modules[path]();
+  }
 };
+
 const layoutElement = (element: string) => LayoutMap[element] || <div />;
 
-const deepGenerateRoutes = (routes) => {
+const generateDeepRoutes = (routes: any) => {
   if (!routes?.length) return null;
 
-  return routes.map((route) => {
+  return routes.map((route: any) => {
     const isSubMenu = !!route?.children;
-
-    return (
-      <Route
-        path={route.path}
-        element={
-          isSubMenu
-            ? layoutElement(route.component)
-            : lazy(() => import(`./pages/System/User/index`))
-        }
-        children={deepGenerateRoutes(route?.children)}
-      />
-    );
+    let element, lazy;
+    if (isSubMenu) {
+      element = layoutElement(route.component);
+    } else {
+      lazy = loadPage(route.component);
+    }
+    return {
+      path: route.path,
+      element,
+      lazy,
+      children: generateDeepRoutes(route?.children),
+    };
   });
 };
 
 const AppRoutes = () => {
   const { system } = useSystemStore();
 
-  const dynamicRoutesRender = useMemo(() => {
-    return deepGenerateRoutes(CONST_ROUTES);
+  const dynamicRoutes = useMemo(() => {
+    return generateDeepRoutes(CONST_ROUTES);
   }, []);
 
   const router = createBrowserRouter([
     {
-      path: '/',
-      element: <Root />,
+      path: '/login',
+      element: <RrotectedRoute element={<Login />} />,
     },
     {
-      path: '/login',
-      element: <Login />,
+      path: '/',
+      element: <Root />,
+      children: [
+        {
+          index: true,
+          element: <div>this is index</div>,
+        },
+        ...dynamicRoutes,
+      ],
     },
     {
       path: '*',
@@ -151,7 +168,16 @@ const AppRoutes = () => {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <RouterProvider
+      router={router}
+      fallbackElement={
+        <div style={{ height: '100vh' }}>
+          <Loading />
+        </div>
+      }
+    />
+  );
 };
 
 export default AppRoutes;
