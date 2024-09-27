@@ -15,4 +15,10 @@ declare namespace Dept {
     updateBy: string;
     updateTime: string;
   };
+  type NodeTree = {
+    id: number;
+    label: string;
+    parentId: number | null;
+    children?: Node[];
+  };
 }

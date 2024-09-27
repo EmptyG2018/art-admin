@@ -4,6 +4,11 @@ declare namespace API {
     msg: string;
   };
 
+  type PageResponse<T = any> = Response & {
+    rows: T[];
+    total: number;
+  };
+
   /** Result POSt /captchaImage */
   type CaptchaImageResult = Response & {
     uuid: string;
@@ -25,4 +30,20 @@ declare namespace API {
 
   /** Result POST /login */
   type UserInfoResult = Response & User.UserInfo;
+
+  /** Result GET /system/user/deptTree */
+  type DeptTreeListResult = Response & {
+    data: Dept.NodeTree[];
+  };
+
+  /** Result GET /system/user/list */
+  type UserPageResult = PageResponse<User.Item & { dept: Dept.Item }>;
+
+  /** Result GET /system/role/list */
+  type RolePageResult = PageResponse<Role.Item>;
+
+  /** Result GET /system/menu/list */
+  type MenuListResult = Response & {
+    data: Menu.Item[];
+  };
 }

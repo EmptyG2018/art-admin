@@ -6,16 +6,28 @@ import {
   SettingDrawer,
 } from '@ant-design/pro-components';
 import { ConfigProvider, Dropdown } from 'antd';
-import React, { useState, useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import { Loading, SelectLang } from '@/components/Layout';
-import defaultProps from './_defaultProps';
-import { getUserInfo } from '@/services/user';
-import { getSystemConfig, getSystemMenus } from '@/services/system';
-import storage from 'store';
+import { useState, useMemo } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { SelectLang } from '@/components/Layout';
+import { useSystemStore, useUserStore } from '@/stores/module';
+
+const generateDeepRoutes = (routes: any) => {
+  if (!routes?.length) return null;
+
+  return routes.map((route: any) => {
+    return {
+      path: route.path,
+      name: route.meta.title,
+      routes: generateDeepRoutes(route?.children),
+    };
+  });
+};
 
 const Admin = () => {
+  const { system } = useSystemStore();
+  const { user } = useUserStore();
   const location = useLocation();
+  const navigate = useNavigate();
   const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
     fixSiderbar: true,
     layout: 'mix',
@@ -27,9 +39,11 @@ const Admin = () => {
     fixedHeader: true,
   });
 
-  // const [pathname, setPathname] = useState('/weclome');
-
   if (typeof document === 'undefined') return <div />;
+
+  const routes = useMemo(() => {
+    return generateDeepRoutes(system.menus);
+  }, [system.menus]);
 
   return (
     <div
@@ -67,9 +81,12 @@ const Admin = () => {
                 width: '331px',
               },
             ]}
-            {...defaultProps}
             location={{
               pathname: location.pathname,
+            }}
+            route={{
+              path: '/',
+              routes,
             }}
             token={{
               header: {
@@ -77,13 +94,14 @@ const Admin = () => {
               },
             }}
             siderMenuType="group"
+            siderWidth={256}
             menu={{
               collapsedShowGroupTitle: true,
             }}
             avatarProps={{
               src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
               size: 'small',
-              title: '七妮妮',
+              title: user.user.nickName,
               render: (props, dom) => {
                 return (
                   <Dropdown
@@ -139,7 +157,7 @@ const Admin = () => {
             menuItemRender={(item, dom) => (
               <div
                 onClick={() => {
-                  setPathname(item.path || '/welcome');
+                  navigate(item.path || '/');
                 }}
               >
                 {dom}
@@ -148,19 +166,16 @@ const Admin = () => {
             {...settings}
           >
             <Outlet />
-            {/* <SettingDrawer
-              pathname={pathname}
+            <SettingDrawer
               enableDarkTheme
+              disableUrlParams
               getContainer={(e: any) => {
                 if (typeof window === 'undefined') return e;
-                return document.getElementById('test-pro-layout');
+                return document.getElementById('admin-template');
               }}
               settings={settings}
-              onSettingChange={(changeSetting) => {
-                setSetting(changeSetting);
-              }}
-              disableUrlParams={false}
-            /> */}
+              onSettingChange={setSetting}
+            />
           </ProLayout>
         </ConfigProvider>
       </ProConfigProvider>

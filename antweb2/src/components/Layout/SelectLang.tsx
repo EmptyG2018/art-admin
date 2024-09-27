@@ -33,7 +33,7 @@ const useStyles = createStyles(({ css }) => ({
 
 const SelectLang = () => {
   const initlang = getLang();
-  const [lang, changeLange] = useState(initlang);
+  const [lang, changeLang] = useState(initlang);
   const { styles } = useStyles();
 
   const items = getLocales().map((locale) => ({
@@ -47,7 +47,7 @@ const SelectLang = () => {
         selectedKeys: [lang],
         items,
         onClick: ({ key }) => {
-          changeLange(key);
+          changeLang(key);
           changeLocale(key);
         },
       }}

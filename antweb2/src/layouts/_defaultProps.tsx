@@ -21,8 +21,8 @@ export default {
             icon: 'https://gw.alipayobjects.com/zos/antfincdn/upvrAjAPQX/Logo_Tech%252520UI.svg',
           },
           {
-            path: '/admin/sub-page2',
-            name: '二级页面',
+            path: '/system/role',
+            name: '角色管理',
             icon: <CrownFilled />,
           },
           {

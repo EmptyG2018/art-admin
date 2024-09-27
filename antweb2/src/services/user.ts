@@ -27,3 +27,19 @@ export async function getUserInfo(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+// 查询用户分页列表
+export const queryUserPage = (
+  params: PageField & {
+    // query
+    /** keyword */
+    keyword?: string;
+  },
+  options?: { [key: string]: any },
+) => {
+  return request<API.UserPageResult>('/api/system/user/list', {
+    method: 'GET',
+    params: { ...params },
+    ...(options || {}),
+  });
+};
