@@ -1,56 +1,16 @@
 import { Button, Divider, Space, Drawer, message } from 'antd';
 import {
   ActionType,
-  FooterToolbar,
   PageContainer,
   ProDescriptions,
   ProTable,
+  ProColumns,
 } from '@ant-design/pro-components';
 import React, { useRef, useState } from 'react';
 import { queryMenuList } from '@/services/menu';
 import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
-
-interface TreeNode {
-  menuId: number;
-  parentId?: number | null;
-  name: string;
-  children?: TreeNode[];
-}
-
-function arrayToTree(nodes: TreeNode[]): TreeNode[] {
-  const map = new Map<number, TreeNode>();
-  const rootNodes: TreeNode[] = [];
-
-  // 创建一个从 id 到 node 的映射
-  nodes.forEach((node) => {
-    map.set(node.menuId, { ...node, children: [] });
-  });
-
-  // 遍历所有节点，构建树形结构
-  nodes.forEach((node) => {
-    const parent = map.get(node.parentId ?? 0);
-    if (parent) {
-      parent.children?.push(map.get(node.menuId)!);
-    } else {
-      rootNodes.push(map.get(node.menuId)!);
-    }
-  });
-
-  // 移除没有子节点的 children 字段
-  const removeEmptyChildren = (node: TreeNode): void => {
-    if (node.children && node.children.length === 0) {
-      delete node.children;
-    }
-    if (node.children) {
-      node.children.forEach((child) => removeEmptyChildren(child));
-    }
-  };
-
-  rootNodes.forEach((rootNode) => removeEmptyChildren(rootNode));
-
-  return rootNodes;
-}
+import { arrayToTree } from '@/utils/data';
 
 /**
  * 添加节点
@@ -126,8 +86,11 @@ export const Component: React.FC<unknown> = () => {
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<API.UserInfo>();
-  const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
-  const columns = [
+  const [expandedRowKeys, setexpandedRowKeys] = useState<Menu.Item['menuId'][]>(
+    [],
+  );
+
+  const columns: ProColumns[] = [
     {
       title: '菜单名称',
       dataIndex: 'menuName',
@@ -147,13 +110,13 @@ export const Component: React.FC<unknown> = () => {
     },
     {
       title: '显示顺序',
-      dataIndex: 'roleSort',
+      dataIndex: 'orderNum',
       valueType: 'text',
       hideInSearch: true,
     },
     {
       title: '状态',
-      dataIndex: 'orderNum',
+      dataIndex: 'status',
       valueType: 'select',
       valueEnum: {
         0: { text: '正常', status: 'MALE' },
@@ -207,7 +170,7 @@ export const Component: React.FC<unknown> = () => {
             新建
           </Button>,
           <Button key="export" onClick={() => handleModalVisible(true)}>
-            导出
+            展开/折叠
           </Button>,
         ]}
         request={async (params, sorter, filter) => {
@@ -224,37 +187,11 @@ export const Component: React.FC<unknown> = () => {
           };
         }}
         postData={(rows: any) => {
-          return arrayToTree(rows);
+          return arrayToTree(rows, { keyField: 'menuId' });
         }}
         columns={columns}
         pagination={false}
-        rowSelection={{
-          onChange: (_, selectedRows) => setSelectedRows(selectedRows),
-        }}
       />
-      {selectedRowsState?.length > 0 && (
-        <FooterToolbar
-          extra={
-            <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
-            </div>
-          }
-        >
-          <Button
-            onClick={async () => {
-              await handleRemove(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量删除
-          </Button>
-          <Button type="primary">批量审批</Button>
-        </FooterToolbar>
-      )}
-
       <CreateForm
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}

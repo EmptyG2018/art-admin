@@ -8,66 +8,34 @@ import {
   Empty,
   message,
 } from 'antd';
-import type { TreeDataNode } from 'antd';
 import {
   ActionType,
   FooterToolbar,
   PageContainer,
   ProDescriptions,
   ProTable,
+  ProColumns,
   ProCard,
 } from '@ant-design/pro-components';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useRequest } from 'ahooks';
 import { queryUserPage } from '@/services/user';
 import { queryDeptTreeList } from '@/services/dept';
 import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
 
-const getParentKey = (key: React.Key, tree: TreeDataNode[]): React.Key => {
-  let parentKey: React.Key;
-  for (let i = 0; i < tree.length; i++) {
-    const node = tree[i];
-    if (node.children) {
-      if (node.children.some((item) => item.key === key)) {
-        parentKey = node.key;
-      } else if (getParentKey(key, node.children)) {
-        parentKey = getParentKey(key, node.children);
-      }
-    }
-  }
-  return parentKey!;
-};
-
-const DeptTree = () => {
+const DeptTree = ({ onSelect }: { onSelect: (key: React.Key) => void }) => {
   const { data: deptTree } = useRequest(queryDeptTreeList);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    // const newExpandedKeys = dataList
-    //   .map((item) => {
-    //     if (item.title.indexOf(value) > -1) {
-    //       return getParentKey(item.key, defaultData);
-    //     }
-    //     return null;
-    //   })
-    //   .filter(
-    //     (item, i, self): item is React.Key =>
-    //       !!(item && self.indexOf(item) === i),
-    //   );
-    // setExpandedKeys(newExpandedKeys);
-    // setSearchValue(value);
-    // setAutoExpandParent(true);
-  };
+  const onSearch = (value: string) => {};
 
   return (
     <>
-      <Input.Search placeholder="请输入部门名称" onChange={onChange} />
-
+      <Input.Search placeholder="请输入部门名称" onSearch={onSearch} />
       {!deptTree?.data ? (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       ) : (
-        <Tree
+        <Tree<any>
           style={{ marginTop: 8 }}
           defaultExpandAll
           blockNode
@@ -77,6 +45,9 @@ const DeptTree = () => {
             children: 'children',
           }}
           treeData={deptTree.data}
+          onSelect={(selectedKeys) => {
+            onSelect && onSelect(selectedKeys[0]);
+          }}
         />
       )}
     </>
@@ -158,7 +129,9 @@ export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<API.UserInfo>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
-  const columns = [
+  const [deptId, setDeptId] = useState<React.Key>();
+
+  const columns: ProColumns[] = [
     {
       title: '用户编号',
       dataIndex: 'userId',
@@ -232,7 +205,7 @@ export const Component: React.FC<unknown> = () => {
     >
       <ProCard gutter={[16, 16]} ghost>
         <ProCard colSpan="300px" style={{ minHeight: 360 }}>
-          <DeptTree />
+          <DeptTree onSelect={setDeptId} />
         </ProCard>
         <ProCard>
           <ProTable
@@ -254,6 +227,7 @@ export const Component: React.FC<unknown> = () => {
                 导出
               </Button>,
             ]}
+            params={{ deptId }}
             request={async (params, sorter, filter) => {
               const { code, rows, total } = await queryUserPage({
                 ...params,
@@ -288,6 +262,7 @@ export const Component: React.FC<unknown> = () => {
               }
             >
               <Button
+                type="primary"
                 onClick={async () => {
                   await handleRemove(selectedRowsState);
                   setSelectedRows([]);
@@ -296,7 +271,6 @@ export const Component: React.FC<unknown> = () => {
               >
                 批量删除
               </Button>
-              <Button type="primary">批量审批</Button>
             </FooterToolbar>
           )}
         </ProCard>
@@ -306,7 +280,7 @@ export const Component: React.FC<unknown> = () => {
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}
       >
-        <ProTable<API.UserInfo, API.UserInfo>
+        <ProTable
           onSubmit={async (value) => {
             const success = await handleAdd(value);
             if (success) {
@@ -319,6 +293,15 @@ export const Component: React.FC<unknown> = () => {
           rowKey="id"
           type="form"
           columns={columns}
+          form={{
+            grid: true,
+            colProps: {
+              span: 12,
+            },
+            rowProps: {
+              gutter: 16,
+            },
+          }}
         />
       </CreateForm>
       {stepFormValues && Object.keys(stepFormValues).length ? (

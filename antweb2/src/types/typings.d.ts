@@ -31,6 +31,11 @@ declare namespace API {
   /** Result POST /login */
   type UserInfoResult = Response & User.UserInfo;
 
+  /** Result GET /system/dept/list */
+  type DeptListResult = Response & {
+    data: Dept.Item[];
+  };
+
   /** Result GET /system/user/deptTree */
   type DeptTreeListResult = Response & {
     data: Dept.NodeTree[];
@@ -46,4 +51,10 @@ declare namespace API {
   type MenuListResult = Response & {
     data: Menu.Item[];
   };
+
+  /** Result GET /system/post/list */
+  type PostPageResult = PageResponse<Post.Item>;
+
+  /** Result GET /system/dict/type/list */
+  type DictTypePageResult = PageResponse<Dict.Type>;
 }

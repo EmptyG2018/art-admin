@@ -32,8 +32,18 @@ export async function getUserInfo(options?: { [key: string]: any }) {
 export const queryUserPage = (
   params: PageField & {
     // query
-    /** keyword */
-    keyword?: string;
+    /** userName */
+    userName?: string;
+    /** phonenumber */
+    phonenumber?: string;
+    /** deptId */
+    deptId?: string;
+    /** status */
+    status?: string;
+    /** beginTime */
+    beginTime?: string;
+    /** endTime */
+    endTime?: string;
   },
   options?: { [key: string]: any },
 ) => {

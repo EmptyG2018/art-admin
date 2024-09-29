@@ -5,6 +5,7 @@ import {
   PageContainer,
   ProDescriptions,
   ProTable,
+  ProColumns,
 } from '@ant-design/pro-components';
 import React, { useRef, useState } from 'react';
 import { queryRolePage } from '@/services/role';
@@ -86,7 +87,7 @@ export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<API.UserInfo>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
-  const columns = [
+  const columns: ProColumns[] = [
     {
       title: '角色编号',
       dataIndex: 'roleId',
@@ -201,6 +202,7 @@ export const Component: React.FC<unknown> = () => {
           }
         >
           <Button
+            type="primary"
             onClick={async () => {
               await handleRemove(selectedRowsState);
               setSelectedRows([]);
@@ -209,7 +211,6 @@ export const Component: React.FC<unknown> = () => {
           >
             批量删除
           </Button>
-          <Button type="primary">批量审批</Button>
         </FooterToolbar>
       )}
 
