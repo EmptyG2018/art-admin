@@ -221,7 +221,7 @@ export const Component: React.FC = () => {
             id: 'pages.layouts.userLayout.title',
           })}
           initialValues={{
-            username: 'admin2',
+            username: 'antd',
             password: '123456',
             autoLogin: true,
           }}

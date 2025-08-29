@@ -1,182 +1,117 @@
-import { useMemo } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useState, useEffect, useMemo, Suspense, lazy } from 'react';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Outlet,
+  Navigate,
+} from 'react-router-dom';
 import { RrotectedRoute } from '@/components/Router';
 import { Loading } from './components/Layout';
-import { Root, Admin } from '@/layouts';
+import { Admin } from '@/layouts';
+import useUserStore from '@/stores/module/user';
 import useSystemStore from '@/stores/module/system';
 import { Component as Login } from './pages/Login';
 import NoFound from './pages/404';
 
 const LayoutMap: Record<string, React.ReactNode> = {
-  Admin: <Admin />,
+  Layout: <Outlet />,
 };
 
-const CONST_ROUTES = [
-  {
-    alwaysShow: true,
-    component: 'Admin',
-    redirect: 'noRedirect',
-    hidden: false,
-    name: 'System',
-    query: null,
-    path: '/system',
-    meta: {
-      icon: 'system',
-      link: null,
-      noCache: false,
-      title: '系统管理',
-    },
-    children: [
-      {
-        component: '/System/User/index',
-        hidden: false,
-        name: 'User',
-        query: null,
-        path: '/system/user',
-        meta: {
-          icon: 'user',
-          link: null,
-          noCache: false,
-          title: '用户管理',
-        },
-      },
-      {
-        component: '/System/Role/index',
-        hidden: false,
-        name: 'Role',
-        query: null,
-        path: '/system/role',
-        meta: {
-          icon: 'peoples',
-          link: null,
-          noCache: false,
-          title: '角色管理',
-        },
-      },
-      {
-        component: '/System/Menu/index',
-        hidden: false,
-        name: 'Menu',
-        query: null,
-        path: '/system/menu',
-        meta: {
-          icon: 'tree-table',
-          link: null,
-          noCache: false,
-          title: '菜单管理',
-        },
-      },
-      {
-        component: '/System/Dept/index',
-        hidden: false,
-        name: 'Dept',
-        query: null,
-        path: '/system/dept',
-        meta: {
-          icon: 'tree',
-          link: null,
-          noCache: false,
-          title: '部门管理',
-        },
-      },
-      {
-        component: '/System/Post/index',
-        hidden: false,
-        name: 'Post',
-        query: null,
-        path: '/system/post',
-        meta: {
-          icon: 'post',
-          link: null,
-          noCache: false,
-          title: '岗位管理',
-        },
-      },
-      {
-        component: '/System/Dict/index',
-        hidden: false,
-        name: 'Dict',
-        query: null,
-        path: '/system/dict',
-        meta: {
-          icon: 'dict',
-          link: null,
-          noCache: false,
-          title: '字典管理',
-        },
-      },
-    ],
-  },
-];
 const modules = import.meta.glob('./pages/**/*.tsx');
 
-const loadPage = (page: string) => {
+const loadLazyPage = (page: string) => {
   for (const path in modules) {
     const dir = path.split('/pages')[1].split('.tsx')[0];
-    if (dir === page) return () => modules[path]();
+    if (dir === page) {
+      const LazyComponent = lazy(() =>
+        modules[path]()
+          .then((r: any) => ({ default: r.Component }))
+          .catch(() => ({ default: () => <div /> })),
+      );
+      return (
+        <Suspense>
+          <LazyComponent />
+        </Suspense>
+      );
+    }
   }
 };
 
 const layoutElement = (element: string) => LayoutMap[element] || <div />;
 
 const generateDeepRoutes = (routes: any) => {
-  if (!routes?.length) return null;
+  if (!routes) return;
+  if (!routes.length) return [];
 
-  return routes.map((route: any) => {
+  const filterRoutes = routes.map((route: any) => {
     const isSubMenu = !!route?.children;
-    let element, lazy;
-    if (isSubMenu) {
-      element = layoutElement(route.component);
-    } else {
-      lazy = loadPage(route.component);
-    }
-    return {
-      path: route.path,
-      element,
-      lazy,
-      children: generateDeepRoutes(route?.children),
-    };
+    let element = isSubMenu
+      ? layoutElement(route.component)
+      : loadLazyPage(route.component);
+
+    return (
+      <Route path={route.path} element={element} key={route.path}>
+        {generateDeepRoutes(route?.children)}
+      </Route>
+    );
   });
+
+  const visibleRouteIdx = routes.findIndex((route: any) => !route.hidden);
+  const indexRoutes =
+    visibleRouteIdx !== -1
+      ? [
+          <Route
+            index
+            element={<Navigate to={routes[visibleRouteIdx].path} replace />}
+          />,
+        ]
+      : [];
+
+  return [...indexRoutes, ...filterRoutes];
+};
+
+const Permission = () => {
+  const { getProfile } = useUserStore();
+  const { getConfig, system, getMenus } = useSystemStore();
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    Promise.all([getProfile(), getConfig(), getMenus()]).then(() => {
+      setInitialized(true);
+    });
+  }, []);
+
+  const dynamicRoutes = useMemo(() => {
+    return generateDeepRoutes(system.menus);
+  }, [system.menus]);
+
+  if (!initialized)
+    return (
+      <div style={{ height: '100vh' }}>
+        <Loading />
+      </div>
+    );
+
+  return (
+    <>
+      <Admin element={<Routes>{dynamicRoutes}</Routes>} />
+    </>
+  );
 };
 
 const AppRoutes = () => {
-  const { system } = useSystemStore();
-
-  const dynamicRoutes = useMemo(() => {
-    return generateDeepRoutes(CONST_ROUTES);
-  }, []);
-
-  const router = createBrowserRouter([
-    {
-      path: '/login',
-      element: <RrotectedRoute element={<Login />} />,
-    },
-    {
-      path: '/',
-      element: <Root />,
-      children: [
-        {
-          index: true,
-          element: <div>this is index</div>,
-        },
-        ...dynamicRoutes,
-      ],
-    },
-    {
-      path: '*',
-      element: <NoFound />,
-    },
-  ]);
-
   return (
-    <RouterProvider
-      router={router}
-      fallbackElement={
-        <div style={{ height: '100vh' }}>
-          <Loading />
-        </div>
-      }
-    />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<RrotectedRoute element={<Login />} />} />
+        <Route path="/404" element={<NoFound />} />
+        <Route
+          path="/*"
+          element={<RrotectedRoute element={<Permission />} />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 };
 

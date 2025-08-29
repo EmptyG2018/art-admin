@@ -3,6 +3,7 @@ import axios from 'axios';
 import type { AxiosRequestConfig } from 'axios';
 import cache from '@/utils/cache';
 import { tansParams } from '@/utils/parameter';
+import { Modal, message, notification } from 'antd';
 
 // 是否显示重新登录
 export let isRelogin = { show: false };
@@ -122,36 +123,29 @@ const request = <T = any>(
     if (code === 401) {
       if (!isRelogin.show) {
         isRelogin.show = true;
-        // ElMessageBox.confirm(
-        //   '登录状态已过期，您可以继续留在该页面，或者重新登录',
-        //   '系统提示',
-        //   {
-        //     confirmButtonText: '重新登录',
-        //     cancelButtonText: '取消',
-        //     type: 'warning',
-        //   },
-        // )
-        //   .then(() => {
-        //     isRelogin.show = false;
-        //     useUserStore()
-        //       .logOut()
-        //       .then(() => {
-        //         location.reload();
-        //       });
-        //   })
-        //   .catch(() => {
-        //     isRelogin.show = false;
-        //   });
+        Modal.confirm({
+          title: '系统提示',
+          content: '登录状态已过期，您可以继续留在该页面，或者重新登录',
+          okText: '重新登录',
+          onOk() {
+            isRelogin.show = false;
+            cookie.remove('token');
+            location.href = '/login';
+          },
+          onCancel() {
+            isRelogin.show = false;
+          },
+        });
       }
       return Promise.reject('无效的会话，或者会话已过期，请重新登录。');
     } else if (code === 500) {
-      // ElMessage({ message: msg, type: 'error' });
+      message.error({ key: 500, content: msg });
       return Promise.reject(new Error(msg));
     } else if (code === 601) {
-      // ElMessage({ message: msg, type: 'warning' });
+      message.warning({ key: 601, content: msg, type: 'warning' });
       return Promise.reject(new Error(msg));
     } else if (code !== 200) {
-      // ElNotification.error({ title: msg });
+      notification.error({ key: 200, message: msg, description: '' });
       return Promise.reject('error');
     } else {
       return Promise.resolve(response.data);

@@ -3,11 +3,21 @@ import {
   Divider,
   Space,
   Drawer,
-  Input,
   Tree,
   Empty,
   message,
+  Tooltip,
+  Row,
+  Col,
 } from 'antd';
+import {
+  ImportOutlined,
+  ExportOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  KeyOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import {
   ActionType,
   FooterToolbar,
@@ -15,7 +25,6 @@ import {
   ProDescriptions,
   ProTable,
   ProColumns,
-  ProCard,
 } from '@ant-design/pro-components';
 import React, { useRef, useState } from 'react';
 import { useRequest } from 'ahooks';
@@ -27,11 +36,8 @@ import UpdateForm, { FormValueType } from './components/UpdateForm';
 const DeptTree = ({ onSelect }: { onSelect: (key: React.Key) => void }) => {
   const { data: deptTree } = useRequest(queryDeptTreeList);
 
-  const onSearch = (value: string) => {};
-
   return (
     <>
-      <Input.Search placeholder="请输入部门名称" onSearch={onSearch} />
       {!deptTree?.data ? (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       ) : (
@@ -134,19 +140,26 @@ export const Component: React.FC<unknown> = () => {
   const columns: ProColumns[] = [
     {
       title: '用户编号',
+      width: 160,
       dataIndex: 'userId',
       hideInSearch: true,
+      hideInForm: true,
     },
     {
       title: '用户名称',
+      width: 220,
       dataIndex: 'userName',
       valueType: 'text',
     },
     {
       title: '用户昵称',
+      width: 220,
       dataIndex: 'nickName',
       valueType: 'text',
       hideInSearch: true,
+      formItemProps: {
+        required: true,
+      },
     },
     {
       title: '手机号码',
@@ -155,77 +168,156 @@ export const Component: React.FC<unknown> = () => {
       hideInTable: true,
     },
     {
-      title: '部门',
+      title: '所属部门',
+      width: 160,
       dataIndex: 'deptName',
       valueType: 'text',
       hideInSearch: true,
     },
     {
-      title: '状态',
-      dataIndex: 'status',
-      valueType: 'select',
-      valueEnum: {
-        0: { text: '正常', status: 'MALE' },
-        1: { text: '停用', status: 'FEMALE' },
+      title: '邮箱',
+      dataIndex: 'email',
+      valueType: 'text',
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
+      title: '用户密码',
+      dataIndex: 'password',
+      valueType: 'password',
+      hideInSearch: true,
+      hideInTable: true,
+      formItemProps: {
+        required: true,
       },
     },
     {
+      title: '性别',
+      width: 120,
+      dataIndex: 'sex',
+      valueType: 'select',
+      hideInSearch: true,
+      hideInTable: true,
+      valueEnum: {
+        0: { text: '男' },
+        1: { text: '女' },
+      },
+    },
+    {
+      title: '状态',
+      width: 120,
+      dataIndex: 'status',
+      valueType: 'select',
+      valueEnum: {
+        0: { text: '正常', status: 'Processing' },
+        1: { text: '停用', status: 'Error' },
+      },
+    },
+    {
+      title: '岗位',
+      width: 120,
+      dataIndex: 'postId',
+      valueType: 'select',
+      valueEnum: {
+        0: { text: '正常', status: 'Processing' },
+        1: { text: '停用', status: 'Error' },
+      },
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
+      title: '角色',
+      width: 120,
+      dataIndex: 'roleId',
+      valueType: 'select',
+      valueEnum: {
+        0: { text: '正常', status: 'Processing' },
+        1: { text: '停用', status: 'Error' },
+      },
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
       title: '创建时间',
+      width: 220,
       dataIndex: 'createTime',
       valueType: 'dateRange',
+      hideInForm: true,
+    },
+    {
+      title: '备注',
+      width: 220,
+      dataIndex: 'remark',
+      valueType: 'textarea',
+      hideInSearch: true,
+      hideInTable: true,
+      colSize: 2,
     },
     {
       title: '操作',
-      width: 360,
+      width: 120,
       dataIndex: 'option',
       valueType: 'option',
+      fixed: 'right',
       render: (_, record) => (
-        <Space direction="horizontal" split={<Divider type="vertical" />}>
-          <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
-            }}
-          >
-            修改
-          </a>
-          <a href="">删除</a>
-          <a href="">重置密码</a>
-          <a href="">分配角色</a>
+        <Space
+          direction="horizontal"
+          split={<Divider type="vertical" />}
+          size={2}
+        >
+          <Tooltip title="修改">
+            <Button
+              type="link"
+              icon={<EditOutlined />}
+              onClick={() => {
+                handleUpdateModalVisible(true);
+                setStepFormValues(record);
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="删除">
+            <Button type="link" size="small" icon={<DeleteOutlined />} />
+          </Tooltip>
+          <Tooltip title="重置密码">
+            <Button type="link" size="small" icon={<KeyOutlined />} />
+          </Tooltip>
+          <Tooltip title="分配角色">
+            <Button type="link" size="small" icon={<UserOutlined />} />
+          </Tooltip>
         </Space>
       ),
     },
   ];
 
   return (
-    <PageContainer
-      header={{
-        title: '用户管理',
-      }}
-    >
-      <ProCard gutter={[16, 16]} ghost>
-        <ProCard colSpan="300px" style={{ minHeight: 360 }}>
+    <PageContainer>
+      <Row wrap={false} gutter={16}>
+        <Col flex="220px" style={{ minHeight: 360 }}>
           <DeptTree onSelect={setDeptId} />
-        </ProCard>
-        <ProCard>
+        </Col>
+        <Col flex="auto">
           <ProTable
             headerTitle="查询表格"
             actionRef={actionRef}
             rowKey="userId"
             toolBarRender={() => [
               <Button
-                key="add"
                 type="primary"
+                key="add"
                 onClick={() => handleModalVisible(true)}
               >
                 新建
               </Button>,
-              <Button key="import" onClick={() => handleModalVisible(true)}>
-                导入
-              </Button>,
-              <Button key="export" onClick={() => handleModalVisible(true)}>
-                导出
-              </Button>,
+              <Button
+                icon={<ImportOutlined />}
+                key="import"
+                onClick={() => handleModalVisible(true)}
+              />,
+              <Button
+                icon={<ExportOutlined />}
+                key="export"
+                onClick={() => handleModalVisible(true)}
+              />,
             ]}
             params={{ deptId }}
             request={async (params, sorter, filter) => {
@@ -250,6 +342,7 @@ export const Component: React.FC<unknown> = () => {
             rowSelection={{
               onChange: (_, selectedRows) => setSelectedRows(selectedRows),
             }}
+            scroll={{ x: 'max-content' }}
           />
           {selectedRowsState?.length > 0 && (
             <FooterToolbar
@@ -273,14 +366,28 @@ export const Component: React.FC<unknown> = () => {
               </Button>
             </FooterToolbar>
           )}
-        </ProCard>
-      </ProCard>
+        </Col>
+      </Row>
 
       <CreateForm
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}
       >
         <ProTable
+          rowKey="id"
+          type="form"
+          columns={columns}
+          form={{
+            layout: 'horizontal',
+            grid: true,
+            labelCol: { span: 8 },
+            colProps: {
+              span: 12,
+            },
+            rowProps: {
+              gutter: 16,
+            },
+          }}
           onSubmit={async (value) => {
             const success = await handleAdd(value);
             if (success) {
@@ -289,18 +396,6 @@ export const Component: React.FC<unknown> = () => {
                 actionRef.current.reload();
               }
             }
-          }}
-          rowKey="id"
-          type="form"
-          columns={columns}
-          form={{
-            grid: true,
-            colProps: {
-              span: 12,
-            },
-            rowProps: {
-              gutter: 16,
-            },
           }}
         />
       </CreateForm>

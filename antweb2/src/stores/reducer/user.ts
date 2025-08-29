@@ -1,7 +1,6 @@
-import storage from 'store';
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState: User.UserInfo = storage.get('profile') || null;
+const initialState: User.UserInfo = null as any;
 
 const userSlice = createSlice({
   name: 'user',

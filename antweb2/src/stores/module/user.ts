@@ -1,16 +1,17 @@
-import storage from 'store';
 import cookie from 'js-cookie';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import type { StoreState } from '..';
+import { setProfile } from '@/stores/reducer/user';
 import { loginForAccount, getUserInfo } from '@/services/user';
 
 const useUserStore = () => {
   const user = useSelector((state: StoreState) => state.user);
+  const dispatch = useDispatch();
 
   // 用户信息
   const getProfile = async () => {
     const { code, msg, ...userInfo } = await getUserInfo();
-    storage.set('profile', userInfo);
+    dispatch(setProfile(userInfo));
   };
 
   // 登录账号

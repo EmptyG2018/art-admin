@@ -1,4 +1,4 @@
-import { GithubFilled, LogoutOutlined } from '@ant-design/icons';
+import { LogoutOutlined } from '@ant-design/icons';
 import type { ProSettings } from '@ant-design/pro-components';
 import {
   ProConfigProvider,
@@ -6,26 +6,30 @@ import {
   SettingDrawer,
 } from '@ant-design/pro-components';
 import { ConfigProvider, Dropdown } from 'antd';
-import { useState, useMemo } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SelectLang } from '@/components/Layout';
 import { useSystemStore, useUserStore } from '@/stores/module';
 
 const generateDeepRoutes = (routes: any) => {
-  if (!routes?.length) return null;
+  if (!routes) return;
+  if (!routes.length) return [];
 
-  return routes.map((route: any) => {
-    return {
-      path: route.path,
-      name: route.meta.title,
-      routes: generateDeepRoutes(route?.children),
-    };
-  });
+  return routes
+    .filter((route: any) => !route.hidden)
+    .map((route: any) => {
+      return {
+        path: route.path,
+        name: route.meta.title,
+        icon: route.meta.icon,
+        routes: generateDeepRoutes(route?.children),
+      };
+    });
 };
 
-const Admin = () => {
+const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
   const { system } = useSystemStore();
-  const { user } = useUserStore();
+  const { user, logoutAccount } = useUserStore();
   const location = useLocation();
   const navigate = useNavigate();
   const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
@@ -60,7 +64,6 @@ const Admin = () => {
           }}
         >
           <ProLayout
-            prefixCls="my-prefix"
             bgLayoutImgList={[
               {
                 src: 'https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png',
@@ -81,6 +84,12 @@ const Admin = () => {
                 width: '331px',
               },
             ]}
+            waterMarkProps={{
+              content: `${user.user.nickName}`,
+              fontSize: 20,
+              gapX: 100,
+              gapY: 100,
+            }}
             location={{
               pathname: location.pathname,
             }}
@@ -93,11 +102,7 @@ const Admin = () => {
                 colorBgMenuItemSelected: 'rgba(0,0,0,0.04)',
               },
             }}
-            siderMenuType="group"
-            siderWidth={256}
-            menu={{
-              collapsedShowGroupTitle: true,
-            }}
+            breadcrumbRender={() => []}
             avatarProps={{
               src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
               size: 'small',
@@ -111,6 +116,10 @@ const Admin = () => {
                           key: 'logout',
                           icon: <LogoutOutlined />,
                           label: '退出登录',
+                          onClick: async () => {
+                            await logoutAccount();
+                            navigate('/login', { replace: true });
+                          },
                         },
                       ],
                     }}
@@ -123,7 +132,7 @@ const Admin = () => {
             actionsRender={(props) => {
               if (props.isMobile) return [];
               if (typeof window === 'undefined') return [];
-              return [<SelectLang />, <GithubFilled key="GithubFilled" />];
+              return [<SelectLang />];
             }}
             headerTitleRender={(logo, title, _) => {
               const defaultDom = (
@@ -148,12 +157,11 @@ const Admin = () => {
                     paddingBlockStart: 12,
                   }}
                 >
-                  <div>© 2021 Made with love</div>
+                  <div>© 2025 Made with love</div>
                   <div>by Ant Design</div>
                 </div>
               );
             }}
-            onMenuHeaderClick={(e) => console.log(e)}
             menuItemRender={(item, dom) => (
               <div
                 onClick={() => {
@@ -163,9 +171,10 @@ const Admin = () => {
                 {dom}
               </div>
             )}
+            siderWidth={256}
             {...settings}
           >
-            <Outlet />
+            {element}
             <SettingDrawer
               enableDarkTheme
               disableUrlParams
