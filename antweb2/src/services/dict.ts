@@ -23,3 +23,9 @@ export const queryDictTypePage = (
     ...(options || {}),
   });
 };
+
+export const queryDictsByType = (dictType: string) => {
+  return request(`/api/system/dict/data/type/${dictType}`, {
+    method: 'GET',
+  });
+};

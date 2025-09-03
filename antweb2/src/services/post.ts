@@ -23,3 +23,10 @@ export const queryPostPage = (
     ...(options || {}),
   });
 };
+
+// 查询所有岗位
+export const queryAllPost = () => {
+  return request('/api/system/post/all', {
+    method: 'GET',
+  });
+};

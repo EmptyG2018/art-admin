@@ -51,6 +51,18 @@ export class SysRoleService {
     });
   }
 
+  /* 全部查询 */
+  async all() {
+    return await this.prisma.sysRole.findMany({
+      where: {
+        delFlag: '0',
+      },
+      orderBy: {
+        roleSort: 'asc',
+      },
+    });
+  }
+
   /* 新增 */
   async add(addSysRoleDto: AddSysRoleDto) {
     const role = await this.prisma.sysRole.findFirst({

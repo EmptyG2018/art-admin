@@ -45,6 +45,15 @@ export class SysPostService {
     });
   }
 
+  /* 全部查询 */
+  async all() {
+    return await this.prisma.sysPost.findMany({
+      orderBy: {
+        postSort: 'asc',
+      },
+    });
+  }
+
   /* 新增 */
   async add(addSysPostDto: AddSysPostDto) {
     const post = await this.prisma.sysPost.findUnique({

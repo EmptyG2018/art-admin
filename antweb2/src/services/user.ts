@@ -1,33 +1,5 @@
 import request from './_request';
 
-// 账号登录
-export async function loginForAccount(
-  body: {
-    uuid: string;
-    username: string;
-    password: string;
-    code: string;
-  },
-  options?: { [key: string]: any },
-) {
-  return request<API.LoginAccountResult>('/api/login', {
-    method: 'POST',
-    headers: {
-      public: true,
-    },
-    data: body,
-    ...(options || {}),
-  });
-}
-
-// 用户信息
-export async function getUserInfo(options?: { [key: string]: any }) {
-  return request<API.UserInfoResult>('/api/getInfo', {
-    method: 'GET',
-    ...(options || {}),
-  });
-}
-
 // 查询用户分页列表
 export const queryUserPage = (
   params: PageField & {
@@ -53,3 +25,41 @@ export const queryUserPage = (
     ...(options || {}),
   });
 };
+
+// 新增用户
+export const addUser = (data: any) => {
+  return request<any>('/api/system/user', {
+    method: 'POST',
+    data,
+  });
+};
+
+// 修改用户
+export const updateUser = (data: any) => {
+  return request<any>('/api/system/user', {
+    method: 'PUT',
+    data,
+  });
+};
+
+// 用户详情
+export function getUser(userId: number) {
+  return request<any>('/api/system/user/antd/' + userId, {
+    method: 'GET',
+  });
+}
+
+// 删除用户
+export function deleteUser(userIds) {
+  return request<any>('/api/system/user/' + userIds, {
+    method: 'DELETE',
+  });
+}
+
+// 重置用户密码
+export function resetUserPwd(data: any) {
+  return request<any>('/api/system/user/resetPwd', {
+    method: 'PUT',
+    data
+  });
+}

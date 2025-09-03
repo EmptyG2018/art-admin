@@ -1,6 +1,5 @@
 import { Footer } from '@/components';
-import { queryCaptchaImage } from '@/services/auth';
-import { loginForAccount } from '@/services/user';
+import { queryCaptchaImage, loginForAccount } from '@/services/auth';
 import {
   AlipayCircleOutlined,
   LockOutlined,

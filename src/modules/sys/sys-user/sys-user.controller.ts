@@ -146,6 +146,19 @@ export class SysUserController {
     };
   }
 
+  /** id查询 */
+  @Get('antd/:userId')
+  async oneByUserIdAntd(@Param('userId') userId: number) {
+    const user = await this.sysUserService.oneByUserId(userId);
+    return {
+      data: {
+        ...user,
+        postIds: user.posts.map((item) => item.postId),
+        roleIds: user.roles.map((item) => item.roleId),
+      },
+    };
+  }
+
   /* 更新 */
   @Put()
   @RepeatSubmit()

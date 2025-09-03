@@ -2,7 +2,7 @@ import cookie from 'js-cookie';
 import { useSelector, useDispatch } from 'react-redux';
 import type { StoreState } from '..';
 import { setProfile } from '@/stores/reducer/user';
-import { loginForAccount, getUserInfo } from '@/services/user';
+import { loginForAccount, getUserInfo } from '@/services/auth';
 
 const useUserStore = () => {
   const user = useSelector((state: StoreState) => state.user);

@@ -1,4 +1,21 @@
-import { Button, Divider, Space, Drawer, message } from 'antd';
+import {
+  Button,
+  Divider,
+  Space,
+  Drawer,
+  message,
+  Dropdown,
+  Tooltip,
+} from 'antd';
+import {
+  ExportOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  FileDoneOutlined,
+  UserOutlined,
+  PlusOutlined,
+  EllipsisOutlined,
+} from '@ant-design/icons';
 import {
   ActionType,
   FooterToolbar,
@@ -7,11 +24,11 @@ import {
   ProTable,
   ProColumns,
 } from '@ant-design/pro-components';
+
 import React, { useRef, useState } from 'react';
 import { queryRolePage } from '@/services/role';
-import CreateForm from './components/CreateForm';
-import UpdateForm, { FormValueType } from './components/UpdateForm';
-
+import CreateRoleForm from './components/CreateRoleForm';
+import UpdateForm, { FormValueType } from './components/UpdateRoleForm';
 /**
  * 添加节点
  * @param fields
@@ -121,26 +138,31 @@ export const Component: React.FC<unknown> = () => {
     {
       title: '创建时间',
       dataIndex: 'createTime',
-      valueType: 'dateRange',
+      valueType: 'dateTime',
     },
     {
       title: '操作',
-      width: 360,
+      width: 120,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => (
-        <Space direction="horizontal" split={<Divider type="vertical" />}>
-          <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
-            }}
-          >
-            修改
-          </a>
-          <a href="">删除</a>
-          <a href="">数据授权</a>
-          <a href="">分配用户</a>
+        <Space
+          direction="horizontal"
+          split={<Divider type="vertical" />}
+          size={2}
+        >
+          <Tooltip title="修改">
+            <Button type="link" size="small" icon={<EditOutlined />} />
+          </Tooltip>
+          <Tooltip title="删除">
+            <Button type="link" size="small" icon={<DeleteOutlined />} />
+          </Tooltip>
+          <Tooltip title="数据授权">
+            <Button type="link" size="small" icon={<FileDoneOutlined />} />
+          </Tooltip>
+          <Tooltip title="分配用户">
+            <Button type="link" size="small" icon={<UserOutlined />} />
+          </Tooltip>
         </Space>
       ),
     },
@@ -157,16 +179,32 @@ export const Component: React.FC<unknown> = () => {
         actionRef={actionRef}
         rowKey="roleId"
         toolBarRender={() => [
-          <Button
-            key="add"
-            type="primary"
-            onClick={() => handleModalVisible(true)}
+          <CreateRoleForm
+            trigger={
+              <Button type="primary" icon={<PlusOutlined />} key="add">
+                新增
+              </Button>
+            }
+            onFinish={() => {
+              actionRef.current?.reload();
+            }}
+          />,
+          <Dropdown
+            key="menu"
+            menu={{
+              items: [
+                {
+                  label: '导出',
+                  icon: <ExportOutlined />,
+                  key: 'export',
+                },
+              ],
+            }}
           >
-            新建
-          </Button>,
-          <Button key="export" onClick={() => handleModalVisible(true)}>
-            导出
-          </Button>,
+            <Button>
+              <EllipsisOutlined />
+            </Button>
+          </Dropdown>,
         ]}
         request={async (params, sorter, filter) => {
           const { code, rows, total } = await queryRolePage({
@@ -214,25 +252,6 @@ export const Component: React.FC<unknown> = () => {
         </FooterToolbar>
       )}
 
-      <CreateForm
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-      >
-        <ProTable
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
-            if (success) {
-              handleModalVisible(false);
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          rowKey="id"
-          type="form"
-          columns={columns}
-        />
-      </CreateForm>
       {stepFormValues && Object.keys(stepFormValues).length ? (
         <UpdateForm
           onSubmit={async (value) => {

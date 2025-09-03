@@ -23,3 +23,10 @@ export const queryRolePage = (
     ...(options || {}),
   });
 };
+
+// 查询所有角色
+export const queryAllRole = () => {
+  return request('/api/system/role/all', {
+    method: 'GET',
+  });
+}

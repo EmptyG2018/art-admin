@@ -59,6 +59,12 @@ export class SysRoleController {
     return await this.sysRoleService.list(getSysRoleListDto);
   }
 
+  /* 全部查询 */
+  @Get('all')
+  async all() {
+    return await this.sysRoleService.all();
+  }
+
   /* 通过id查询 */
   @Get(':roleId')
   @RequiresPermissions('system:role:query')

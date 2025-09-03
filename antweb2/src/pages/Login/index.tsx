@@ -222,7 +222,7 @@ export const Component: React.FC = () => {
           })}
           initialValues={{
             username: 'antd',
-            password: '123456',
+            password: 'antd123',
             autoLogin: true,
           }}
           actions={[

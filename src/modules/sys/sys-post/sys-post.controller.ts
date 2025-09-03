@@ -52,6 +52,12 @@ export class SysPostController {
     return await this.sysPostService.list(getSysPostListDto);
   }
 
+  /* 全部查询 */
+  @Get('all')
+  async all() {
+    return await this.sysPostService.all();
+  }
+
   /* 通过id查询 */
   @Get(':postId')
   @RequiresPermissions('system:post:query')

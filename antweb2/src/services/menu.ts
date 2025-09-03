@@ -17,3 +17,9 @@ export const queryMenuList = (
     ...(options || {}),
   });
 };
+
+export const queryMenuTree = () => {
+  return request<any>('/api/system/menu/treeselect', {
+    method: 'GET',
+  });
+};
