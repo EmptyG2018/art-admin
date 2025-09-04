@@ -1,12 +1,15 @@
+import React, { useRef, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Button,
   Divider,
   Space,
-  message,
   Tooltip,
+  message,
   Dropdown,
   Popconfirm,
   Modal,
+  Badge,
 } from 'antd';
 import {
   ExportOutlined,
@@ -19,14 +22,19 @@ import {
   ActionType,
   FooterToolbar,
   PageContainer,
+  ProDescriptions,
   ProTable,
   ProColumns,
 } from '@ant-design/pro-components';
-import React, { useRef, useState } from 'react';
-import { queryPostPage, deletePost } from '@/services/post';
-import { queryDictsByType } from '@/services/dict';
-import CreatePostForm from './components/CreatePostForm';
-import UpdatePostForm from './components/UpdatePostForm';
+import { useRequest } from 'ahooks';
+import {
+  queryDictPage,
+  queryDictsByType,
+  getDictType,
+  deleteDict,
+} from '@/services/dict';
+import CreateDictDataForm from './components/CreateDictDataForm';
+import UpdateDictDataForm from './components/UpdateDictDataForm';
 
 /**
  *  删除节点
@@ -36,7 +44,7 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await deletePost(selectedRows.map((row) => row.postId).join(','));
+    await deleteDict(selectedRows.map((row) => row.dictCode).join(','));
     hide();
     message.success('删除成功');
     return true;
@@ -47,64 +55,106 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
   }
 };
 
-export const Component: React.FC<unknown> = () => {
+interface TableListProps {
+  dictType: string;
+}
+
+const TableList: React.FC<TableListProps> = (props) => {
+  const { dictType } = props;
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
-
   const columns: ProColumns[] = [
     {
-      title: '岗位编号',
-      dataIndex: 'postId',
+      title: '字典编号',
+      dataIndex: 'dictCode',
+      width: 140,
       hideInSearch: true,
       hideInForm: true,
     },
     {
-      title: '岗位名称',
-      dataIndex: 'postName',
+      title: '字典标签',
+      dataIndex: 'dictLabel',
       valueType: 'text',
-      width: 160,
+      width: 140,
+      formItemProps: {
+        rules: [{ required: true, message: '请输入字典标签' }],
+      },
+      colProps: { span: 12 },
+    },
+    {
+      title: '字典键值',
+      dataIndex: 'dictValue',
+      valueType: 'text',
+      width: 180,
+      hideInSearch: true,
+      formItemProps: {
+        rules: [{ required: true, message: '请输入字典键值' }],
+      },
+      colProps: { span: 12 },
+    },
+    {
+      title: '样式属性',
+      dataIndex: 'cssClass',
+      valueType: 'text',
+      hideInSearch: true,
       hideInTable: true,
+      colProps: { span: 12 },
+    },
+    {
+      title: '回显样式',
+      dataIndex: 'listClass',
+      valueType: 'select',
       hideInSearch: true,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入岗位名称' }],
+      hideInTable: true,
+      valueEnum: {
+        Default: { text: '默认(Default)', status: 'Default' },
+        Processing: { text: '主要(Processing)', status: 'Processing' },
+        Success: { text: '成功(Success)', status: 'Success' },
+        Warning: { text: '警告(Warning)', status: 'Warning' },
+        Error: { text: '错误(Error)', status: 'Error' },
+        space: { text: '--------------' },
+        default: { text: '默认(deafult)' },
+        primary: { text: '主要(primary)' },
+        success: { text: '成功(success)' },
+        info: { text: '信息(info)' },
+        warning: { text: '警告(warning)' },
+        danger: { text: '危险(danger)' },
+      },
+      fieldProps: {
+        optionRender: (option) => {
+          const statusMap = {
+            Default: 'default',
+            Processing: 'processing',
+            Success: 'success',
+            Warning: 'warning',
+            Error: 'error',
+          };
+
+          return (
+            <Badge status={statusMap[option.value] || ''} text={option.label} />
+          );
+        },
       },
       colProps: { span: 12 },
-    },
-    {
-      title: '岗位编码',
-      dataIndex: 'postCode',
-      valueType: 'text',
-      width: 160,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入岗位名称' }],
-      },
-      colProps: { span: 12 },
-    },
-    {
-      title: '岗位名称',
-      dataIndex: 'postName',
-      valueType: 'text',
-      width: 160,
-      hideInForm: true,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入岗位名称' }],
-      },
     },
     {
       title: '排序',
-      dataIndex: 'postSort',
+      dataIndex: 'dictSort',
       valueType: 'digit',
       width: 120,
       initialValue: 0,
       hideInSearch: true,
+      formItemProps: {
+        rules: [{ required: true, message: '请输入排序' }],
+      },
       colProps: { span: 12 },
     },
     {
       title: '状态',
       dataIndex: 'status',
       valueType: 'radio',
-      width: 120,
       initialValue: '0',
+      width: 120,
       request: async () => {
         const res = await queryDictsByType('sys_normal_disable');
         return res.data.map((dict) => ({
@@ -118,7 +168,6 @@ export const Component: React.FC<unknown> = () => {
       title: '备注',
       dataIndex: 'remark',
       valueType: 'textarea',
-      hideInTable: true,
       hideInSearch: true,
       colProps: { span: 24 },
     },
@@ -127,6 +176,7 @@ export const Component: React.FC<unknown> = () => {
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
+      hideInSearch: true,
       hideInForm: true,
     },
     {
@@ -134,24 +184,25 @@ export const Component: React.FC<unknown> = () => {
       width: 100,
       dataIndex: 'option',
       valueType: 'option',
+      fixed: 'right',
       render: (_, record) => (
         <Space
           direction="horizontal"
           split={<Divider type="vertical" />}
           size={2}
         >
-          <Tooltip title="修改">
-            <UpdatePostForm
-              values={record}
-              columns={columns}
-              trigger={
+          <UpdateDictDataForm
+            values={record}
+            columns={columns}
+            trigger={
+              <Tooltip title="修改">
                 <Button type="link" size="small" icon={<EditOutlined />} />
-              }
-              onFinish={() => {
-                actionRef.current?.reload();
-              }}
-            />
-          </Tooltip>
+              </Tooltip>
+            }
+            onFinish={() => {
+              actionRef.current?.reload();
+            }}
+          />
           <Tooltip title="删除">
             <Popconfirm
               title="删除记录"
@@ -170,17 +221,14 @@ export const Component: React.FC<unknown> = () => {
   ];
 
   return (
-    <PageContainer
-      header={{
-        title: '岗位管理',
-      }}
-    >
+    <>
       <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
-        rowKey="postId"
+        rowKey="dictCode"
         toolBarRender={() => [
-          <CreatePostForm
+          <CreateDictDataForm
+            values={{ dictType }}
             columns={columns}
             trigger={
               <Button type="primary" icon={<PlusOutlined />} key="add">
@@ -191,6 +239,7 @@ export const Component: React.FC<unknown> = () => {
               actionRef.current?.reload();
             }}
           />,
+
           <Dropdown
             menu={{
               items: [
@@ -209,7 +258,8 @@ export const Component: React.FC<unknown> = () => {
           </Dropdown>,
         ]}
         request={async (params, sorter, filter) => {
-          const { code, rows, total } = await queryPostPage({
+          const { code, rows, total } = await queryDictPage({
+            dictType,
             ...params,
             // FIXME: remove @ts-ignore
             // @ts-ignore
@@ -230,6 +280,7 @@ export const Component: React.FC<unknown> = () => {
         rowSelection={{
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
         }}
+        scroll={{ x: 1200 }}
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar
@@ -263,6 +314,78 @@ export const Component: React.FC<unknown> = () => {
           </Button>
         </FooterToolbar>
       )}
+    </>
+  );
+};
+
+export const Component: React.FC<unknown> = () => {
+  const params = useParams();
+  const navigate = useNavigate();
+  const { loading, data } = useRequest(
+    async () => {
+      const res = await getDictType(params.dictId);
+      return res.data;
+    },
+    {
+      refreshDeps: [params.dictId],
+    },
+  );
+
+  const columns: ProColumns[] = [
+    {
+      title: '字典编号',
+      dataIndex: 'dictId',
+    },
+    {
+      title: '字典名称',
+      dataIndex: 'dictName',
+      valueType: 'text',
+    },
+    {
+      title: '字典类型',
+      dataIndex: 'dictType',
+      valueType: 'text',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      valueType: 'radio',
+      request: async () => {
+        const res = await queryDictsByType('sys_normal_disable');
+        return res.data.map((dict) => ({
+          label: dict.dictLabel,
+          value: dict.dictValue,
+        }));
+      },
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
+      valueType: 'textarea',
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      valueType: 'dateTime',
+    },
+  ];
+
+  return (
+    <PageContainer
+      header={{
+        title: '字典数据',
+      }}
+      content={
+        <ProDescriptions
+          columns={columns}
+          column={{ sm: 1, md: 2, lg: 2, xl: 2 }}
+          loading={loading}
+          dataSource={data}
+        />
+      }
+      onBack={() => navigate(-1)}
+    >
+      {!!data?.dictType && <TableList dictType={data.dictType} />}
     </PageContainer>
   );
 };

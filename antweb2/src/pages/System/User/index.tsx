@@ -189,7 +189,7 @@ export const Component: React.FC<unknown> = () => {
             values={record}
             trigger={
               <Tooltip title="修改">
-                <Button type="link" size='small' icon={<EditOutlined />} />
+                <Button type="link" size="small" icon={<EditOutlined />} />
               </Tooltip>
             }
             onFinish={() => {
@@ -279,7 +279,6 @@ export const Component: React.FC<unknown> = () => {
                 }}
               />,
               <Dropdown
-                key="menu"
                 menu={{
                   items: [
                     {
@@ -294,6 +293,7 @@ export const Component: React.FC<unknown> = () => {
                     },
                   ],
                 }}
+                key="menu"
               >
                 <Button>
                   <EllipsisOutlined />
