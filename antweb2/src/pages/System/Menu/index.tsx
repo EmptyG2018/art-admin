@@ -1,4 +1,4 @@
-import { Button, Divider, Space, Drawer, message } from 'antd';
+import { Button, Divider, Space, Drawer, message, Tooltip } from 'antd';
 import {
   ActionType,
   PageContainer,
@@ -9,54 +9,8 @@ import {
 import React, { useRef, useState } from 'react';
 import { queryMenuList } from '@/services/menu';
 import CreateForm from './components/CreateForm';
-import UpdateForm, { FormValueType } from './components/UpdateForm';
 import { arrayToTree } from '@/utils/data';
-
-/**
- * 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.UserInfo) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addUser({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
-
-/**
- * 更新节点
- * @param fields
- */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('正在配置');
-  try {
-    await modifyUser(
-      {
-        userId: fields.id || '',
-      },
-      {
-        name: fields.name || '',
-        nickName: fields.nickName || '',
-        email: fields.email || '',
-      },
-    );
-    hide();
-
-    message.success('配置成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
-};
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 
 /**
  *  删除节点
@@ -126,26 +80,30 @@ export const Component: React.FC<unknown> = () => {
     {
       title: '创建时间',
       dataIndex: 'createTime',
-      valueType: 'dateRange',
+      valueType: 'dateTime',
+
       hideInSearch: true,
     },
     {
       title: '操作',
-      width: 240,
+      width: 140,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => (
-        <Space direction="horizontal" split={<Divider type="vertical" />}>
-          <a href="">新增</a>
-          <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
-            }}
-          >
-            修改
-          </a>
-          <a href="">删除</a>
+        <Space
+          direction="horizontal"
+          split={<Divider type="vertical" />}
+          size={2}
+        >
+          <Tooltip title="新增">
+            <Button type="link" size="small" icon={<PlusOutlined />} />
+          </Tooltip>
+          <Tooltip title="修改">
+            <Button type="link" size="small" icon={<EditOutlined />} />
+          </Tooltip>
+          <Tooltip title="删除">
+            <Button type="link" size="small" icon={<DeleteOutlined />} />
+          </Tooltip>
         </Space>
       ),
     },
@@ -162,15 +120,8 @@ export const Component: React.FC<unknown> = () => {
         actionRef={actionRef}
         rowKey="menuId"
         toolBarRender={() => [
-          <Button
-            key="add"
-            type="primary"
-            onClick={() => handleModalVisible(true)}
-          >
+          <Button type="primary" icon={<PlusOutlined />} key="add">
             新建
-          </Button>,
-          <Button key="export" onClick={() => handleModalVisible(true)}>
-            展开/折叠
           </Button>,
         ]}
         request={async (params, sorter, filter) => {
@@ -192,68 +143,6 @@ export const Component: React.FC<unknown> = () => {
         columns={columns}
         pagination={false}
       />
-      <CreateForm
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-      >
-        <ProTable
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
-            if (success) {
-              handleModalVisible(false);
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          rowKey="id"
-          type="form"
-          columns={columns}
-        />
-      </CreateForm>
-      {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
-          onSubmit={async (value) => {
-            const success = await handleUpdate(value);
-            if (success) {
-              handleUpdateModalVisible(false);
-              setStepFormValues({});
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-            setStepFormValues({});
-          }}
-          updateModalVisible={updateModalVisible}
-          values={stepFormValues}
-        />
-      ) : null}
-
-      <Drawer
-        width={600}
-        open={!!row}
-        onClose={() => {
-          setRow(undefined);
-        }}
-        closable={false}
-      >
-        {row?.name && (
-          <ProDescriptions<API.UserInfo>
-            column={2}
-            title={row?.name}
-            request={async () => ({
-              data: row || {},
-            })}
-            params={{
-              id: row?.name,
-            }}
-            columns={columns}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };
