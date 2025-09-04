@@ -30,3 +30,33 @@ export const queryAllPost = () => {
     method: 'GET',
   });
 };
+
+// 新增岗位
+export const addPost = (data) => {
+  return request('/api/system/post', {
+    method: 'POST',
+    data,
+  });
+};
+
+// 删除岗位
+export const deletePost = (postIds) => {
+  return request('/api/system/post/' + postIds, {
+    method: 'DELETE',
+  });
+};
+
+// 修改岗位
+export const updatePost = (data) => {
+  return request('/api/system/post', {
+    method: 'PUT',
+    data,
+  });
+};
+
+// 岗位详情
+export const getPost = (postId) => {
+  return request('/api/system/post/' + postId, {
+    method: 'GET',
+  });
+};

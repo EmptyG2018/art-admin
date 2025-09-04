@@ -93,15 +93,15 @@ export const Component: React.FC<unknown> = () => {
   const columns: ProColumns[] = [
     {
       title: '用户编号',
-      width: 120,
       dataIndex: 'userId',
+      width: 120,
       hideInSearch: true,
     },
     {
       title: '用户昵称',
-      width: 220,
       dataIndex: 'nickName',
       valueType: 'text',
+      width: 220,
       renderText: (text, record) => (
         <UpdateUserForm formDisabled values={record} trigger={<a>{text}</a>} />
       ),
@@ -109,9 +109,9 @@ export const Component: React.FC<unknown> = () => {
     },
     {
       title: '所属部门',
-      width: 160,
       dataIndex: 'deptId',
       valueType: 'treeSelect',
+      width: 160,
       fieldProps: {
         fieldNames: { label: 'label', value: 'id', children: 'children' },
       },
@@ -123,28 +123,28 @@ export const Component: React.FC<unknown> = () => {
     },
     {
       title: '手机号码',
-      width: 220,
       dataIndex: 'phonenumber',
       valueType: 'text',
+      width: 220,
     },
     {
       title: '邮箱',
-      width: 280,
       dataIndex: 'email',
       valueType: 'text',
+      width: 280,
       hideInSearch: true,
     },
     {
       title: '用户名称',
-      width: 220,
       dataIndex: 'userName',
       valueType: 'text',
+      width: 220,
     },
     {
       title: '性别',
-      width: 120,
       dataIndex: 'sex',
       valueType: 'radio',
+      width: 120,
       request: async () => {
         const res = await queryDictsByType('sys_user_sex');
         return res.data.map((dict) => ({
@@ -156,9 +156,9 @@ export const Component: React.FC<unknown> = () => {
     },
     {
       title: '状态',
-      width: 120,
       dataIndex: 'status',
-      valueType: 'select',
+      valueType: 'radio',
+      width: 120,
       request: async () => {
         const res = await queryDictsByType('sys_normal_disable');
         return res.data.map((dict) => ({
@@ -169,15 +169,15 @@ export const Component: React.FC<unknown> = () => {
     },
     {
       title: '创建时间',
-      width: 220,
       dataIndex: 'createTime',
       valueType: 'dateTime',
+      width: 220,
     },
     {
       title: '操作',
-      width: 120,
       dataIndex: 'option',
       valueType: 'option',
+      width: 180,
       fixed: 'right',
       render: (_, record) => (
         <Space
@@ -189,7 +189,7 @@ export const Component: React.FC<unknown> = () => {
             values={record}
             trigger={
               <Tooltip title="修改">
-                <Button type="link" icon={<EditOutlined />} />
+                <Button type="link" size='small' icon={<EditOutlined />} />
               </Tooltip>
             }
             onFinish={() => {

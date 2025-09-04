@@ -142,7 +142,7 @@ export const Component: React.FC<unknown> = () => {
     },
     {
       title: '操作',
-      width: 120,
+      width: 180,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => (
