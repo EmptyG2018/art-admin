@@ -1,18 +1,8 @@
 import React, { useRef, useState } from 'react';
-import {
-  Button,
-  Divider,
-  Space,
-  message,
-  Dropdown,
-  Tooltip,
-  Modal,
-  Input,
-} from 'antd';
+import { Button, message, Dropdown, Modal } from 'antd';
 import {
   ExportOutlined,
   EllipsisOutlined,
-  EyeOutlined,
   ClearOutlined,
 } from '@ant-design/icons';
 import {
@@ -23,8 +13,11 @@ import {
   ProColumns,
 } from '@ant-design/pro-components';
 import { queryDictsByType } from '@/services/dict';
-import { queryOperlogPage, deleteOperlog, cleanOperlog } from '@/services/log';
-import UpdateOperlogForm from './components/UpdateOperlogForm';
+import {
+  queryLogininforPage,
+  deleteLogininfor,
+  cleanLogininfor,
+} from '@/services/log';
 
 /**
  *  删除节点
@@ -34,7 +27,7 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await deleteOperlog(selectedRows.map((row) => row.operId).join(','));
+    await deleteLogininfor(selectedRows.map((row) => row.infoId).join(','));
     hide();
     message.success('删除成功');
     return true;
@@ -50,70 +43,43 @@ export const Component: React.FC<unknown> = () => {
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
   const columns: ProColumns[] = [
     {
-      title: '日志编号',
-      dataIndex: 'operId',
-      hideInSearch: true,
-      hideInForm: true,
+      title: '访问编号',
+      dataIndex: 'infoId',
       width: 140,
-    },
-    {
-      title: '登录信息',
-      dataIndex: 'loginInfo',
-      renderFormItem: (_, __, form) => {
-        const { operIp, operName, operLocation } = form.getFieldsValue(true);
-        return (
-          <Input.TextArea
-            value={`操作人：${operName} \nIP地址：${operIp}（${operLocation}）`}
-          />
-        );
-      },
       hideInSearch: true,
-      hideInTable: true,
-      width: 240,
-      colProps: { span: 24 },
     },
     {
-      title: '系统模块',
-      dataIndex: 'title',
+      title: '用户名称',
+      dataIndex: 'userName',
       valueType: 'text',
       width: 180,
-      colProps: { span: 12 },
     },
     {
-      title: '请求地址',
-      dataIndex: 'operUrl',
+      title: '登录IP',
+      dataIndex: 'ipaddr',
       valueType: 'text',
+      width: 180,
+    },
+    {
+      title: '登录地址',
+      dataIndex: 'loginLocation',
+      valueType: 'text',
+      width: 180,
       hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 12 },
     },
     {
-      title: '请求动作',
-      dataIndex: 'businessType',
-      valueType: 'select',
-      width: 180,
-      request: async () => {
-        const res = await queryDictsByType('sys_oper_type');
-        return res.data.map((dict) => ({
-          label: dict.dictLabel,
-          value: dict.dictValue,
-        }));
-      },
-      colProps: { span: 12 },
-    },
-    {
-      title: '操作人员',
-      dataIndex: 'operName',
+      title: '操作系统',
+      dataIndex: 'os',
       valueType: 'text',
       width: 180,
-      hideInForm: true,
+      hideInSearch: true,
     },
     {
-      title: 'IP地址',
-      dataIndex: 'operIp',
+      title: '浏览器',
+      dataIndex: 'browser',
       valueType: 'text',
       width: 180,
-      hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '执行状态',
@@ -127,90 +93,25 @@ export const Component: React.FC<unknown> = () => {
           value: dict.dictValue,
         }));
       },
-      colProps: { span: 12 },
     },
     {
-      title: '操作方法',
-      dataIndex: 'method',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 24 },
-    },
-    {
-      title: '请求参数',
-      dataIndex: 'operParam',
-      valueType: 'textarea',
-      fieldProps: {
-        autoSize: { minRows: 6, maxRows: 8 },
-      },
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 12 },
-    },
-    {
-      title: '响应参数',
-      dataIndex: 'jsonResult',
-      valueType: 'textarea',
-      fieldProps: {
-        autoSize: { minRows: 6, maxRows: 8 },
-      },
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 12 },
-    },
-    {
-      title: '耗时(ms)',
-      dataIndex: 'costTime',
-      valueType: 'text',
-      hideInSearch: true,
-      width: 120,
-      colProps: { span: 12 },
-    },
-    {
-      title: '操作时间',
-      dataIndex: 'operTime',
+      title: '登录时间',
+      dataIndex: 'loginTime',
       valueType: 'dateTime',
       width: 220,
-      colProps: { span: 12 },
-    },
-    {
-      title: '操作',
-      width: 60,
-      dataIndex: 'option',
-      valueType: 'option',
-      fixed: 'right',
-      render: (_, record) => (
-        <Space
-          direction="horizontal"
-          split={<Divider type="vertical" />}
-          size={2}
-        >
-          <UpdateOperlogForm
-            formDisabled
-            values={record}
-            columns={columns}
-            trigger={
-              <Tooltip title="查看">
-                <Button type="link" size="small" icon={<EyeOutlined />} />
-              </Tooltip>
-            }
-          />
-        </Space>
-      ),
     },
   ];
 
   return (
     <PageContainer
       header={{
-        title: '操作日志',
+        title: '登录日志',
       }}
     >
       <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
-        rowKey="operId"
+        rowKey="infoId"
         toolBarRender={() => [
           <Button
             icon={<ClearOutlined />}
@@ -221,7 +122,7 @@ export const Component: React.FC<unknown> = () => {
                 content: '您确定要清空全部记录吗？',
                 onOk: async () => {
                   try {
-                    await cleanOperlog();
+                    await cleanLogininfor();
                     actionRef.current?.reloadAndRest?.();
                     Promise.resolve();
                   } catch {
@@ -251,7 +152,7 @@ export const Component: React.FC<unknown> = () => {
           </Dropdown>,
         ]}
         request={async (params, sorter, filter) => {
-          const { code, rows, total } = await queryOperlogPage({
+          const { code, rows, total } = await queryLogininforPage({
             ...params,
             // FIXME: remove @ts-ignore
             // @ts-ignore

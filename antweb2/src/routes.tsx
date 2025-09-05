@@ -16,6 +16,7 @@ import NoFound from './pages/404';
 
 const LayoutMap: Record<string, React.ReactNode> = {
   Layout: <Outlet />,
+  ParentView: <Outlet />,
 };
 
 const modules = import.meta.glob('./pages/**/*.tsx');

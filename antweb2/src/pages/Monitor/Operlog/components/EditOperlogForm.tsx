@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Modal, FormInstance, Button, Flex } from 'antd';
 import { ProTable, ProColumns } from '@ant-design/pro-components';
 
-interface EditConfigWrapperForm {
+interface EditOperlogWrapperForm {
+  formDisabled?: boolean;
   values?: any;
   request?: any;
   columns: ProColumns[];
@@ -10,14 +11,14 @@ interface EditConfigWrapperForm {
   onFinish?: (values: any) => void;
 }
 
-interface EditConfigForm extends EditConfigWrapperForm {
+interface EditOperlogForm extends EditOperlogWrapperForm {
   trigger: JSX.Element;
   title: string;
 }
 
-const EditConfigWrapperForm: React.FC<EditConfigWrapperForm> = (props) => {
+const EditOperlogWrapperForm: React.FC<EditOperlogWrapperForm> = (props) => {
   const formRef = useRef<FormInstance>();
-  const { values, request, columns, onCancel, onFinish } = props;
+  const { formDisabled, values, request, columns, onCancel, onFinish } = props;
 
   useEffect(() => {
     if (values) formRef.current?.setFieldsValue(values);
@@ -44,8 +45,10 @@ const EditConfigWrapperForm: React.FC<EditConfigWrapperForm> = (props) => {
       form={{
         grid: true,
         rowProps: { gutter: 16 },
+        disabled: formDisabled,
         submitter: {
           render: ({ form }) => {
+            if (formDisabled) return null;
             return (
               <Flex gap={8} justify="flex-end">
                 <Button key="cancel" onClick={() => onCancel?.()}>
@@ -68,7 +71,7 @@ const EditConfigWrapperForm: React.FC<EditConfigWrapperForm> = (props) => {
   );
 };
 
-const EditConfigForm: React.FC<EditConfigForm> = (props) => {
+const EditOperlogForm: React.FC<EditOperlogForm> = (props) => {
   const { trigger, title, onFinish, ...rest } = props;
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -85,7 +88,7 @@ const EditConfigForm: React.FC<EditConfigForm> = (props) => {
         destroyOnClose
         onCancel={() => setVisible(false)}
       >
-        <EditConfigWrapperForm
+        <EditOperlogWrapperForm
           onFinish={async (values) => {
             const ok = await onFinish?.(values);
             if (ok) setVisible(false);
@@ -98,5 +101,4 @@ const EditConfigForm: React.FC<EditConfigForm> = (props) => {
   );
 };
 
-export default EditConfigForm;
-
+export default EditOperlogForm;
