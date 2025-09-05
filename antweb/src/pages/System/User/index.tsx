@@ -1,64 +1,69 @@
-import services from '@/services';
+import {
+  Button,
+  Divider,
+  Space,
+  Tree,
+  Empty,
+  message,
+  Tooltip,
+  Row,
+  Col,
+  Dropdown,
+  Popconfirm,
+  Modal,
+} from 'antd';
+import {
+  ImportOutlined,
+  ExportOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  KeyOutlined,
+  UserOutlined,
+  PlusOutlined,
+  EllipsisOutlined,
+} from '@ant-design/icons';
 import {
   ActionType,
   FooterToolbar,
   PageContainer,
-  ProDescriptions,
-  ProDescriptionsItemProps,
   ProTable,
+  ProColumns,
+  ModalForm,
+  ProFormText,
 } from '@ant-design/pro-components';
-import { Button, Divider, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
-import CreateForm from './components/CreateForm';
-import UpdateForm, { FormValueType } from './components/UpdateForm';
+import { useRequest } from 'ahooks';
+import { queryUserPage, deleteUser, resetUserPwd } from '@/services/user';
+import { queryDeptTreeList } from '@/services/dept';
+import { queryDictsByType } from '@/services/dict';
+import CreateUserForm from './components/CreateUserForm';
+import UpdateUserForm from './components/UpdateUserForm';
 
-const { addUser, queryUserList, deleteUser, modifyUser } =
-  services.UserController;
+const DeptTree = ({ onSelect }: { onSelect: (key: React.Key) => void }) => {
+  const { data: deptTree } = useRequest(queryDeptTreeList);
 
-/**
- * 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.UserInfo) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addUser({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
-
-/**
- * 更新节点
- * @param fields
- */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('正在配置');
-  try {
-    await modifyUser(
-      {
-        userId: fields.id || '',
-      },
-      {
-        name: fields.name || '',
-        nickName: fields.nickName || '',
-        email: fields.email || '',
-      },
-    );
-    hide();
-
-    message.success('配置成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
+  return (
+    <>
+      {!deptTree?.data ? (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      ) : (
+        <Tree<any>
+          style={{ marginTop: 8 }}
+          defaultExpandAll
+          blockNode
+          fieldNames={{
+            key: 'id',
+            title: 'label',
+            children: 'children',
+          }}
+          treeData={deptTree.data}
+          onSelect={(selectedKeys) => {
+            onSelect && onSelect(selectedKeys[0]);
+          }}
+        />
+      )}
+    </>
+  );
 };
 
 /**
@@ -69,202 +74,292 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await deleteUser({
-      userId: selectedRows.find((row) => row.id)?.id || '',
-    });
+    await deleteUser(selectedRows.map((row) => row.userId).join(','));
     hide();
-    message.success('删除成功，即将刷新');
+    message.success('删除成功');
     return true;
-  } catch (error) {
+  } catch {
     hide();
-    message.error('删除失败，请重试');
+    message.error('删除失败请重试!');
     return false;
   }
 };
 
-const TableList: React.FC<unknown> = () => {
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
-  const [updateModalVisible, handleUpdateModalVisible] =
-    useState<boolean>(false);
-  const [stepFormValues, setStepFormValues] = useState({});
+export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<API.UserInfo>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
-  const columns: ProDescriptionsItemProps<API.UserInfo>[] = [
+  const [deptId, setDeptId] = useState<React.Key>();
+
+  const columns: ProColumns[] = [
     {
-      title: '名称',
-      dataIndex: 'name',
-      tip: '名称是唯一的 key',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '名称为必填项',
-          },
-        ],
-      },
+      title: '用户编号',
+      dataIndex: 'userId',
+      width: 120,
+      hideInSearch: true,
     },
     {
-      title: '昵称',
+      title: '用户昵称',
       dataIndex: 'nickName',
       valueType: 'text',
+      width: 220,
+      renderText: (text, record) => (
+        <UpdateUserForm formDisabled values={record} trigger={<a>{text}</a>} />
+      ),
+      hideInSearch: true,
+    },
+    {
+      title: '所属部门',
+      dataIndex: 'deptId',
+      valueType: 'treeSelect',
+      width: 160,
+      fieldProps: {
+        fieldNames: { label: 'label', value: 'id', children: 'children' },
+      },
+      request: async () => {
+        const res = await queryDeptTreeList();
+        return res.data;
+      },
+      hideInSearch: true,
+    },
+    {
+      title: '手机号码',
+      dataIndex: 'phonenumber',
+      valueType: 'text',
+      width: 220,
+    },
+    {
+      title: '邮箱',
+      dataIndex: 'email',
+      valueType: 'text',
+      width: 280,
+      hideInSearch: true,
+    },
+    {
+      title: '用户名称',
+      dataIndex: 'userName',
+      valueType: 'text',
+      width: 220,
     },
     {
       title: '性别',
-      dataIndex: 'gender',
-      hideInForm: true,
-      valueEnum: {
-        0: { text: '男', status: 'MALE' },
-        1: { text: '女', status: 'FEMALE' },
+      dataIndex: 'sex',
+      valueType: 'radio',
+      width: 120,
+      request: async () => {
+        const res = await queryDictsByType('sys_user_sex');
+        return res.data.map((dict) => ({
+          label: dict.dictLabel,
+          value: dict.dictValue,
+        }));
       },
+      hideInSearch: true,
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      valueType: 'radio',
+      width: 120,
+      request: async () => {
+        const res = await queryDictsByType('sys_normal_disable');
+        return res.data.map((dict) => ({
+          label: dict.dictLabel,
+          value: dict.dictValue,
+        }));
+      },
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      valueType: 'dateTime',
+      width: 220,
     },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
+      width: 180,
+      fixed: 'right',
       render: (_, record) => (
-        <>
-          <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
+        <Space
+          direction="horizontal"
+          split={<Divider type="vertical" />}
+          size={2}
+        >
+          <UpdateUserForm
+            values={record}
+            trigger={
+              <Tooltip title="修改">
+                <Button type="link" size="small" icon={<EditOutlined />} />
+              </Tooltip>
+            }
+            onFinish={() => {
+              actionRef.current?.reload();
+            }}
+          />
+          <Tooltip title="删除">
+            <Popconfirm
+              title="删除记录"
+              description="您确定要删除此记录吗？"
+              onConfirm={async () => {
+                await handleRemove([record]);
+                actionRef.current?.reloadAndRest?.();
+              }}
+            >
+              <Button type="link" size="small" icon={<DeleteOutlined />} />
+            </Popconfirm>
+          </Tooltip>
+          <ModalForm
+            title="重置密码"
+            width={400}
+            trigger={
+              <Tooltip title="重置密码">
+                <Button type="link" size="small" icon={<KeyOutlined />} />
+              </Tooltip>
+            }
+            modalProps={{
+              destroyOnClose: true,
+            }}
+            onFinish={async (formValues) => {
+              const hide = message.loading('正在重置');
+              try {
+                await resetUserPwd({ ...formValues, userId: record.userId });
+                hide();
+                message.success('重置成功');
+                return true;
+              } catch {
+                hide();
+                message.error('重置失败请重试！');
+                return false;
+              }
             }}
           >
-            配置
-          </a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a>
-        </>
+            <ProFormText.Password
+              name="password"
+              label="新密码"
+              placeholder="请输入新密码"
+              rules={[
+                { required: true, message: '请输入密码' },
+                {
+                  pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/,
+                  message: '密码至少包含字母和数字，且长度在6-20位之间',
+                },
+              ]}
+              colProps={{ span: 24 }}
+            />
+          </ModalForm>
+
+          <Tooltip title="分配角色">
+            <Button type="link" size="small" icon={<UserOutlined />} />
+          </Tooltip>
+        </Space>
       ),
     },
   ];
 
   return (
-    <PageContainer
-      header={{
-        title: '用户管理',
-      }}
-    >
-      <ProTable<API.UserInfo>
-        headerTitle="查询表格"
-        actionRef={actionRef}
-        rowKey="id"
-        search={{
-          labelWidth: 120,
-        }}
-        toolBarRender={() => [
-          <Button
-            key="1"
-            type="primary"
-            onClick={() => handleModalVisible(true)}
-          >
-            新建
-          </Button>,
-        ]}
-        request={async (params, sorter, filter) => {
-          const { data, success } = await queryUserList({
-            ...params,
-            // FIXME: remove @ts-ignore
-            // @ts-ignore
-            sorter,
-            filter,
-          });
-          return {
-            data: data?.list || [],
-            success,
-          };
-        }}
-        columns={columns}
-        rowSelection={{
-          onChange: (_, selectedRows) => setSelectedRows(selectedRows),
-        }}
-      />
-      {selectedRowsState?.length > 0 && (
-        <FooterToolbar
-          extra={
-            <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
-            </div>
-          }
-        >
-          <Button
-            onClick={async () => {
-              await handleRemove(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量删除
-          </Button>
-          <Button type="primary">批量审批</Button>
-        </FooterToolbar>
-      )}
-      <CreateForm
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-      >
-        <ProTable<API.UserInfo, API.UserInfo>
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
-            if (success) {
-              handleModalVisible(false);
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          rowKey="id"
-          type="form"
-          columns={columns}
-        />
-      </CreateForm>
-      {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
-          onSubmit={async (value) => {
-            const success = await handleUpdate(value);
-            if (success) {
-              handleUpdateModalVisible(false);
-              setStepFormValues({});
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-            setStepFormValues({});
-          }}
-          updateModalVisible={updateModalVisible}
-          values={stepFormValues}
-        />
-      ) : null}
-
-      <Drawer
-        width={600}
-        open={!!row}
-        onClose={() => {
-          setRow(undefined);
-        }}
-        closable={false}
-      >
-        {row?.name && (
-          <ProDescriptions<API.UserInfo>
-            column={2}
-            title={row?.name}
-            request={async () => ({
-              data: row || {},
-            })}
-            params={{
-              id: row?.name,
+    <PageContainer>
+      <Row wrap={false} gutter={16}>
+        <Col flex="220px" style={{ minHeight: 360 }}>
+          <DeptTree onSelect={setDeptId} />
+        </Col>
+        <Col flex="auto">
+          <ProTable
+            headerTitle="查询表格"
+            actionRef={actionRef}
+            rowKey="userId"
+            toolBarRender={() => [
+              <CreateUserForm
+                trigger={
+                  <Button type="primary" icon={<PlusOutlined />} key="add">
+                    新增
+                  </Button>
+                }
+                onFinish={() => {
+                  actionRef.current?.reload();
+                }}
+              />,
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      label: '导入',
+                      icon: <ImportOutlined />,
+                      key: 'import',
+                    },
+                    {
+                      label: '导出',
+                      icon: <ExportOutlined />,
+                      key: 'export',
+                    },
+                  ],
+                }}
+                key="menu"
+              >
+                <Button>
+                  <EllipsisOutlined />
+                </Button>
+              </Dropdown>,
+            ]}
+            params={{ deptId }}
+            request={async (params, sorter, filter) => {
+              const { code, rows, total } = await queryUserPage({
+                ...params,
+                // FIXME: remove @ts-ignore
+                // @ts-ignore
+                sorter,
+                filter,
+              });
+              return {
+                data: rows,
+                total,
+                success: code === 200,
+              };
             }}
             columns={columns}
+            pagination={{
+              current: 1,
+              pageSize: 15,
+            }}
+            rowSelection={{
+              onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+            }}
+            scroll={{ x: 'max-content' }}
           />
-        )}
-      </Drawer>
+          {selectedRowsState?.length > 0 && (
+            <FooterToolbar
+              extra={
+                <div>
+                  已选择{' '}
+                  <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
+                  项&nbsp;&nbsp;
+                </div>
+              }
+            >
+              <Button
+                type="primary"
+                onClick={async () => {
+                  Modal.confirm({
+                    title: '删除记录',
+                    content: '您确定要删除选中的记录吗？',
+                    onOk: async () => {
+                      const ok = await handleRemove(selectedRowsState);
+                      if (ok) {
+                        setSelectedRows([]);
+                        actionRef.current?.reloadAndRest?.();
+                        Promise.resolve();
+                      } else {
+                        Promise.reject();
+                      }
+                    },
+                  });
+                }}
+              >
+                批量删除
+              </Button>
+            </FooterToolbar>
+          )}
+        </Col>
+      </Row>
     </PageContainer>
   );
 };
-
-export default TableList;

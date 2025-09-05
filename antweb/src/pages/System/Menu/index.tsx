@@ -1,65 +1,16 @@
-import services from '@/services';
+import { Button, Divider, Space, Drawer, message, Tooltip } from 'antd';
 import {
   ActionType,
-  FooterToolbar,
   PageContainer,
   ProDescriptions,
-  ProDescriptionsItemProps,
   ProTable,
+  ProColumns,
 } from '@ant-design/pro-components';
-import { Button, Divider, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
+import { queryMenuList } from '@/services/menu';
 import CreateForm from './components/CreateForm';
-import UpdateForm, { FormValueType } from './components/UpdateForm';
-
-const { addUser, queryUserList, deleteUser, modifyUser } =
-  services.UserController;
-
-/**
- * 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.UserInfo) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addUser({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
-
-/**
- * 更新节点
- * @param fields
- */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('正在配置');
-  try {
-    await modifyUser(
-      {
-        userId: fields.id || '',
-      },
-      {
-        name: fields.name || '',
-        nickName: fields.nickName || '',
-        email: fields.email || '',
-      },
-    );
-    hide();
-
-    message.success('配置成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
-};
+import { arrayToTree } from '@/utils/data';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 
 /**
  *  删除节点
@@ -82,59 +33,78 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
   }
 };
 
-const TableList: React.FC<unknown> = () => {
+export const Component: React.FC<unknown> = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] =
     useState<boolean>(false);
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<API.UserInfo>();
-  const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
-  const columns: ProDescriptionsItemProps<API.UserInfo>[] = [
+  const [expandedRowKeys, setexpandedRowKeys] = useState<Menu.Item['menuId'][]>(
+    [],
+  );
+
+  const columns: ProColumns[] = [
     {
-      title: '名称',
-      dataIndex: 'name',
-      tip: '名称是唯一的 key',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '名称为必填项',
-          },
-        ],
-      },
-    },
-    {
-      title: '昵称',
-      dataIndex: 'nickName',
+      title: '菜单名称',
+      dataIndex: 'menuName',
       valueType: 'text',
     },
     {
-      title: '性别',
-      dataIndex: 'gender',
-      hideInForm: true,
+      title: '图标',
+      dataIndex: 'icon',
+      valueType: 'text',
+      hideInSearch: true,
+    },
+    {
+      title: '权限标识',
+      dataIndex: 'perms',
+      valueType: 'text',
+      hideInSearch: true,
+    },
+    {
+      title: '显示顺序',
+      dataIndex: 'orderNum',
+      valueType: 'text',
+      hideInSearch: true,
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      valueType: 'select',
       valueEnum: {
-        0: { text: '男', status: 'MALE' },
-        1: { text: '女', status: 'FEMALE' },
+        0: { text: '正常', status: 'MALE' },
+        1: { text: '停用', status: 'FEMALE' },
       },
     },
     {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      valueType: 'dateTime',
+
+      hideInSearch: true,
+    },
+    {
       title: '操作',
+      width: 140,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => (
-        <>
-          <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
-            }}
-          >
-            配置
-          </a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a>
-        </>
+        <Space
+          direction="horizontal"
+          split={<Divider type="vertical" />}
+          size={2}
+        >
+          <Tooltip title="新增">
+            <Button type="link" size="small" icon={<PlusOutlined />} />
+          </Tooltip>
+          <Tooltip title="修改">
+            <Button type="link" size="small" icon={<EditOutlined />} />
+          </Tooltip>
+          <Tooltip title="删除">
+            <Button type="link" size="small" icon={<DeleteOutlined />} />
+          </Tooltip>
+        </Space>
       ),
     },
   ];
@@ -142,27 +112,20 @@ const TableList: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: 'CRUD 示例',
+        title: '菜单管理',
       }}
     >
-      <ProTable<API.UserInfo>
+      <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
-        rowKey="id"
-        search={{
-          labelWidth: 120,
-        }}
+        rowKey="menuId"
         toolBarRender={() => [
-          <Button
-            key="1"
-            type="primary"
-            onClick={() => handleModalVisible(true)}
-          >
+          <Button type="primary" icon={<PlusOutlined />} key="add">
             新建
           </Button>,
         ]}
         request={async (params, sorter, filter) => {
-          const { data, success } = await queryUserList({
+          const { data } = await queryMenuList({
             ...params,
             // FIXME: remove @ts-ignore
             // @ts-ignore
@@ -170,101 +133,16 @@ const TableList: React.FC<unknown> = () => {
             filter,
           });
           return {
-            data: data?.list || [],
-            success,
+            data: data,
+            success: true,
           };
         }}
+        postData={(rows: any) => {
+          return arrayToTree(rows, { keyField: 'menuId' });
+        }}
         columns={columns}
-        rowSelection={{
-          onChange: (_, selectedRows) => setSelectedRows(selectedRows),
-        }}
+        pagination={false}
       />
-      {selectedRowsState?.length > 0 && (
-        <FooterToolbar
-          extra={
-            <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
-            </div>
-          }
-        >
-          <Button
-            onClick={async () => {
-              await handleRemove(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量删除
-          </Button>
-          <Button type="primary">批量审批</Button>
-        </FooterToolbar>
-      )}
-      <CreateForm
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-      >
-        <ProTable<API.UserInfo, API.UserInfo>
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
-            if (success) {
-              handleModalVisible(false);
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          rowKey="id"
-          type="form"
-          columns={columns}
-        />
-      </CreateForm>
-      {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
-          onSubmit={async (value) => {
-            const success = await handleUpdate(value);
-            if (success) {
-              handleUpdateModalVisible(false);
-              setStepFormValues({});
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-            setStepFormValues({});
-          }}
-          updateModalVisible={updateModalVisible}
-          values={stepFormValues}
-        />
-      ) : null}
-
-      <Drawer
-        width={600}
-        open={!!row}
-        onClose={() => {
-          setRow(undefined);
-        }}
-        closable={false}
-      >
-        {row?.name && (
-          <ProDescriptions<API.UserInfo>
-            column={2}
-            title={row?.name}
-            request={async () => ({
-              data: row || {},
-            })}
-            params={{
-              id: row?.name,
-            }}
-            columns={columns}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };
-
-export default TableList;

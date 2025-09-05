@@ -1,119 +1,65 @@
-import { request } from '@umijs/max';
+import request from './_request';
 
-// 账号登录
-export async function loginForAccount(
-  body: {
-    uuid: string;
-    username: string;
-    password: string;
-    code: string;
-  },
-  options?: { [key: string]: any },
-) {
-  return request<any>('/api/login', {
-    method: 'POST',
-    data: body,
-    ...(options || {}),
-  });
-}
-
-// 用户信息
-export async function getInfo(options?: { [key: string]: any }) {
-  return request<any>('/api/getInfo', {
-    method: 'GET',
-    ...(options || {}),
-  });
-}
-
-/** 此处后端没有提供注释 GET /api/v1/queryUserList */
-export async function queryUserList(
-  params: {
+// 查询用户分页列表
+export const queryUserPage = (
+  params: PageField & {
     // query
-    /** keyword */
-    keyword?: string;
-    /** current */
-    current?: number;
-    /** pageSize */
-    pageSize?: number;
+    /** userName */
+    userName?: string;
+    /** phonenumber */
+    phonenumber?: string;
+    /** deptId */
+    deptId?: string;
+    /** status */
+    status?: string;
+    /** beginTime */
+    beginTime?: string;
+    /** endTime */
+    endTime?: string;
   },
   options?: { [key: string]: any },
-) {
-  return request<API.Result_PageInfo_UserInfo__>('/api/v1/queryUserList', {
+) => {
+  return request<API.UserPageResult>('/api/system/user/list', {
     method: 'GET',
-    params: {
-      ...params,
-    },
+    params: { ...params },
     ...(options || {}),
   });
-}
+};
 
-/** 此处后端没有提供注释 POST /api/v1/user */
-export async function addUser(
-  body?: API.UserInfoVO,
-  options?: { [key: string]: any },
-) {
-  return request<API.Result_UserInfo_>('/api/v1/user', {
+// 新增用户
+export const addUser = (data: any) => {
+  return request<any>('/api/system/user', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
+    data,
   });
-}
+};
 
-/** 此处后端没有提供注释 GET /api/v1/user/${param0} */
-export async function getUserDetail(
-  params: {
-    // path
-    /** userId */
-    userId?: string;
-  },
-  options?: { [key: string]: any },
-) {
-  const { userId: param0 } = params;
-  return request<API.Result_UserInfo_>(`/api/v1/user/${param0}`, {
-    method: 'GET',
-    params: { ...params },
-    ...(options || {}),
-  });
-}
-
-/** 此处后端没有提供注释 PUT /api/v1/user/${param0} */
-export async function modifyUser(
-  params: {
-    // path
-    /** userId */
-    userId?: string;
-  },
-  body?: API.UserInfoVO,
-  options?: { [key: string]: any },
-) {
-  const { userId: param0 } = params;
-  return request<API.Result_UserInfo_>(`/api/v1/user/${param0}`, {
+// 修改用户
+export const updateUser = (data: any) => {
+  return request<any>('/api/system/user', {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    params: { ...params },
-    data: body,
-    ...(options || {}),
+    data,
+  });
+};
+
+// 用户详情
+export function getUser(userId: number) {
+  return request<any>('/api/system/user/antd/' + userId, {
+    method: 'GET',
   });
 }
 
-/** 此处后端没有提供注释 DELETE /api/v1/user/${param0} */
-export async function deleteUser(
-  params: {
-    // path
-    /** userId */
-    userId?: string;
-  },
-  options?: { [key: string]: any },
-) {
-  const { userId: param0 } = params;
-  return request<API.Result_string_>(`/api/v1/user/${param0}`, {
+// 删除用户
+export function deleteUser(userIds) {
+  return request<any>('/api/system/user/' + userIds, {
     method: 'DELETE',
-    params: { ...params },
-    ...(options || {}),
+  });
+}
+
+// 重置用户密码
+export function resetUserPwd(data: any) {
+  return request<any>('/api/system/user/resetPwd', {
+    method: 'PUT',
+    data
   });
 }

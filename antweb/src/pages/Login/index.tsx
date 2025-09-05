@@ -1,5 +1,5 @@
-import { Footer } from '@/components';
-import { queryCaptchaImage, loginForAccount } from '@/services/auth';
+import { SelectLang, Footer } from '@/components/Layout';
+import { queryCaptchaImage } from '@/services/auth';
 import {
   AlipayCircleOutlined,
   LockOutlined,
@@ -15,20 +15,14 @@ import {
   ProFormCheckbox,
   ProFormText,
 } from '@ant-design/pro-components';
-import {
-  FormattedMessage,
-  Helmet,
-  history,
-  SelectLang,
-  useIntl,
-  useModel,
-  useRequest,
-} from '@umijs/max';
-import { Alert, Button, message, Space, Tabs } from 'antd';
+import { useIntl, FormattedMessage } from 'react-intl';
+import { useRequest } from 'ahooks';
+import { App, Alert, Button, message, Space, Tabs } from 'antd';
 import { createStyles } from 'antd-style';
 import React, { useState } from 'react';
-import { flushSync } from 'react-dom';
-import Settings from '../../../config/defaultSettings';
+import { useNavigate } from 'react-router-dom';
+import useUserStore from '@/stores/module/user';
+import Settings from '@/defaultSettings';
 
 const useStyles = createStyles(({ token }) => {
   return {
@@ -98,7 +92,7 @@ const Lang: React.FC = () => {
 
   return (
     <div className={styles.lang} data-lang>
-      {SelectLang && <SelectLang />}
+      <SelectLang />
     </div>
   );
 };
@@ -156,72 +150,59 @@ const CaptchaImage: React.FC<{
     <Button className={styles.captchaImage} size="large" onClick={refresh}>
       <div
         style={{ width: '100%', height: '100%' }}
-        dangerouslySetInnerHTML={{ __html: data.img }}
+        dangerouslySetInnerHTML={{ __html: data!.img }}
       />
     </Button>
   );
 };
 
-const LoginPage: React.FC = () => {
+export const Component: React.FC = () => {
+  const app = App.useApp();
+  const { loginAccount } = useUserStore();
   const [userLoginState, setUserLoginState] = useState<any>({});
-  const { initialState, setInitialState } = useModel('@@initialState');
   const [type, setType] = useState<string>('account');
   const [uuid, setUUID] = useState('');
+  const navigate = useNavigate();
   const { styles } = useStyles();
   const intl = useIntl();
   const { status, type: loginType } = userLoginState;
-
-  const fetchUserInfo = async () => {
-    const userInfo = { nickName: 'xxx' };
-    if (userInfo) {
-      flushSync(() => {
-        setInitialState((s) => ({
-          ...s,
-          currentUser: userInfo,
-        }));
-      });
-    }
-  };
 
   const handleSubmit = async (values: any) => {
     const { autoLogin, ...rest } = values;
     try {
       // 登录
-      const res = await loginForAccount({ ...rest, uuid });
+      const res = await loginAccount({ ...rest, uuid });
 
       if (res.code === 200) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
-        message.success(defaultLoginSuccessMessage);
-        // await fetchUserInfo();
+        app.message.success(defaultLoginSuccessMessage);
         const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
+        navigate(urlParams.get('redirect') || '/');
         return;
       }
       // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
+      setUserLoginState(res.msg);
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
         defaultMessage: '登录失败，请重试！',
       });
-      message.error(defaultLoginFailureMessage);
+      app.message.error(defaultLoginFailureMessage);
     }
   };
 
   return (
     <div className={styles.container}>
-      <Helmet>
-        <title>
-          {intl.formatMessage({
-            id: 'menu.login',
-            defaultMessage: '登录',
-          })}
-          - {Settings.title}
-        </title>
-      </Helmet>
+      <title>
+        {intl.formatMessage({
+          id: 'menu.login',
+          defaultMessage: '登录',
+        })}
+        - {Settings.title}
+      </title>
       <Lang />
       <div
         style={{
@@ -240,6 +221,8 @@ const LoginPage: React.FC = () => {
             id: 'pages.layouts.userLayout.title',
           })}
           initialValues={{
+            username: 'antd',
+            password: 'antd123',
             autoLogin: true,
           }}
           actions={[
@@ -466,4 +449,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+Component.displayName = 'LoginPage';

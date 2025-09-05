@@ -1,20 +1,34 @@
-import services from '@/services';
+import {
+  Button,
+  Divider,
+  Space,
+  Drawer,
+  message,
+  Dropdown,
+  Tooltip,
+} from 'antd';
+import {
+  ExportOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  FileDoneOutlined,
+  UserOutlined,
+  PlusOutlined,
+  EllipsisOutlined,
+} from '@ant-design/icons';
 import {
   ActionType,
   FooterToolbar,
   PageContainer,
   ProDescriptions,
-  ProDescriptionsItemProps,
   ProTable,
+  ProColumns,
 } from '@ant-design/pro-components';
-import { Button, Divider, Drawer, message } from 'antd';
+
 import React, { useRef, useState } from 'react';
-import CreateForm from './components/CreateForm';
-import UpdateForm, { FormValueType } from './components/UpdateForm';
-
-const { addUser, queryUserList, deleteUser, modifyUser } =
-  services.UserController;
-
+import { queryRolePage } from '@/services/role';
+import CreateRoleForm from './components/CreateRoleForm';
+import UpdateForm, { FormValueType } from './components/UpdateRoleForm';
 /**
  * 添加节点
  * @param fields
@@ -82,7 +96,7 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
   }
 };
 
-const TableList: React.FC<unknown> = () => {
+export const Component: React.FC<unknown> = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] =
     useState<boolean>(false);
@@ -90,51 +104,66 @@ const TableList: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
   const [row, setRow] = useState<API.UserInfo>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
-  const columns: ProDescriptionsItemProps<API.UserInfo>[] = [
+  const columns: ProColumns[] = [
     {
-      title: '名称',
-      dataIndex: 'name',
-      tip: '名称是唯一的 key',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '名称为必填项',
-          },
-        ],
-      },
+      title: '角色编号',
+      dataIndex: 'roleId',
+      hideInSearch: true,
     },
     {
-      title: '昵称',
-      dataIndex: 'nickName',
+      title: '角色名称',
+      dataIndex: 'roleName',
       valueType: 'text',
     },
     {
-      title: '性别',
-      dataIndex: 'gender',
-      hideInForm: true,
+      title: '权限字符',
+      dataIndex: 'roleKey',
+      valueType: 'text',
+    },
+    {
+      title: '显示顺序',
+      dataIndex: 'roleSort',
+      valueType: 'text',
+      hideInSearch: true,
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      valueType: 'select',
       valueEnum: {
-        0: { text: '男', status: 'MALE' },
-        1: { text: '女', status: 'FEMALE' },
+        0: { text: '正常', status: 'MALE' },
+        1: { text: '停用', status: 'FEMALE' },
       },
     },
     {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      valueType: 'dateTime',
+    },
+    {
       title: '操作',
+      width: 180,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => (
-        <>
-          <a
-            onClick={() => {
-              handleUpdateModalVisible(true);
-              setStepFormValues(record);
-            }}
-          >
-            配置
-          </a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a>
-        </>
+        <Space
+          direction="horizontal"
+          split={<Divider type="vertical" />}
+          size={2}
+        >
+          <Tooltip title="修改">
+            <Button type="link" size="small" icon={<EditOutlined />} />
+          </Tooltip>
+          <Tooltip title="删除">
+            <Button type="link" size="small" icon={<DeleteOutlined />} />
+          </Tooltip>
+          <Tooltip title="数据授权">
+            <Button type="link" size="small" icon={<FileDoneOutlined />} />
+          </Tooltip>
+          <Tooltip title="分配用户">
+            <Button type="link" size="small" icon={<UserOutlined />} />
+          </Tooltip>
+        </Space>
       ),
     },
   ];
@@ -142,27 +171,43 @@ const TableList: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: 'CRUD 示例',
+        title: '角色管理',
       }}
     >
-      <ProTable<API.UserInfo>
+      <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
-        rowKey="id"
-        search={{
-          labelWidth: 120,
-        }}
+        rowKey="roleId"
         toolBarRender={() => [
-          <Button
-            key="1"
-            type="primary"
-            onClick={() => handleModalVisible(true)}
+          <CreateRoleForm
+            trigger={
+              <Button type="primary" icon={<PlusOutlined />} key="add">
+                新增
+              </Button>
+            }
+            onFinish={() => {
+              actionRef.current?.reload();
+            }}
+          />,
+          <Dropdown
+            key="menu"
+            menu={{
+              items: [
+                {
+                  label: '导出',
+                  icon: <ExportOutlined />,
+                  key: 'export',
+                },
+              ],
+            }}
           >
-            新建
-          </Button>,
+            <Button>
+              <EllipsisOutlined />
+            </Button>
+          </Dropdown>,
         ]}
         request={async (params, sorter, filter) => {
-          const { data, success } = await queryUserList({
+          const { code, rows, total } = await queryRolePage({
             ...params,
             // FIXME: remove @ts-ignore
             // @ts-ignore
@@ -170,11 +215,16 @@ const TableList: React.FC<unknown> = () => {
             filter,
           });
           return {
-            data: data?.list || [],
-            success,
+            data: rows,
+            total,
+            success: code === 200,
           };
         }}
         columns={columns}
+        pagination={{
+          current: 1,
+          pageSize: 15,
+        }}
         rowSelection={{
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
         }}
@@ -190,6 +240,7 @@ const TableList: React.FC<unknown> = () => {
           }
         >
           <Button
+            type="primary"
             onClick={async () => {
               await handleRemove(selectedRowsState);
               setSelectedRows([]);
@@ -198,28 +249,9 @@ const TableList: React.FC<unknown> = () => {
           >
             批量删除
           </Button>
-          <Button type="primary">批量审批</Button>
         </FooterToolbar>
       )}
-      <CreateForm
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-      >
-        <ProTable<API.UserInfo, API.UserInfo>
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
-            if (success) {
-              handleModalVisible(false);
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          rowKey="id"
-          type="form"
-          columns={columns}
-        />
-      </CreateForm>
+
       {stepFormValues && Object.keys(stepFormValues).length ? (
         <UpdateForm
           onSubmit={async (value) => {
@@ -266,5 +298,3 @@ const TableList: React.FC<unknown> = () => {
     </PageContainer>
   );
 };
-
-export default TableList;
