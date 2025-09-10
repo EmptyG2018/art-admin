@@ -5,7 +5,14 @@
 /**
  * 布局组件
  */
-import { Question, SelectLang } from "./RightContent";
-import { AvatarDropdown, AvatarName } from "./RightContent/AvatarDropdown";
+import { Question, SelectLang } from './RightContent';
+import { AvatarDropdown, AvatarName } from './RightContent/AvatarDropdown';
+import WangEdtior from './WangEditor';
 
-export { AvatarDropdown, AvatarName, Question, SelectLang };
+export {
+  AvatarDropdown,
+  AvatarName,
+  Question,
+  SelectLang,
+  WangEdtior,
+};
