@@ -177,7 +177,7 @@ export const Component: React.FC<unknown> = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      width: 180,
+      width: 140,
       fixed: 'right',
       render: (_, record) => (
         <Space
@@ -247,10 +247,6 @@ export const Component: React.FC<unknown> = () => {
               colProps={{ span: 24 }}
             />
           </ModalForm>
-
-          <Tooltip title="分配角色">
-            <Button type="link" size="small" icon={<UserOutlined />} />
-          </Tooltip>
         </Space>
       ),
     },
