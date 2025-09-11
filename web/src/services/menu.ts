@@ -23,3 +23,33 @@ export const queryMenuTree = () => {
     method: 'GET',
   });
 };
+
+// 新增菜单
+export const addMenu = (data) => {
+  return request<any>('/api/system/menu', {
+    method: 'POST',
+    data,
+  });
+};
+
+// 删除菜单
+export const deleteMenu = (menuIds) => {
+  return request<any>('/api/system/menu/' + menuIds, {
+    method: 'DELETE',
+  });
+};
+
+// 修改菜单
+export const updateMenu = (data) => {
+  return request<any>('/api/system/menu', {
+    method: 'PUT',
+    data,
+  });
+};
+
+// 菜单详情
+export const getMenu = (menuId) => {
+  return request<any>('/api/system/menu/' + menuId, {
+    method: 'GET',
+  });
+};
