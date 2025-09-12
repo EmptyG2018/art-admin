@@ -3082,6 +3082,11 @@ react-is@^18.2.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
+react-js-cron@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-js-cron/-/react-js-cron-5.2.0.tgz#b0e3caa10fb0a0e3586e93778e72bc9be194a3d8"
+  integrity sha512-+Mxm3cS7qmIoAIz7NVY27jvsJKNZ4tx+H/nNtMUJW4DcKR7jUIL1GP0jOD79K5j86Dq8jvShKJMh30+c8bmVtA==
+
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"

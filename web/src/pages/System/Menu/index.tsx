@@ -101,7 +101,7 @@ export const Component: React.FC<unknown> = () => {
                 name="isFrame"
                 label="是否外链"
                 placeholder="请选择是否外链"
-                initialValue="M"
+                initialValue="1"
                 options={[
                   { label: '是', value: '0' },
                   { label: '否', value: '1' },

@@ -7,6 +7,7 @@
  */
 import { Question, SelectLang } from './RightContent';
 import { AvatarDropdown, AvatarName } from './RightContent/AvatarDropdown';
+import CronSelect from './CronSelect';
 import WangEdtior from './WangEditor';
 
 export {
@@ -14,5 +15,6 @@ export {
   AvatarName,
   Question,
   SelectLang,
+  CronSelect,
   WangEdtior,
 };
