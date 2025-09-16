@@ -31,3 +31,11 @@ export async function updateProfile(data) {
     data,
   });
 }
+
+// 修改用户密码
+export async function updatePwd(data) {
+  return request<any>('/api/system/user/updatePwd', {
+    method: 'PUT',
+    data,
+  });
+}
