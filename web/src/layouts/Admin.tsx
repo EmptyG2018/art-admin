@@ -1,4 +1,4 @@
-import { LogoutOutlined } from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import type { ProSettings } from '@ant-design/pro-components';
 import {
   ProConfigProvider,
@@ -112,6 +112,14 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
                   <Dropdown
                     menu={{
                       items: [
+                        {
+                          key: 'settings',
+                          icon: <SettingOutlined />,
+                          label: '设置',
+                          onClick: async () => {
+                            navigate('/ant_settings');
+                          },
+                        },
                         {
                           key: 'logout',
                           icon: <LogoutOutlined />,
