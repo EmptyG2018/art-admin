@@ -33,9 +33,14 @@ export async function updateProfile(data) {
 }
 
 // 修改用户密码
-export async function updatePwd(data) {
-  return request<any>('/api/system/user/updatePwd', {
-    method: 'PUT',
-    data,
-  });
+export async function updatePwd({ oldPassword, newPassword }) {
+  return request<any>(
+    '/api/system/user/profile/updatePwd?oldPassword=' +
+      oldPassword +
+      '&newPassword=' +
+      newPassword,
+    {
+      method: 'PUT',
+    },
+  );
 }

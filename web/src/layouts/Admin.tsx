@@ -1,3 +1,6 @@
+import React, { useState, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ConfigProvider, Dropdown } from 'antd';
 import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import type { ProSettings } from '@ant-design/pro-components';
 import {
@@ -5,9 +8,6 @@ import {
   ProLayout,
   SettingDrawer,
 } from '@ant-design/pro-components';
-import { ConfigProvider, Dropdown } from 'antd';
-import React, { useState, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { SelectLang } from '@/components/Layout';
 import { useSystemStore, useUserStore } from '@/stores/module';
 
@@ -57,12 +57,12 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
         overflow: 'auto',
       }}
     >
-      <ProConfigProvider hashed={false}>
-        <ConfigProvider
-          getTargetContainer={() => {
-            return document.getElementById('admin-template') || document.body;
-          }}
-        >
+      <ConfigProvider
+        getTargetContainer={() => {
+          return document.getElementById('admin-template') || document.body;
+        }}
+      >
+        <ProConfigProvider hashed={false}>
           <ProLayout
             bgLayoutImgList={[
               {
@@ -185,7 +185,6 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
             {element}
             <SettingDrawer
               enableDarkTheme
-              disableUrlParams
               getContainer={(e: any) => {
                 if (typeof window === 'undefined') return e;
                 return document.getElementById('admin-template');
@@ -194,8 +193,8 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
               onSettingChange={setSetting}
             />
           </ProLayout>
-        </ConfigProvider>
-      </ProConfigProvider>
+        </ProConfigProvider>
+      </ConfigProvider>
     </div>
   );
 };

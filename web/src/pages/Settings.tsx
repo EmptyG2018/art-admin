@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { App, Button, Menu, List, Modal, Flex, Form } from 'antd';
+import { App, Button, Menu, List, Modal, Flex, Form, Radio } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { createStyles } from 'antd-style';
 import { ProForm, ProFormText, ProFormRadio } from '@ant-design/pro-components';
 import { queryDictsByType } from '@/services/dict';
 import { getProfile, updateProfile, updatePwd } from '@/services/system';
-
 
 const useStyles = createStyles(({ token, css }) => ({
   container: css`
@@ -30,6 +29,48 @@ const useStyles = createStyles(({ token, css }) => ({
     color: ${token.colorText};
     font-weight: 500;
     font-size: ${token.sizeMD}px;
+  `,
+
+  themeStyle: css`
+    display: flex;
+    gap: 12px;
+  `,
+
+  themeStyleLight: css`
+    width: 64px;
+    height: 48px;
+    background-color: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid ${token.colorBorder};
+  `,
+
+  themeStyleDark: css`
+    position: relative;
+    width: 64px;
+    height: 48px;
+    background-color: rgba(0, 21, 41, 0.85);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid ${token.colorBorder};
+    &::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 16px;
+      background-color: rgba(0, 0, 0, 0.85);
+      top: 0;
+      left: 0;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.65);
+      top: 0;
+      left: 0;
+    }
   `,
 }));
 
@@ -222,8 +263,95 @@ const SafeSettings = () => {
   );
 };
 
+const ThemeBlockSelect = ({ value, onChange }) => {
+  const { styles } = useStyles();
+  // const [value, setValue] = useState(value);
+
+  return (
+    <div className={styles.themeStyle}>
+      <div className={styles.themeStyleLight}></div>
+      <div className={styles.themeStyleDark}></div>
+    </div>
+  );
+};
+
 const ThemeSettings = () => {
-  return <div>this is theme.</div>;
+  const app = App.useApp();
+  const { styles } = useStyles();
+
+  return (
+    <ProForm
+      layout="vertical"
+      request={async () => {
+        const { postGroup, roleGroup, data } = await getProfile();
+
+        return {
+          ...data,
+          deptStr: data?.dept?.deptName + ' / ' + postGroup,
+          roleStr: roleGroup,
+        };
+      }}
+      submitter={{
+        render: ({ form }) => {
+          return [
+            <Button
+              type="primary"
+              key="submit"
+              onClick={() => form?.submit?.()}
+            >
+              更新资料
+            </Button>,
+          ];
+        },
+      }}
+      onFinish={async (formValues) => {
+        const { deptStr, roleStr, ...data } = formValues;
+        const hide = app.message.loading('正在更新');
+        try {
+          await updateProfile({ ...data });
+          hide();
+          app.message.success('更新成功');
+          return true;
+        } catch {
+          hide();
+          app.message.error('更新失败请重试！');
+          return false;
+        }
+      }}
+    >
+      <Form.Item label="整体风格设置">
+        <Radio.Group
+          options={[
+            { value: 1, label: <div className={styles.themeStyleLight}></div> },
+            { value: 2, label: <div className={styles.themeStyleDark}></div> },
+          ]}
+        />
+      </Form.Item>
+      <ProFormText
+        name="phonenumber"
+        label="手机号码"
+        width="sm"
+        rules={[{ required: true, message: '请输入手机号码' }]}
+      />
+      <ProFormText
+        name="email"
+        label="邮箱"
+        width="md"
+        rules={[{ required: true, message: '请输入邮箱' }]}
+      />
+      <ProFormRadio.Group
+        name="sex"
+        label="性别"
+        request={async () => {
+          const res = await queryDictsByType('sys_user_sex');
+          return res.data.map((dict) => ({
+            label: dict.dictLabel,
+            value: dict.dictValue,
+          }));
+        }}
+      />
+    </ProForm>
+  );
 };
 
 export const Component = () => {
