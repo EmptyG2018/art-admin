@@ -1,14 +1,18 @@
 import React, { useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ConfigProvider, Dropdown } from 'antd';
-import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { ConfigProvider, Dropdown, Button } from 'antd';
+import {
+  LogoutOutlined,
+  SettingOutlined,
+  BellOutlined,
+} from '@ant-design/icons';
 import type { ProSettings } from '@ant-design/pro-components';
 import {
   ProConfigProvider,
   ProLayout,
   SettingDrawer,
 } from '@ant-design/pro-components';
-import { SelectLang } from '@/components/Layout';
+import { SelectLang, SelectTheme } from '@/components/Layout';
 import { useSystemStore, useUserStore } from '@/stores/module';
 
 const generateDeepRoutes = (routes: any) => {
@@ -140,7 +144,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
             actionsRender={(props) => {
               if (props.isMobile) return [];
               if (typeof window === 'undefined') return [];
-              return [<SelectLang />];
+              return [<SelectLang />, <SelectTheme />];
             }}
             headerTitleRender={(logo, title, _) => {
               const defaultDom = (

@@ -10,13 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.4.0",
+    "@ant-design/icons": "^6.0.2",
     "@ant-design/pro-components": "^2.7.15",
     "@reduxjs/toolkit": "^2.2.7",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-react": "^1.0.6",
     "ahooks": "^3.8.1",
-    "antd": "^5.20.3",
+    "antd": "^5.27.4",
     "antd-style": "^3.6.2",
     "axios": "^1.7.5",
     "classnames": "^2.5.1",

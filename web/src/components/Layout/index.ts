@@ -6,7 +6,8 @@
  * 布局组件
  */
 import SelectLang from './SelectLang';
+import SelectTheme from './SelectTheme';
 import Footer from './Footer';
 import Loading from './Loading';
 
-export { SelectLang, Footer, Loading };
+export { SelectLang, SelectTheme, Footer, Loading };
