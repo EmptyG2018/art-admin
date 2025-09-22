@@ -9,32 +9,17 @@ datasource db {
 }
 
 model SysWeb {
-  webId        Int       @id @default(autoincrement())
-  theme        String?   @default("#409EFF") @db.VarChar(50)
-  sideTheme    String?   @default("") @db.VarChar(50)
-  topNav       Boolean?
-  tagsView     Boolean?
-  fixedHeader  Boolean?
-  sidebarLogo  Boolean?
-  dynamicTitle Boolean?
-  createBy     String    @unique @db.VarChar(64)
-  createTime   DateTime?
-  updateBy     String?   @default("") @db.VarChar(64)
-  updateTime   DateTime?
+  webId      Int       @id @default(autoincrement())
+  theme      String?   @db.VarChar(500)
+  createBy   String    @unique @db.VarChar(64)
+  createTime DateTime?
+  updateBy   String?   @default("") @db.VarChar(64)
+  updateTime DateTime?
+
+  user       SysUser   @relation(fields: [userId], references: [userId])
+  userId     Int       @unique
 
   @@map("sys_web")
-}
-
-model SysTable {
-  tableId         String    @db.VarChar(100)
-  createBy        String    @db.VarChar(64)
-  createTime      DateTime?
-  updateBy        String?   @default("") @db.VarChar(64)
-  updateTime      DateTime?
-  tableJsonConfig String?   @db.Text
-
-  @@id([tableId, createBy])
-  @@map("sys_table")
 }
 
 model SysConfig {
@@ -299,6 +284,8 @@ model SysUser {
   dept        SysDept?  @relation(fields: [deptId], references: [deptId])
   posts       SysPost[] @relation("sys_post_to_sys_user")
   roles       SysRole[] @relation("sys_role_to_sys_user")
+
+  web         SysWeb?
 
   @@index([deptId], map: "sys_user_deptId_fkey")
   @@map("sys_user")
