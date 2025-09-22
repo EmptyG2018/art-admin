@@ -23,7 +23,8 @@
     "db:pull": "prisma db pull",
     "db:m": "prisma migrate dev --name inte",
     "db:g": "prisma generate",
-    "db:seed": "node ./prisma/seed.ts"
+    "db:seed": "node ./prisma/seed.js",
+    "db:clear": "node ./prisma/clear.js"
   },
   "dependencies": {
     "@nestjs-modules/ioredis": "^2.0.2",
