@@ -1091,7 +1091,7 @@ async function main() {
       path: 'settings',
       component: '/Settings/index',
       menuType: 'C',
-      visible: '0',
+      visible: '1',
       status: '0',
       icon: '',
       perms: 'settings:list',
