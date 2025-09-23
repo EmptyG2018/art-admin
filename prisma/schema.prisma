@@ -10,8 +10,8 @@ datasource db {
 
 model SysWeb {
   webId      Int       @id @default(autoincrement())
-  theme      String?   @db.VarChar(500)
-  createBy   String    @unique @db.VarChar(64)
+  theme      String?   @default("{}") @db.VarChar(500)
+  createBy   String    @default("") @db.VarChar(64)
   createTime DateTime?
   updateBy   String?   @default("") @db.VarChar(64)
   updateTime DateTime?
@@ -166,7 +166,7 @@ model SysMenu {
   visible    String?   @default("0") @db.Char(1)
   status     String?   @default("0") @db.Char(1)
   perms      String?   @db.VarChar(100)
-  icon       String?   @default("#") @db.VarChar(100)
+  icon       String?   @default("") @db.VarChar(100)
   createBy   String?   @default("") @db.VarChar(64)
   createTime DateTime?
   updateBy   String?   @default("") @db.VarChar(64)

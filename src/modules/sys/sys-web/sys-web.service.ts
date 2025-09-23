@@ -20,12 +20,15 @@ export class SysWebService {
     private readonly prisma: PrismaService,
     @InjectRedis() private readonly redis: Redis,
   ) {}
-  async getOne(userId: number, usarName: string) {
+  async getOne(userId: number) {
     const webString = await this.redis.get(`${WEB_CONFIG_KEY}:${userId}`);
     if (webString) return JSON.parse(webString);
     const web = await this.prisma.sysWeb.findUnique({
       where: {
-        createBy: usarName,
+        userId,
+      },
+      include: {
+        user: true,
       },
     });
     if (web) {
@@ -35,10 +38,10 @@ export class SysWebService {
   }
 
   /* 新增或者编辑 */
-  async add(userId: number, userName: string, addSysWebDto: AddSysWebDto) {
+  async add(userId: number, addSysWebDto: AddSysWebDto) {
     await this.prisma.sysWeb.upsert({
       where: {
-        createBy: userName,
+        userId,
       },
       update: addSysWebDto,
       create: addSysWebDto,
@@ -47,16 +50,16 @@ export class SysWebService {
   }
 
   /* 重置配置 */
-  async delete(userId: number, userName: string) {
+  async delete(userId: number) {
     const web = await this.prisma.sysWeb.findUnique({
       where: {
-        createBy: userName,
+        userId,
       },
     });
     if (web) {
       await this.prisma.sysWeb.delete({
         where: {
-          createBy: userName,
+          userId,
         },
       });
       await this.redis.del(`${WEB_CONFIG_KEY}:${userId}`);
