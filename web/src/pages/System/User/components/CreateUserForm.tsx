@@ -30,7 +30,7 @@ const CreateUserForm: React.FC<CreateFormProps> = (props) => {
       rowProps={{ gutter: 16 }}
       grid
       modalProps={{
-        destroyOnClose: true,
+        destroyOnHidden: true,
       }}
       onFinish={async (formValues) => {
         const hide = message.loading('正在添加');

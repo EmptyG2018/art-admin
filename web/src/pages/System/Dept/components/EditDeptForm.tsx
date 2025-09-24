@@ -85,7 +85,7 @@ const EditDeptForm: React.FC<EditDeptForm> = (props) => {
         title={title}
         width={800}
         footer={null}
-        destroyOnClose
+        destroyOnHidden
         onCancel={() => setVisible(false)}
       >
         <EditDeptWrapperForm

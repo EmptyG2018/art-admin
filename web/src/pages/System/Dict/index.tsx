@@ -126,7 +126,7 @@ export const Component: React.FC<unknown> = () => {
           size={2}
         >
           <Tooltip title="字典数据">
-            <Link to={`../ant_dict/${record.dictId}`}>
+            <Link to={`../dict/${record.dictId}`}>
               <Button type="link" size="small" icon={<HddOutlined />} />
             </Link>
           </Tooltip>

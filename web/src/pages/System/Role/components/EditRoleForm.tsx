@@ -27,7 +27,7 @@ const EditRoleForm: React.FC<EditRoleFormProps> = (props) => {
       trigger={trigger}
       rowProps={{ gutter: 16 }}
       modalProps={{
-        destroyOnClose: true,
+        destroyOnHidden: true,
       }}
       onFinish={(formValues) => {
         console.log(formValues);

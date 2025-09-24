@@ -8,6 +8,7 @@ import {
   ProColumns,
   ProForm,
   ProFormText,
+  ProFormSelect,
   ProFormDigit,
   ProFormTreeSelect,
   ProFormRadio,
@@ -18,6 +19,7 @@ import { queryMenuList, queryMenuTree, deleteMenu } from '@/services/menu';
 import { arrayToTree } from '@/utils/data';
 import CreateMenuForm from './components/CreateMenuForm';
 import UpdateMenuForm from './components/UpdateMenuForm';
+import icons from '@/constants/icons';
 
 /**
  *  删除节点
@@ -69,6 +71,7 @@ export const Component: React.FC<unknown> = () => {
         label="菜单类型"
         placeholder="请选择状态"
         initialValue="M"
+        radioType='button'
         options={[
           { label: '目录', value: 'M' },
           { label: '菜单', value: 'C' },
@@ -88,11 +91,27 @@ export const Component: React.FC<unknown> = () => {
                 width="md"
               />
               {['M'].includes(menuType) && (
-                <ProFormText
+                <ProFormSelect
                   name="icon"
                   label="菜单图标"
                   placeholder="请输入菜单图标"
                   width="sm"
+                  showSearch
+                  fieldProps={{
+                    optionRender: (option) => (
+                      <Space>
+                        {option.data.icon}
+                        {option.data.label}
+                      </Space>
+                    ),
+                  }}
+                  options={Object.entries(icons).map(
+                    ([key, IconComponent]) => ({
+                      icon: <IconComponent />,
+                      label: key,
+                      value: key,
+                    }),
+                  )}
                 />
               )}
             </ProForm.Group>
@@ -221,6 +240,10 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'text',
       width: 140,
       hideInSearch: true,
+      render: (_, item) => {
+        const Icon = icons[item.icon];
+        return Icon ? <Icon /> : null;
+      },
     },
     {
       title: '权限标识',

@@ -217,7 +217,7 @@ export const Component: React.FC<unknown> = () => {
               </Tooltip>
             }
             modalProps={{
-              destroyOnClose: true,
+              destroyOnHidden: true,
             }}
             onFinish={async (formValues) => {
               const hide = message.loading('正在重置');

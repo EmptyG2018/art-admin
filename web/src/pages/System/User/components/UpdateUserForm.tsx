@@ -37,7 +37,7 @@ const UpdateUserForm: React.FC<CreateFormProps> = (props) => {
       grid
       disabled={formDisabled}
       modalProps={{
-        destroyOnClose: true,
+        destroyOnHidden: true,
       }}
       submitter={{
         render: (_, dom) => (formDisabled ? null : dom),

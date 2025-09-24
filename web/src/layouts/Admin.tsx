@@ -1,10 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ConfigProvider, Dropdown, Button } from 'antd';
+import { ConfigProvider, Dropdown } from 'antd';
 import {
   LogoutOutlined,
   SettingOutlined,
-  BellOutlined,
 } from '@ant-design/icons';
 import type { ProSettings } from '@ant-design/pro-components';
 import {
@@ -12,8 +11,9 @@ import {
   ProLayout,
   SettingDrawer,
 } from '@ant-design/pro-components';
-import { SelectLang, SelectTheme } from '@/components/Layout';
+import { SelectLang } from '@/components/Layout';
 import { useSystemStore, useUserStore } from '@/stores/module';
+import icons from "@/constants/icons";
 
 const generateDeepRoutes = (routes: any) => {
   if (!routes) return;
@@ -22,10 +22,11 @@ const generateDeepRoutes = (routes: any) => {
   return routes
     .filter((route: any) => !route.hidden)
     .map((route: any) => {
+      const Icon = icons[route.meta.icon];
       return {
         path: route.path,
         name: route.meta.title,
-        icon: route.meta.icon,
+        icon: Icon ? <Icon />  : null,
         routes: generateDeepRoutes(route?.children),
       };
     });
@@ -121,7 +122,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
                           icon: <SettingOutlined />,
                           label: '设置',
                           onClick: async () => {
-                            navigate('/ant_settings');
+                            navigate('/settings');
                           },
                         },
                         {
@@ -144,7 +145,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
             actionsRender={(props) => {
               if (props.isMobile) return [];
               if (typeof window === 'undefined') return [];
-              return [<SelectLang />, <SelectTheme />];
+              return [<SelectLang />];
             }}
             headerTitleRender={(logo, title, _) => {
               const defaultDom = (

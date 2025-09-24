@@ -45,7 +45,7 @@ const SafeSettings = () => {
         open={editPwdModal}
         title="修改密码"
         footer={null}
-        destroyOnClose
+        destroyOnHidden
         onCancel={() => setEditPwdModal(false)}
       >
         <ProForm

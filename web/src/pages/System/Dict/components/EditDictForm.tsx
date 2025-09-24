@@ -82,7 +82,7 @@ const EditDictForm: React.FC<EditDictForm> = (props) => {
         title={title}
         width={800}
         footer={null}
-        destroyOnClose
+        destroyOnHidden
         onCancel={() => setVisible(false)}
       >
         <EditDictWrapperForm

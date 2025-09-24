@@ -228,7 +228,7 @@ export const Component: React.FC<unknown> = () => {
           />
           <Tooltip title="调度日志">
             <Link
-              to={`../ant_job/ant_log?jobName=${record.jobName}&jobGroup=${record.jobGroup}`}
+              to={`../job/log?jobName=${record.jobName}&jobGroup=${record.jobGroup}`}
             >
               <Button type="link" size="small" icon={<ClockCircleOutlined />} />
             </Link>
@@ -272,7 +272,7 @@ export const Component: React.FC<unknown> = () => {
               actionRef.current?.reload();
             }}
           />,
-          <Link to="../ant_job/ant_log">
+          <Link to="../job/log">
             <Button icon={<ClockCircleOutlined />} key="log">
               调度日志
             </Button>
