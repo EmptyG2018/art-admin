@@ -6,14 +6,12 @@ import {
   createIntlCache,
   IntlShape,
 } from 'react-intl';
-import { Provider as StoreProvider } from 'react-redux';
 import {
   App as AntdContext,
   ConfigProvider as AntdProvier,
   ConfigProviderProps,
 } from 'antd';
 import { getLang, locales } from './locales';
-import stores from '@/stores';
 import AppRoutes from './routes';
 import dayjs from 'dayjs';
 import './App.css';
@@ -65,10 +63,8 @@ function AppProvider({ children }: { children: React.ReactNode }) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <StoreProvider store={stores}>
-      <AppProvider>
-        <AppRoutes />
-      </AppProvider>
-    </StoreProvider>
+    <AppProvider>
+      <AppRoutes />
+    </AppProvider>
   </StrictMode>,
 );

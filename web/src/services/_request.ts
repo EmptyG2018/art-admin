@@ -1,4 +1,3 @@
-import cookie from 'js-cookie';
 import axios from 'axios';
 import type { AxiosRequestConfig } from 'axios';
 import cache from '@/utils/cache';
@@ -6,7 +5,7 @@ import { tansParams } from '@/utils/parameter';
 import { Modal, message, notification } from 'antd';
 
 // 是否显示重新登录
-export let isRelogin = { show: false };
+export const isRelogin = { show: false };
 
 // 错误信息
 const ERROR_MESSAGES: Record<string, string> = {
@@ -35,7 +34,12 @@ const request = <T = any>(
     (config) => {
       config.url = url;
 
-      const token = cookie.get('token');
+      let token;
+      try {
+        const tokenData = cache.local.getJSON('token');
+        token = tokenData?.state?.token || undefined;
+      } catch {}
+
       if (token && !config.headers.public) {
         // 请求携带token
         config.headers['Authorization'] = 'Bearer ' + token;
@@ -129,7 +133,7 @@ const request = <T = any>(
           okText: '重新登录',
           onOk() {
             isRelogin.show = false;
-            cookie.remove('token');
+            cache.local.remove('token')
             location.href = '/login';
           },
           onCancel() {

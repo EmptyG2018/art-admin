@@ -9,8 +9,7 @@ import {
 import { RrotectedRoute } from '@/components/Router';
 import { Loading } from './components/Layout';
 import { Admin } from '@/layouts';
-import useUserStore from '@/stores/module/user';
-import useSystemStore from '@/stores/module/system';
+import { useProfileStore, useSystemStore } from '@/stores';
 import { Component as Login } from './pages/Login';
 import NoFound from './pages/404';
 
@@ -65,6 +64,7 @@ const generateDeepRoutes = (routes: any) => {
           <Route
             index
             element={<Navigate to={routes[visibleRouteIdx].path} replace />}
+            key="index"
           />,
         ]
       : [];
@@ -73,19 +73,19 @@ const generateDeepRoutes = (routes: any) => {
 };
 
 const Permission = () => {
-  const { getProfile } = useUserStore();
-  const { getConfig, system, getMenus } = useSystemStore();
+  const { fetchProfile } = useProfileStore();
+  const { menus, fetchConfig, fetchMenus } = useSystemStore();
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    Promise.all([getProfile(), getConfig(), getMenus()]).then(() => {
+    Promise.all([fetchProfile(), fetchConfig(), fetchMenus()]).then(() => {
       setInitialized(true);
     });
-  }, []);
+  }, [fetchProfile, fetchConfig, fetchMenus]);
 
   const dynamicRoutes = useMemo(() => {
-    return generateDeepRoutes(system.menus);
-  }, [system.menus]);
+    return generateDeepRoutes(menus);
+  }, [menus]);
 
   if (!initialized)
     return (

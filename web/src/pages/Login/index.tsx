@@ -21,8 +21,7 @@ import { App, Alert, Button, message, Space, Tabs } from 'antd';
 import { createStyles } from 'antd-style';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useUserStore from '@/stores/module/user';
-import Settings from '@/defaultSettings';
+import { useProfileStore } from '@/stores';
 
 const useStyles = createStyles(({ token }) => {
   return {
@@ -158,7 +157,7 @@ const CaptchaImage: React.FC<{
 
 export const Component: React.FC = () => {
   const app = App.useApp();
-  const { loginAccount } = useUserStore();
+  const { loginAccount } = useProfileStore();
   const [userLoginState, setUserLoginState] = useState<any>({});
   const [type, setType] = useState<string>('account');
   const [uuid, setUUID] = useState('');
@@ -196,13 +195,6 @@ export const Component: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <title>
-        {intl.formatMessage({
-          id: 'menu.login',
-          defaultMessage: '登录',
-        })}
-        - {Settings.title}
-      </title>
       <Lang />
       <div
         style={{

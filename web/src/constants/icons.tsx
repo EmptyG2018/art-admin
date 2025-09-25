@@ -40,7 +40,7 @@ import {
   CloudDownloadOutlined,
 } from '@ant-design/icons';
 
-const icons = {
+const icons: any = {
   HomeOutlined: HomeOutlined,
   DashboardOutlined: DashboardOutlined,
   AppstoreOutlined: AppstoreOutlined,

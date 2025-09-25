@@ -1,19 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ConfigProvider, Dropdown } from 'antd';
-import {
-  LogoutOutlined,
-  SettingOutlined,
-} from '@ant-design/icons';
-import type { ProSettings } from '@ant-design/pro-components';
-import {
-  ProConfigProvider,
-  ProLayout,
-  SettingDrawer,
-} from '@ant-design/pro-components';
+import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { ProLayout } from '@ant-design/pro-components';
 import { SelectLang } from '@/components/Layout';
-import { useSystemStore, useUserStore } from '@/stores/module';
-import icons from "@/constants/icons";
+import { useProfileStore, useSystemStore } from '@/stores';
+import icons from '@/constants/icons';
 
 const generateDeepRoutes = (routes: any) => {
   if (!routes) return;
@@ -26,33 +18,23 @@ const generateDeepRoutes = (routes: any) => {
       return {
         path: route.path,
         name: route.meta.title,
-        icon: Icon ? <Icon />  : null,
+        icon: Icon ? <Icon /> : null,
         routes: generateDeepRoutes(route?.children),
       };
     });
 };
 
 const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
-  const { system } = useSystemStore();
-  const { user, logoutAccount } = useUserStore();
+  const { profile, logoutAccount } = useProfileStore();
+  const { menus } = useSystemStore();
   const location = useLocation();
   const navigate = useNavigate();
-  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
-    fixSiderbar: true,
-    layout: 'mix',
-    splitMenus: false,
-    navTheme: 'light',
-    contentWidth: 'Fluid',
-    colorPrimary: '#1677FF',
-    siderMenuType: 'sub',
-    fixedHeader: true,
-  });
-
-  if (typeof document === 'undefined') return <div />;
 
   const routes = useMemo(() => {
-    return generateDeepRoutes(system.menus);
-  }, [system.menus]);
+    return generateDeepRoutes(menus);
+  }, [menus]);
+
+  if (typeof document === 'undefined') return <div />;
 
   return (
     <div
@@ -67,138 +49,132 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
           return document.getElementById('admin-template') || document.body;
         }}
       >
-        <ProConfigProvider hashed={false}>
-          <ProLayout
-            bgLayoutImgList={[
-              {
-                src: 'https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png',
-                left: 85,
-                bottom: 100,
-                height: '303px',
-              },
-              {
-                src: 'https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png',
-                bottom: -68,
-                right: -45,
-                height: '303px',
-              },
-              {
-                src: 'https://img.alicdn.com/imgextra/i3/O1CN018NxReL1shX85Yz6Cx_!!6000000005798-2-tps-884-496.png',
-                bottom: 0,
-                left: 0,
-                width: '331px',
-              },
-            ]}
-            waterMarkProps={{
-              content: `${user.user.nickName}`,
-              fontSize: 20,
-              gapX: 100,
-              gapY: 100,
-            }}
-            location={{
-              pathname: location.pathname,
-            }}
-            route={{
-              path: '/',
-              routes,
-            }}
-            token={{
-              header: {
-                colorBgMenuItemSelected: 'rgba(0,0,0,0.04)',
-              },
-            }}
-            breadcrumbRender={() => []}
-            avatarProps={{
-              src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
-              size: 'small',
-              title: user.user.nickName,
-              render: (props, dom) => {
-                return (
-                  <Dropdown
-                    menu={{
-                      items: [
-                        {
-                          key: 'settings',
-                          icon: <SettingOutlined />,
-                          label: '设置',
-                          onClick: async () => {
-                            navigate('/settings');
-                          },
-                        },
-                        {
-                          key: 'logout',
-                          icon: <LogoutOutlined />,
-                          label: '退出登录',
-                          onClick: async () => {
-                            await logoutAccount();
-                            navigate('/login', { replace: true });
-                          },
-                        },
-                      ],
-                    }}
-                  >
-                    {dom}
-                  </Dropdown>
-                );
-              },
-            }}
-            actionsRender={(props) => {
-              if (props.isMobile) return [];
-              if (typeof window === 'undefined') return [];
-              return [<SelectLang />];
-            }}
-            headerTitleRender={(logo, title, _) => {
-              const defaultDom = (
-                <a>
-                  {logo}
-                  {title}
-                </a>
-              );
-              if (typeof window === 'undefined') return defaultDom;
-              if (document.body.clientWidth < 1400) {
-                return defaultDom;
-              }
-              if (_.isMobile) return defaultDom;
-              return <>{defaultDom}</>;
-            }}
-            menuFooterRender={(props) => {
-              if (props?.collapsed) return undefined;
+        <ProLayout
+          token={{
+            header: {
+              colorBgMenuItemSelected: 'rgba(0,0,0,0.04)',
+            },
+          }}
+          location={{
+            pathname: location.pathname,
+          }}
+          route={{
+            path: '/',
+            routes,
+          }}
+          headerTitleRender={(logo, title, _) => {
+            const defaultDom = (
+              <a>
+                {logo}
+                {title}
+              </a>
+            );
+            if (typeof window === 'undefined') return defaultDom;
+            if (document.body.clientWidth < 1400) {
+              return defaultDom;
+            }
+            if (_.isMobile) return defaultDom;
+            return <>{defaultDom}</>;
+          }}
+          avatarProps={{
+            src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
+            size: 'small',
+            title: profile.user.nickName,
+            render: (props, dom) => {
               return (
-                <div
-                  style={{
-                    textAlign: 'center',
-                    paddingBlockStart: 12,
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        key: 'settings',
+                        icon: <SettingOutlined />,
+                        label: '设置',
+                        onClick: async () => {
+                          navigate('/settings');
+                        },
+                      },
+                      {
+                        key: 'logout',
+                        icon: <LogoutOutlined />,
+                        label: '退出登录',
+                        onClick: async () => {
+                          await logoutAccount();
+                          navigate('/login', { replace: true });
+                        },
+                      },
+                    ],
                   }}
                 >
-                  <div>© 2025 Made with love</div>
-                  <div>by Ant Design</div>
-                </div>
+                  {dom}
+                </Dropdown>
               );
-            }}
-            menuItemRender={(item, dom) => (
+            },
+          }}
+          actionsRender={(props) => {
+            if (props.isMobile) return [];
+            if (typeof window === 'undefined') return [];
+            return [<SelectLang />];
+          }}
+          breadcrumbRender={() => []}
+          menuItemRender={(item, dom) => (
+            <div
+              onClick={() => {
+                navigate(item.path || '/');
+              }}
+            >
+              {dom}
+            </div>
+          )}
+          menuFooterRender={(props) => {
+            if (props?.collapsed) return undefined;
+            return (
               <div
-                onClick={() => {
-                  navigate(item.path || '/');
+                style={{
+                  textAlign: 'center',
+                  paddingBlockStart: 12,
                 }}
               >
-                {dom}
+                <div>© 2025 Made with love</div>
+                <div>by Ant Design</div>
               </div>
-            )}
-            siderWidth={256}
-            {...settings}
-          >
-            {element}
-            <SettingDrawer
-              enableDarkTheme
-              getContainer={(e: any) => {
-                if (typeof window === 'undefined') return e;
-                return document.getElementById('admin-template');
-              }}
-              settings={settings}
-              onSettingChange={setSetting}
-            />
-          </ProLayout>
-        </ProConfigProvider>
+            );
+          }}
+          bgLayoutImgList={[
+            {
+              src: 'https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png',
+              left: 85,
+              bottom: 100,
+              height: '303px',
+            },
+            {
+              src: 'https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png',
+              bottom: -68,
+              right: -45,
+              height: '303px',
+            },
+            {
+              src: 'https://img.alicdn.com/imgextra/i3/O1CN018NxReL1shX85Yz6Cx_!!6000000005798-2-tps-884-496.png',
+              bottom: 0,
+              left: 0,
+              width: '331px',
+            },
+          ]}
+          waterMarkProps={{
+            content: `${profile.user.nickName}`,
+            fontSize: 20,
+            gapX: 100,
+            gapY: 100,
+          }}
+          fixSiderbar
+          layout="mix"
+          splitMenus={false}
+          contentWidth="Fluid"
+          siderMenuType="sub"
+          fixedHeader
+          siderWidth={256}
+        >
+          {element}
+        </ProLayout>
       </ConfigProvider>
     </div>
   );

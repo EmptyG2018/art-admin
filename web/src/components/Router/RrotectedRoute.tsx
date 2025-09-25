@@ -1,5 +1,6 @@
-import cookie from 'js-cookie';
+
 import { Navigate, useLocation } from 'react-router-dom';
+import { useProfileStore } from "@/stores"
 
 // 免登录白名单
 export const WHITELIST = ['/login'];
@@ -8,7 +9,7 @@ const ProtectedRoute: React.FC<{ element: React.ReactNode }> = ({
   element,
 }) => {
   const location = useLocation();
-  const token = cookie.get('token');
+  const { token } = useProfileStore()
 
   if (!!token && WHITELIST.includes(location.pathname)) {
     return <Navigate to="/" />;

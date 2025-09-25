@@ -1,3 +1,17 @@
+import Cookies from 'js-cookie';
+
+const cookieCache = {
+  set: (key: string, value: string) => {
+    Cookies.set(key, value, { expires: 7, path: '/' });
+  },
+  get: (key: string) => {
+    return Cookies.get(key) || null;
+  },
+  remove: (key: string) => {
+    Cookies.remove(key);
+  },
+};
+
 const sessionCache = {
   set(key: string, value: string) {
     if (!sessionStorage) {
@@ -67,6 +81,11 @@ const localCache = {
 
 export default {
   /**
+   * Cookie
+   */
+  cookie: cookieCache,
+
+  /**
    * 会话级缓存
    */
   session: sessionCache,
@@ -75,4 +94,3 @@ export default {
    */
   local: localCache,
 };
-
