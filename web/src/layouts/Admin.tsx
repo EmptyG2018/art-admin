@@ -45,7 +45,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
 
   return (
     <div
-      id="admin-template"
+      id="art-template"
       style={{
         height: '100vh',
         overflow: 'auto',
@@ -57,7 +57,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
           token,
         }}
         getTargetContainer={() => {
-          return document.getElementById('admin-template') || document.body;
+          return document.getElementById('art-template') || document.body;
         }}
       >
         <ProLayout
