@@ -37,15 +37,9 @@ const useStyles = createStyles(({ token }) => {
       },
     },
     lang: {
-      width: 42,
-      height: 42,
-      lineHeight: '42px',
       position: 'fixed',
+      top: 0,
       right: 16,
-      borderRadius: token.borderRadius,
-      ':hover': {
-        backgroundColor: token.colorBgTextHover,
-      },
     },
     captchaImage: {
       paddingTop: 0,
