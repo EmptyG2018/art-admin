@@ -1,10 +1,11 @@
 import { App, Button } from 'antd';
-import { MoonFilled, SunOutlined, SyncOutlined } from '@ant-design/icons';
+import { MoonFilled, SunOutlined } from '@ant-design/icons';
 import { createStyles } from 'antd-style';
 import { ProForm, ProFormRadio } from '@ant-design/pro-components';
-import { getProfile, updateProfile } from '@/services/system';
+import { useSystemStore } from '@/stores';
+import { updateSystemConfig } from '@/services/system';
 
-const PRIMARY_COLORS = ['#1677ff', '#ff6b6b', '#13C2C2', '#ff9f43', '#722ed1'];
+const PRIMARY_COLORS = ['#1677ff', '#ff6b6b', '#13c2c2', '#ff9f43', '#722ed1'];
 
 const useStyles = createStyles(({ css }) => ({
   themeLayout: css`
@@ -25,22 +26,19 @@ const useStyles = createStyles(({ css }) => ({
   `,
 }));
 
-
 const ThemeSettings = () => {
   const app = App.useApp();
   const { styles } = useStyles();
+  const { theme, setTheme } = useSystemStore();
 
   return (
     <ProForm
       layout="vertical"
-      request={async () => {
-        const { postGroup, roleGroup, data } = await getProfile();
-
-        return {
-          ...data,
-          deptStr: data?.dept?.deptName + ' / ' + postGroup,
-          roleStr: roleGroup,
-        };
+      onValuesChange={(_, values) => {
+        setTheme({
+          ...values,
+          colorInfo: values.colorPrimary,
+        });
       }}
       submitter={{
         render: ({ form }) => {
@@ -56,10 +54,14 @@ const ThemeSettings = () => {
         },
       }}
       onFinish={async (formValues) => {
-        const { deptStr, roleStr, ...data } = formValues;
         const hide = app.message.loading('正在更新');
         try {
-          await updateProfile({ ...data });
+          updateSystemConfig({
+            theme: JSON.stringify({
+              ...formValues,
+              colorInfo: formValues.colorPrimary,
+            }),
+          });
           hide();
           app.message.success('更新成功');
           return true;
@@ -71,19 +73,10 @@ const ThemeSettings = () => {
       }}
     >
       <ProFormRadio.Group
-        name="styles"
+        name="layout"
         label="整体风格设置"
-        initialValue='auto'
+        initialValue={theme.layout}
         options={[
-          {
-            label: (
-              <div className={styles.themeLayout}>
-                <SyncOutlined style={{ fontSize: 28 }} />
-                跟随系统
-              </div>
-            ),
-            value: 'auto',
-          },
           {
             label: (
               <div className={styles.themeLayout}>
@@ -106,9 +99,9 @@ const ThemeSettings = () => {
       />
 
       <ProFormRadio.Group
-        name="primaryColor"
+        name="colorPrimary"
         label="主题色"
-        initialValue='#1677ff'
+        initialValue={theme.colorPrimary}
         options={PRIMARY_COLORS.map((v) => ({
           label: (
             <div className={styles.themeColor} style={{ background: v }} />

@@ -8,6 +8,14 @@ export async function getSystemConfig(options?: { [key: string]: any }) {
   });
 }
 
+// 修改系统配置
+export async function updateSystemConfig(data) {
+  return request<any>('/api/system/web', {
+    method: 'POST',
+    data,
+  });
+}
+
 // 获取菜单
 export async function getSystemMenus(options?: { [key: string]: any }) {
   return request<any>('/api/getRouters', {

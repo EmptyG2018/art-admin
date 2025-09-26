@@ -7,12 +7,13 @@
  * @Description:
  *
  */
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { SysWebService } from './sys-web.service';
 import { User, UserEnum } from 'src/common/decorators/user.decorator';
 import { DataObj } from 'src/common/class/data-obj.class';
 import { CreateMessagePipe } from 'src/common/pipes/createmessage.pipe';
-import { AddSysWebDto } from './dto/req-sys-web.dto';
+import { UpdateMessagePipe } from 'src/common/pipes/updatemessage.pipe';
+import { AddSysWebDto, UpdateSysWebDto } from './dto/req-sys-web.dto';
 
 @Controller('system/web')
 export class SysWebController {
@@ -29,16 +30,12 @@ export class SysWebController {
   async add(
     @Body(CreateMessagePipe) addSysWebDto: AddSysWebDto,
     @User(UserEnum.userId) userId: number,
-    @User(UserEnum.userName) userName: string,
   ) {
-    await this.sysWebService.add(userId, userName, addSysWebDto);
+    await this.sysWebService.add(userId, addSysWebDto);
   }
 
   @Delete()
-  async delete(
-    @User(UserEnum.userId) userId: number,
-    @User(UserEnum.userName) userName: string,
-  ) {
-    await this.sysWebService.delete(userId, userName);
+  async delete(@User(UserEnum.userId) userId: number) {
+    await this.sysWebService.delete(userId);
   }
 }

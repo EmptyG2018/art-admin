@@ -1,11 +1,16 @@
 import React, { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ConfigProvider, Dropdown } from 'antd';
+import { ConfigProvider, Dropdown, theme } from 'antd';
 import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import { ProLayout } from '@ant-design/pro-components';
 import { SelectLang } from '@/components/Layout';
 import { useProfileStore, useSystemStore } from '@/stores';
 import icons from '@/constants/icons';
+
+const themeLayout: any = {
+  light: theme.defaultAlgorithm,
+  dark: theme.darkAlgorithm,
+};
 
 const generateDeepRoutes = (routes: any) => {
   if (!routes) return;
@@ -26,13 +31,15 @@ const generateDeepRoutes = (routes: any) => {
 
 const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
   const { profile, logoutAccount } = useProfileStore();
-  const { menus } = useSystemStore();
+  const { menus, theme } = useSystemStore();
   const location = useLocation();
   const navigate = useNavigate();
 
   const routes = useMemo(() => {
     return generateDeepRoutes(menus);
   }, [menus]);
+
+  const { layout, ...token } = theme;
 
   if (typeof document === 'undefined') return <div />;
 
@@ -45,6 +52,10 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
       }}
     >
       <ConfigProvider
+        theme={{
+          algorithm: themeLayout[layout],
+          token,
+        }}
         getTargetContainer={() => {
           return document.getElementById('admin-template') || document.body;
         }}

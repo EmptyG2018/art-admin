@@ -11,7 +11,7 @@ datasource db {
 model SysWeb {
   webId      Int       @id @default(autoincrement())
   theme      String?   @default("{}") @db.VarChar(500)
-  createBy   String    @default("") @db.VarChar(64)
+  createBy   String?    @default("") @db.VarChar(64)
   createTime DateTime?
   updateBy   String?   @default("") @db.VarChar(64)
   updateTime DateTime?

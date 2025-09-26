@@ -2057,7 +2057,7 @@ async function main() {
   await prisma.sysWeb.create({
     data: {
       userId: user.userId,
-      theme: '{"layout":"auto","primaryColor":"#1677FF"}',
+      theme: '{"layout":"light","colorPrimary":"#1677FF","colorInfo": "#1677FF"}',
       createBy: 'admin',
       createTime: new Date(),
     },

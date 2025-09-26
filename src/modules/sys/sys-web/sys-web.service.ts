@@ -42,7 +42,12 @@ export class SysWebService {
         userId,
       },
       update: addSysWebDto,
-      create: addSysWebDto,
+      create: {
+        ...addSysWebDto,
+        user: {
+          connect: { userId },
+        },
+      },
     });
     await this.redis.del(`${WEB_CONFIG_KEY}:${userId}`);
   }

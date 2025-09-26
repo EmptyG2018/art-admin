@@ -3,20 +3,37 @@ import { getSystemConfig, getSystemMenus } from '@/services/system';
 
 type Store = {
   menus: any[];
-  config: any;
+  theme: any;
   fetchMenus: () => void;
   fetchConfig: () => void;
+  setTheme: (payload: any) => void;
+};
+
+const defaultTheme = {
+  layout: 'light',
+  colorPrimary: '#1677ff',
+  colorInfo: '#1677ff',
 };
 
 const useSystemStore = create<Store>()((set) => ({
   menus: [],
-  config: null,
+  theme: { ...defaultTheme },
 
   fetchConfig: async () => {
     const res = await getSystemConfig();
+
+    let theme = {};
+    try {
+      const obj = JSON.parse(res.data?.theme || '{}');
+      theme = {
+        ...defaultTheme,
+        ...obj,
+      };
+    } catch {}
+
     set((state) => ({
       ...state,
-      config: res.data,
+      theme,
     }));
 
     return res;
@@ -30,6 +47,13 @@ const useSystemStore = create<Store>()((set) => ({
     }));
 
     return res;
+  },
+
+  setTheme: (payload: any) => {
+    set((state) => ({
+      ...state,
+      theme: payload,
+    }));
   },
 }));
 

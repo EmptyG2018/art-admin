@@ -17,7 +17,7 @@ const SafeSettings = () => {
           {
             id: '1',
             name: '账户密码',
-            desc: '当前密码强度：强',
+            desc: '保护个人账户安全，保障信息不泄露',
           },
         ]}
         renderItem={(item) => (
