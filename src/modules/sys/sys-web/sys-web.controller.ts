@@ -4,8 +4,8 @@
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-17 20:00:47
  * @FilePath: /meimei-new/src/modules/sys/sys-web/sys-web.controller.ts
- * @Description: 
- * 
+ * @Description:
+ *
  */
 import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { SysWebService } from './sys-web.service';
@@ -20,11 +20,8 @@ export class SysWebController {
 
   /* 查询一条 */
   @Get()
-  async getOne(
-    @User(UserEnum.userId) userId: number,
-    @User(UserEnum.userName) userName: string,
-  ) {
-    const config = await this.sysWebService.getOne(userId, userName);
+  async getOne(@User(UserEnum.userId) userId: number) {
+    const config = await this.sysWebService.getOne(userId);
     return DataObj.create(config);
   }
 

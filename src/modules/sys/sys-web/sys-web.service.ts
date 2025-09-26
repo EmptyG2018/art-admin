@@ -27,13 +27,11 @@ export class SysWebService {
       where: {
         userId,
       },
-      include: {
-        user: true,
-      },
     });
     if (web) {
-      await this.redis.set(`${WEB_CONFIG_KEY}:${userId}`, JSON.stringify(web));
-      return web;
+      const { userId, ...rest } = web;
+      await this.redis.set(`${WEB_CONFIG_KEY}:${userId}`, JSON.stringify(rest));
+      return rest;
     }
   }
 

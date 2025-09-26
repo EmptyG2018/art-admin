@@ -5,6 +5,6 @@
 /**
  * 布局组件
  */
-import RrotectedRoute from './RrotectedRoute';
+import ProtectedRoute from './ProtectedRoute';
 
-export { RrotectedRoute };
+export { ProtectedRoute };

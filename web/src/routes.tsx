@@ -6,7 +6,9 @@ import {
   Outlet,
   Navigate,
 } from 'react-router-dom';
-import { RrotectedRoute } from '@/components/Router';
+import { ProtectedRoute } from '@/components/Router';
+import { Result, Button, Typography, Skeleton } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Loading } from './components/Layout';
 import { Admin } from '@/layouts';
 import { useProfileStore, useSystemStore } from '@/stores';
@@ -30,12 +32,42 @@ const loadLazyPage = (page: string) => {
           .catch(() => ({ default: () => <div /> })),
       );
       return (
-        <Suspense>
+        <Suspense fallback={<Skeleton style={{ padding: 40 }} />}>
           <LazyComponent />
         </Suspense>
       );
     }
   }
+
+  return (
+    <Result
+      status="error"
+      title="页面组件未找到"
+      subTitle="路由配置中指定的组件路径未匹配到本地文件"
+    >
+      <div className="desc">
+        <Typography.Paragraph>
+          <Typography.Text
+            strong
+            style={{
+              fontSize: 16,
+            }}
+          >
+            请检查以下内容：
+          </Typography.Text>
+        </Typography.Paragraph>
+        <Typography.Paragraph>
+          <QuestionCircleOutlined className="site-result-demo-error-icon" />{' '}
+          是否在 <Typography.Text code>src/pages{page}.tsx</Typography.Text>
+          下创建了对应文件？
+        </Typography.Paragraph>
+        <Typography.Paragraph>
+          <QuestionCircleOutlined className="site-result-demo-error-icon" />{' '}
+          配置组件路径是否区分大小写？
+        </Typography.Paragraph>
+      </div>
+    </Result>
+  );
 };
 
 const layoutElement = (element: string) => LayoutMap[element] || <div />;
@@ -46,7 +78,7 @@ const generateDeepRoutes = (routes: any) => {
 
   const filterRoutes = routes.map((route: any) => {
     const isSubMenu = !!route?.children;
-    let element = isSubMenu
+    const element = isSubMenu
       ? layoutElement(route.component)
       : loadLazyPage(route.component);
 
@@ -57,17 +89,16 @@ const generateDeepRoutes = (routes: any) => {
     );
   });
 
-  const visibleRouteIdx = routes.findIndex((route: any) => !route.hidden);
-  const indexRoutes =
-    visibleRouteIdx !== -1
-      ? [
-          <Route
-            index
-            element={<Navigate to={routes[visibleRouteIdx].path} replace />}
-            key="index"
-          />,
-        ]
-      : [];
+  const visibleRoute = routes.find((route: any) => !route.hidden);
+  const indexRoutes = visibleRoute
+    ? [
+        <Route
+          index
+          element={<Navigate to={visibleRoute.path} replace />}
+          key="index"
+        />,
+      ]
+    : [];
 
   return [...indexRoutes, ...filterRoutes];
 };
@@ -75,43 +106,64 @@ const generateDeepRoutes = (routes: any) => {
 const Permission = () => {
   const { fetchProfile } = useProfileStore();
   const { menus, fetchConfig, fetchMenus } = useSystemStore();
-  const [initialized, setInitialized] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([fetchProfile(), fetchConfig(), fetchMenus()]).then(() => {
-      setInitialized(true);
-    });
+    Promise.all([fetchProfile(), fetchConfig(), fetchMenus()])
+      .then(() => {
+        setError('');
+      })
+      .catch((error) => {
+        setError(error.toString());
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [fetchProfile, fetchConfig, fetchMenus]);
 
   const dynamicRoutes = useMemo(() => {
     return generateDeepRoutes(menus);
   }, [menus]);
 
-  if (!initialized)
+  if (loading)
     return (
       <div style={{ height: '100vh' }}>
         <Loading />
       </div>
     );
 
-  return (
-    <>
-      <Admin element={<Routes>{dynamicRoutes}</Routes>} />
-    </>
-  );
+  if (error)
+    return (
+      <Result
+        status="error"
+        title="获取配置异常"
+        subTitle={error}
+        extra={[
+          <Button
+            type="primary"
+            key="refresh"
+            onClick={() => location.reload()}
+          >
+            刷新重试
+          </Button>,
+        ]}
+      ></Result>
+    );
+
+  return <Admin element={<Routes>{dynamicRoutes}</Routes>} />;
 };
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<RrotectedRoute element={<Login />} />} />
-        <Route path="/404" element={<NoFound />} />
-        <Route
-          path="/*"
-          element={<RrotectedRoute element={<Permission />} />}
-        />
-      </Routes>
+      <ProtectedRoute>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/404" element={<NoFound />} />
+          <Route path="/*" element={<Permission />} />
+        </Routes>
+      </ProtectedRoute>
     </BrowserRouter>
   );
 };
