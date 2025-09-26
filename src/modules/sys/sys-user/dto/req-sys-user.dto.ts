@@ -3,7 +3,7 @@
  * @Date: 2024-05-13 16:22:47
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-15 17:02:32
- * @FilePath: \meimei-new\src\modules\sys\sys-user\dto\req-sys-user.dto.ts
+ * @FilePath: \art-template\src\modules\sys\sys-user\dto\req-sys-user.dto.ts
  * @Description:
  *
  */

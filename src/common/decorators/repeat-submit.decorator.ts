@@ -3,7 +3,7 @@
  * @Date: 2024-04-23 18:59:25
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-04-27 18:02:57
- * @FilePath: /meimei-new/src/common/decorators/repeat-submit.decorator.ts
+ * @FilePath: /art-template/src/common/decorators/repeat-submit.decorator.ts
  * @Description: 防重复提交装饰器
  * 
  */

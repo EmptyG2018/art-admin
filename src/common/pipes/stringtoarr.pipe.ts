@@ -3,7 +3,7 @@
  * @Date: 2024-05-10 16:02:38
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-10 16:57:05
- * @FilePath: \meimei-new\src\common\pipes\stringtoarr.pipe.ts
+ * @FilePath: \art-template\src\common\pipes\stringtoarr.pipe.ts
  * @Description: 将 ‘,’ 拼接的字符串转化为数组
  *
  */

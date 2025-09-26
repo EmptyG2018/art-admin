@@ -3,7 +3,7 @@
  * @Date: 2024-05-17 17:21:17
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-17 20:28:15
- * @FilePath: /meimei-new/src/modules/sys/sys-table/dto/req-sys-table.dto.ts
+ * @FilePath: /art-template/src/modules/sys/sys-table/dto/req-sys-table.dto.ts
  * @Description:
  *
  */

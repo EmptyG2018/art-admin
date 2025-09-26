@@ -3,7 +3,7 @@
  * @Date: 2024-04-27 22:07:09
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-11 22:45:01
- * @FilePath: /meimei-new/src/modules/monitor/login-infor/dto/res-login-infor.dto.ts
+ * @FilePath: /art-template/src/modules/monitor/login-infor/dto/res-login-infor.dto.ts
  * @Description:
  *
  */

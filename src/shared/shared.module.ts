@@ -3,7 +3,7 @@
  * @Date: 2024-04-23 08:48:10
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-17 14:06:02
- * @FilePath: \meimei-new\src\shared\shared.module.ts
+ * @FilePath: \art-template\src\shared\shared.module.ts
  * @Description: 系统工具模块
  *
  */

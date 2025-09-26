@@ -3,7 +3,7 @@
  * @Date: 2024-05-13 13:59:22
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-17 15:44:23
- * @FilePath: \meimei-new\src\modules\sys\sys.module.ts
+ * @FilePath: \art-template\src\modules\sys\sys.module.ts
  * @Description: 
  * 
  */

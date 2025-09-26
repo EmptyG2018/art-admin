@@ -3,7 +3,7 @@
  * @Date: 2024-05-17 19:47:46
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-18 11:19:08
- * @FilePath: /meimei-new/src/modules/monitor/server/server.service.ts
+ * @FilePath: /art-template/src/modules/monitor/server/server.service.ts
  * @Description: 系统信息
  *
  */

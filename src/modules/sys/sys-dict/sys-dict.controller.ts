@@ -3,7 +3,7 @@
  * @Date: 2024-04-30 15:17:47
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-11 22:21:22
- * @FilePath: /meimei-new/src/modules/sys/sys-dict/sys-dict.controller.ts
+ * @FilePath: /art-template/src/modules/sys/sys-dict/sys-dict.controller.ts
  * @Description:
  *
  */

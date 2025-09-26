@@ -3,7 +3,7 @@
  * @Date: 2024-04-27 18:03:28
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-11 15:56:22
- * @FilePath: \meimei-new\src\common\decorators\log.decorator.ts
+ * @FilePath: \art-template\src\common\decorators\log.decorator.ts
  * @Description: 接口日志装饰器
  *
  */

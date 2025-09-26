@@ -3,7 +3,7 @@
  * @Date: 2024-04-23 18:59:25
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-04-27 21:41:32
- * @FilePath: /meimei-new/src/common/guards/role-auth.guard.ts
+ * @FilePath: /art-template/src/common/guards/role-auth.guard.ts
  * @Description: 角色守卫
  *
  */

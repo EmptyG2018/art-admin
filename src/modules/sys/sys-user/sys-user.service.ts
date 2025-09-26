@@ -3,7 +3,7 @@
  * @Date: 2024-05-11 13:32:00
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-06-27 11:17:14
- * @FilePath: \admin-prisma-vue3\meimei-admin\src\modules\sys\sys-user\sys-user.service.ts
+ * @FilePath: \admin-prisma-vue3\art-template\src\modules\sys\sys-user\sys-user.service.ts
  * @Description:
  *
  */

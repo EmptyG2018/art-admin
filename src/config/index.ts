@@ -3,7 +3,7 @@
  * @Date: 2024-04-22 19:22:42
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-04-22 21:13:53
- * @FilePath: /meimei-new/src/config/index.ts
+ * @FilePath: /art-template/src/config/index.ts
  * @Description: 环境变量入口
  * 
  */

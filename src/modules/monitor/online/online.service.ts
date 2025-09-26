@@ -3,7 +3,7 @@
  * @Date: 2024-05-17 19:47:46
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-19 00:12:04
- * @FilePath: /meimei-nestjs-admin/admin-prisma-vue3/meimei-admin/src/modules/monitor/online/online.service.ts
+ * @FilePath: /meimei-nestjs-admin/admin-prisma-vue3/art-template/src/modules/monitor/online/online.service.ts
  * @Description: 
  * 
  */

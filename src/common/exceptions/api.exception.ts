@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-09-18 11:07:37
  * @LastEditors: Please set LastEditors
  * @Description: 自定义异常
- * @FilePath: /meimei-admin/src/common/exceptions/api.exception.ts
+ * @FilePath: /art-template/src/common/exceptions/api.exception.ts
  * You can you up，no can no bb！！
  */
 import { HttpException } from '@nestjs/common';

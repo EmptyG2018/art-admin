@@ -3,7 +3,7 @@
  * @Date: 2024-04-22 19:22:42
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-19 00:50:43
- * @FilePath: /meimei-admin/src/config/config.pro.ts
+ * @FilePath: /art-template/src/config/config.pro.ts
  * @Description: 开发环境配置文件
  *
  */

@@ -3,7 +3,7 @@
  * @Date: 2024-05-17 20:08:51
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-17 20:25:37
- * @FilePath: /meimei-new/src/modules/sys/sys-table/sys-table.module.ts
+ * @FilePath: /art-template/src/modules/sys/sys-table/sys-table.module.ts
  * @Description: 
  * 
  */

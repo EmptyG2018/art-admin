@@ -3,7 +3,7 @@
  * @Date: 2024-05-11 20:53:17
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-15 17:22:44
- * @FilePath: \meimei-new\src\modules\sys\sys-notice\sys-notice.controller.ts
+ * @FilePath: \art-template\src\modules\sys\sys-notice\sys-notice.controller.ts
  * @Description:
  *
  */

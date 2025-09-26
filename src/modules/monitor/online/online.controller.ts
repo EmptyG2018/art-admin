@@ -3,7 +3,7 @@
  * @Date: 2024-05-16 16:11:52
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-18 15:53:39
- * @FilePath: /meimei-new/src/modules/monitor/online/online.controller.ts
+ * @FilePath: /art-template/src/modules/monitor/online/online.controller.ts
  * @Description:
  *
  */
@@ -12,7 +12,7 @@
  * @Date: 2024-05-16 16:11:52
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-16 17:01:09
- * @FilePath: \meimei-new\src\modules\monitor\online\online.controller.ts
+ * @FilePath: \art-template\src\modules\monitor\online\online.controller.ts
  * @Description:
  *
  */

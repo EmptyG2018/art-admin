@@ -3,7 +3,7 @@
  * @Date: 2024-04-28 08:39:38
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-13 16:15:08
- * @FilePath: \meimei-new\src\modules\sys\sys-config\sys-config.service.ts
+ * @FilePath: \art-template\src\modules\sys\sys-config\sys-config.service.ts
  * @Description: 接口日志
  *
  */

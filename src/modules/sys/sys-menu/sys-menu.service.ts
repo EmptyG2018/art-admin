@@ -3,7 +3,7 @@
  * @Date: 2024-05-13 13:59:22
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-17 21:57:51
- * @FilePath: /meimei-new/src/modules/sys/sys-menu/sys-menu.service.ts
+ * @FilePath: /art-template/src/modules/sys/sys-menu/sys-menu.service.ts
  * @Description:
  *
  */

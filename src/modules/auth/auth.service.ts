@@ -3,7 +3,7 @@
  * @Date: 2024-04-23 19:15:56
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-18 10:19:04
- * @FilePath: /meimei-new/src/modules/auth/auth.service.ts
+ * @FilePath: /art-template/src/modules/auth/auth.service.ts
  * @Description: 用户身份校验
  *
  */

@@ -3,7 +3,7 @@
  * @Date: 2024-05-12 17:35:00
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-13 20:41:54
- * @FilePath: /meimei-new/src/modules/sys/sys-menu/sys-menu.controller.ts
+ * @FilePath: /art-template/src/modules/sys/sys-menu/sys-menu.controller.ts
  * @Description:
  *
  */

@@ -3,7 +3,7 @@
  * @Date: 2024-04-27 18:05:10
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-04-27 18:05:49
- * @FilePath: /meimei-new/src/common/decorators/requires-roles.decorator.ts
+ * @FilePath: /art-template/src/common/decorators/requires-roles.decorator.ts
  * @Description: 角色权限装饰器
  * 
  */

@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-09-18 11:07:59
  * @LastEditors: Please set LastEditors
  * @Description: 保持原数据返回的装饰器
- * @FilePath: /meimei-admin/src/common/decorators/keep.decorator.ts
+ * @FilePath: /art-template/src/common/decorators/keep.decorator.ts
  * You can you up，no can no bb！！
  */
 

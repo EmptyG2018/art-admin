@@ -4,7 +4,7 @@
  * @LastEditTime: 2024-04-23 15:22:27
  * @LastEditors: HuChao 491623426@qq.com
  * @Description: 是否演示环境守卫
- * @FilePath: \meimei-new\src\common\guards\demo-environment.guard.ts
+ * @FilePath: \art-template\src\common\guards\demo-environment.guard.ts
  * You can you up，no can no bb！！
  */
 

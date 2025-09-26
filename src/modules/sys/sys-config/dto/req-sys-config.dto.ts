@@ -3,7 +3,7 @@
  * @Date: 2024-04-28 08:39:38
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-10 15:00:28
- * @FilePath: \meimei-new\src\modules\sys\sys-config\dto\req-sys-config.dto.ts
+ * @FilePath: \art-template\src\modules\sys\sys-config\dto\req-sys-config.dto.ts
  * @Description:
  *
  */
