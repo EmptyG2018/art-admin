@@ -1,74 +1,104 @@
-import { Form, Tree } from 'antd';
-import {
-  ModalForm,
-  ProFormText,
-  ProFormDigit,
-  ProFormRadio,
-  ProFormTextArea,
-  ProFormTreeSelect,
-} from '@ant-design/pro-components';
-import { queryDictsByType } from '@/services/dict';
-import { queryMenuTree } from '@/services/menu';
+import React, { useState, useEffect, useRef } from 'react';
+import { Modal, Flex, Button, FormInstance } from 'antd';
+import { ProForm } from '@ant-design/pro-components';
 
-interface EditRoleFormProps {
-  formDisabled?: boolean;
-  title: string;
-  values: any;
-  trigger: JSX.Element;
-  onFinish?: () => void;
+interface EditRoleWrapperFormProps {
+  values?: any;
+  request?: any;
+  formRender: JSX.Element;
+  onCancel?: () => void;
+  onFinish?: (values: any) => void;
 }
 
-const EditRoleForm: React.FC<EditRoleFormProps> = (props) => {
-  const { title, trigger, onFinish } = props;
+interface EditRoleFormProps extends EditRoleWrapperFormProps {
+  trigger: JSX.Element;
+  title: string;
+}
+
+interface EditRoleFormProps {
+  title: string;
+  values?: any;
+  request?: any;
+  trigger: JSX.Element;
+  formRender: JSX.Element;
+  onFinish?: (values: any) => void;
+}
+
+const EditMenuWrapperForm: React.FC<EditRoleWrapperFormProps> = (props) => {
+  const formRef = useRef<FormInstance>();
+  const { values, request, formRender, onCancel, onFinish } = props;
+
+  useEffect(() => {
+    if (values) formRef.current?.setFieldsValue(values);
+  }, [values]);
+
+  useEffect(() => {
+    if (!request) return;
+
+    const req = async () => {
+      const data = await request();
+      if (data) {
+        formRef.current?.setFieldsValue(data);
+      }
+    };
+    req();
+  }, [request]);
 
   return (
-    <ModalForm
-      title={title}
-      trigger={trigger}
-      rowProps={{ gutter: 16 }}
-      modalProps={{
-        destroyOnHidden: true,
+    <ProForm
+      formRef={formRef}
+      submitter={{
+        render: ({ form }) => {
+          return (
+            <Flex gap={8} justify="flex-end">
+              <Button key="cancel" onClick={() => onCancel?.()}>
+                取消
+              </Button>
+              <Button
+                type="primary"
+                key="submit"
+                onClick={() => form?.submit?.()}
+              >
+                提交
+              </Button>
+            </Flex>
+          );
+        },
       }}
-      onFinish={(formValues) => {
-        console.log(formValues);
-      }}
+      onFinish={onFinish}
     >
-      <ProFormText width="md" name="roleNmae" label="角色名称" />
-      <ProFormText name="roleKey" label="角色名称" />
-      <ProFormDigit name="roleSort" label="角色排序" />
-      <ProFormRadio.Group
-        name="status"
-        label="状态"
-        placeholder="请选择状态"
-        request={async () => {
-          const res = await queryDictsByType('sys_normal_disable');
-          return res.data.map((dict) => ({
-            label: dict.dictLabel,
-            value: dict.dictValue,
-          }));
-        }}
-      />
-      <ProFormTreeSelect
-      initialValue={[2]}
-        name="menuIds"
-        label="菜单权限"
-        fieldProps={{
-          multiple: true,
-          fieldNames: {
-            label: 'label',
-            value: 'id',
-            children: 'children',
-          },
-          treeCheckable: true,
-          showCheckedStrategy: 'SHOW_ALL',
-        }}
-        request={async () => {
-          const res = await queryMenuTree();
-          return res.data;
-        }}
-      />
-      <ProFormTextArea name="remark" label="备注" />
-    </ModalForm>
+      {formRender}
+    </ProForm>
+  );
+};
+
+const EditRoleForm: React.FC<EditRoleFormProps> = (props) => {
+  const { trigger, title, onFinish, ...rest } = props;
+  const [visible, setVisible] = useState<boolean>(false);
+
+  return (
+    <>
+      {React.cloneElement(trigger, {
+        onClick: () => setVisible(true),
+      })}
+      <Modal
+        open={visible}
+        title={title}
+        width={800}
+        footer={null}
+        destroyOnHidden
+        onCancel={() => setVisible(false)}
+      >
+        <EditMenuWrapperForm
+          onFinish={async (values) => {
+            const ok = await onFinish?.(values);
+            if (ok) setVisible(false);
+          }}
+          onCancel={() => setVisible(false)}
+          {...rest}
+        />
+      </Modal>
+    </>
   );
 };
 

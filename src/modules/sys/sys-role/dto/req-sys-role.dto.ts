@@ -71,14 +71,6 @@ export class AddSysRoleDto extends DataBaseDto {
   @IsString()
   dataScope?: string;
 
-  /* 菜单树选择项是否关联显示 */
-  @IsBoolean()
-  menuCheckStrictly: boolean;
-
-  /* 菜单树选择项是否关联显示 */
-  @IsBoolean()
-  deptCheckStrictly: boolean;
-
   /* 角色状态（0正常 1停用） */
   @IsString()
   @Excel({

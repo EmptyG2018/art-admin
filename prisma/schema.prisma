@@ -243,8 +243,6 @@ model SysRole {
   createTime        DateTime?
   dataScope         String?   @default("4") @db.Char(4)
   delFlag           String?   @default("0") @db.Char(1)
-  deptCheckStrictly Boolean?  @default(true)
-  menuCheckStrictly Boolean?  @default(true)
   remark            String?   @db.VarChar(500)
   roleKey           String    @db.VarChar(100)
   roleName          String    @db.VarChar(30)

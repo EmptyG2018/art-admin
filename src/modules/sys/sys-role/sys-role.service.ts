@@ -233,8 +233,7 @@ export class SysRoleService {
         delFlag: '0',
       },
     });
-    const { depts, deptCheckStrictly } = role;
-    if (!deptCheckStrictly) return depts.map((menu) => menu.deptId);
+    const { depts } = role;
     const filterRole = depts.filter((dept) => {
       return !depts.some(
         (dept2) =>

@@ -1,21 +1,38 @@
-import { Modal } from 'antd';
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
+import { App } from 'antd';
 import EditRoleForm from './EditRoleForm';
+import { addRole } from '@/services/role';
 
 interface CreateRoleFormProps {
+  values?: any;
   trigger: JSX.Element;
-  onCancel: () => void;
+  formRender: JSX.Element;
+  onFinish?: () => void;
 }
 
 const CreateRoleForm: React.FC<CreateRoleFormProps> = (props) => {
-  const { trigger, onCancel } = props;
+  const { message } = App.useApp();
+  const { values, trigger, formRender, onFinish } = props;
 
   return (
     <EditRoleForm
       title="新建角色"
+      values={values}
       trigger={trigger}
-      onFinish={() => {
-        console.log('111');
+      formRender={formRender}
+      onFinish={async (formValues) => {
+        const hide = message.loading('正在添加');
+        try {
+          await addRole(formValues);
+          onFinish?.();
+          hide();
+          message.success('添加成功');
+          return true;
+        } catch {
+          hide();
+          message.error('添加失败请重试！');
+          return false;
+        }
       }}
     />
   );

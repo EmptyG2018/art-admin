@@ -2,10 +2,11 @@ import {
   Button,
   Divider,
   Space,
-  Drawer,
   message,
   Dropdown,
   Tooltip,
+  Form,
+  Tree,
 } from 'antd';
 import {
   ExportOutlined,
@@ -20,60 +21,73 @@ import {
   ActionType,
   FooterToolbar,
   PageContainer,
-  ProDescriptions,
   ProTable,
   ProColumns,
+  ProFormText,
+  ProFormRadio,
+  ProFormDigit,
+  ProFormTextArea,
+  useToken,
 } from '@ant-design/pro-components';
 
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { queryRolePage } from '@/services/role';
 import CreateRoleForm from './components/CreateRoleForm';
-import UpdateForm, { FormValueType } from './components/UpdateRoleForm';
-/**
- * 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.UserInfo) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addUser({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
+import UpdateMenuForm from './components/UpdateRoleForm';
+import { queryDictsByType } from '@/services/dict';
+import { queryMenuTree } from '@/services/menu';
+import { useRequest, useControllableValue } from 'ahooks';
+
+interface TreeNode {
+  id: number | string;
+  children?: TreeNode[];
+  // 其他字段如 title 等可选
+}
 
 /**
- * 更新节点
- * @param fields
+ * 从选中的节点 ID 中提取“最终叶子节点”（即：没有被选中的后代的选中节点）
+ * @param tree 树形结构数组
+ * @param selectedIds 选中的节点 ID 集合
+ * @returns 最终叶子节点 ID 数组
  */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('正在配置');
-  try {
-    await modifyUser(
-      {
-        userId: fields.id || '',
-      },
-      {
-        name: fields.name || '',
-        nickName: fields.nickName || '',
-        email: fields.email || '',
-      },
-    );
-    hide();
+function getLeafSelectedNodes(
+  tree: TreeNode[],
+  selectedIds: (number | string)[],
+): (number | string)[] {
+  const selectedSet = new Set(selectedIds);
+  const result: (number | string)[] = [];
 
-    message.success('配置成功');
+  function traverse(node: TreeNode): boolean {
+    const { id, children = [] } = node;
+
+    if (!selectedSet.has(id)) {
+      return false;
+    }
+
+    let hasSelectedDescendant = false;
+
+    for (const child of children) {
+      if (traverse(child)) {
+        hasSelectedDescendant = true;
+      }
+    }
+
+    if (!hasSelectedDescendant) {
+      result.push(id);
+    }
+
     return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
   }
-};
+
+  // 遍历根节点
+  for (const root of tree) {
+    if (root && typeof root === 'object' && 'id' in root) {
+      traverse(root);
+    }
+  }
+
+  return result;
+}
 
 /**
  *  删除节点
@@ -96,13 +110,51 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
   }
 };
 
+const MenuTree = (props) => {
+  const { token } = useToken();
+  const [state, setState] = useControllableValue<any[]>(props, {
+    defaultValue: [],
+  });
+  const { data: treeData } = useRequest(async () => {
+    const res = await queryMenuTree();
+    return res.data;
+  });
+
+  const checkeds = useMemo(() => {
+    if (!treeData) return [];
+
+    return getLeafSelectedNodes(treeData, state);
+  }, [treeData, state]);
+
+  return (
+    <div
+      style={{
+        maxWidth: 440,
+        padding: token.paddingSM,
+        overflow: 'auto',
+        border: '1px solid ' + token.colorBorder,
+        borderRadius: token.borderRadius,
+      }}
+    >
+      <Tree
+        checkedKeys={checkeds}
+        treeData={treeData}
+        fieldNames={{
+          title: 'label',
+          key: 'id',
+          children: 'children',
+        }}
+        checkable
+        onCheck={(v: any, { halfCheckedKeys }: any) => {
+          setState([...new Set([...v, ...halfCheckedKeys])]);
+        }}
+      />
+    </div>
+  );
+};
+
 export const Component: React.FC<unknown> = () => {
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
-  const [updateModalVisible, handleUpdateModalVisible] =
-    useState<boolean>(false);
-  const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<API.UserInfo>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
   const columns: ProColumns[] = [
     {
@@ -151,9 +203,18 @@ export const Component: React.FC<unknown> = () => {
           split={<Divider type="vertical" />}
           size={2}
         >
-          <Tooltip title="修改">
-            <Button type="link" size="small" icon={<EditOutlined />} />
-          </Tooltip>
+          <UpdateMenuForm
+            values={record}
+            formRender={formRender}
+            trigger={
+              <Tooltip title="修改">
+                <Button type="link" size="small" icon={<EditOutlined />} />
+              </Tooltip>
+            }
+            onFinish={() => {
+              actionRef.current?.reload();
+            }}
+          />
           <Tooltip title="删除">
             <Button type="link" size="small" icon={<DeleteOutlined />} />
           </Tooltip>
@@ -168,6 +229,61 @@ export const Component: React.FC<unknown> = () => {
     },
   ];
 
+  const formRender = (
+    <>
+      <ProFormText
+        name="roleName"
+        label="角色名称"
+        placeholder="请输入角色名称"
+        rules={[{ required: true, message: '请输入角色名称' }]}
+        width="md"
+      />
+      <ProFormText
+        name="roleKey"
+        label="权限字符"
+        placeholder="请输入权限字符"
+        rules={[{ required: true, message: '请输入权限字符' }]}
+        width="md"
+      />
+      <Form.Item name="menuIds" label="菜单权限" initialValue={[]}>
+        <MenuTree />
+      </Form.Item>
+      <ProFormDigit
+        name="roleSort"
+        label="排序"
+        placeholder="请输入排序"
+        min={1}
+        rules={[{ required: true, message: '请输入排序' }]}
+        width="xs"
+        fieldProps={{ precision: 0 }}
+      />
+      <ProFormRadio.Group
+        name="status"
+        label="状态"
+        placeholder="请选择状态"
+        initialValue="0"
+        options={[
+          { label: '是', value: '0' },
+          { label: '否', value: '1' },
+        ]}
+        rules={[{ required: true, message: '请选择状态' }]}
+        request={async () => {
+          const res = await queryDictsByType('sys_normal_disable');
+          return res.data.map((dict) => ({
+            label: dict.dictLabel,
+            value: dict.dictValue,
+          }));
+        }}
+      />
+      <ProFormTextArea
+        name="remark"
+        label="备注"
+        width="lg"
+        placeholder="请输入备注"
+      />
+    </>
+  );
+
   return (
     <PageContainer
       header={{
@@ -180,6 +296,7 @@ export const Component: React.FC<unknown> = () => {
         rowKey="roleId"
         toolBarRender={() => [
           <CreateRoleForm
+            formRender={formRender}
             trigger={
               <Button type="primary" icon={<PlusOutlined />} key="add">
                 新增
@@ -251,50 +368,6 @@ export const Component: React.FC<unknown> = () => {
           </Button>
         </FooterToolbar>
       )}
-
-      {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
-          onSubmit={async (value) => {
-            const success = await handleUpdate(value);
-            if (success) {
-              handleUpdateModalVisible(false);
-              setStepFormValues({});
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-            setStepFormValues({});
-          }}
-          updateModalVisible={updateModalVisible}
-          values={stepFormValues}
-        />
-      ) : null}
-
-      <Drawer
-        width={600}
-        open={!!row}
-        onClose={() => {
-          setRow(undefined);
-        }}
-        closable={false}
-      >
-        {row?.name && (
-          <ProDescriptions<API.UserInfo>
-            column={2}
-            title={row?.name}
-            request={async () => ({
-              data: row || {},
-            })}
-            params={{
-              id: row?.name,
-            }}
-            columns={columns}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };

@@ -29,4 +29,29 @@ export const queryAllRole = () => {
   return request('/api/system/role/all', {
     method: 'GET',
   });
-}
+};
+
+// 新增
+export const addRole = (data) => {
+  return request('/api/system/role', {
+    method: 'POST',
+    data,
+  });
+};
+
+// 删除
+
+// 修改
+export const updateRole = (data) => {
+  return request('/api/system/role', {
+    method: 'PUT',
+    data,
+  });
+};
+
+// 角色详情
+export const getRole = (roleId) => {
+  return request('/api/system/role/' + roleId, {
+    method: 'GET',
+  });
+};

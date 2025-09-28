@@ -218,7 +218,6 @@ export class LoginService {
     const deptPromise = roles.map((role) => {
       if (role.dataScope === '2') {
         // 自定义数据权限
-        const deptCheckStrictly = role.deptCheckStrictly;
         return this.prisma.sysDept
           .findMany({
             where: {
@@ -230,7 +229,6 @@ export class LoginService {
             },
           })
           .then((depts) => {
-            if (!deptCheckStrictly) return depts;
             const filterRole = depts.filter((dept) => {
               return !depts.some(
                 (dept2) =>

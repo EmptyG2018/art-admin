@@ -5,8 +5,6 @@ declare namespace Role {
     createTime: string;
     dataScope: string;
     delFlag: string;
-    deptCheckStrictly: boolean;
-    menuCheckStrictly: boolean;
     remark: string;
     roleKey: string;
     roleName: string;
