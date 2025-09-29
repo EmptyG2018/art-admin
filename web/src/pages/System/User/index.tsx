@@ -34,13 +34,13 @@ import {
 import React, { useRef, useState } from 'react';
 import { useRequest } from 'ahooks';
 import { queryUserPage, deleteUser, resetUserPwd } from '@/services/user';
-import { queryDeptTreeList } from '@/services/dept';
+import { queryDeptTree } from '@/services/dept';
 import { queryDictsByType } from '@/services/dict';
 import CreateUserForm from './components/CreateUserForm';
 import UpdateUserForm from './components/UpdateUserForm';
 
 const DeptTree = ({ onSelect }: { onSelect: (key: React.Key) => void }) => {
-  const { data: deptTree } = useRequest(queryDeptTreeList);
+  const { data: deptTree } = useRequest(queryDeptTree);
 
   return (
     <>
@@ -116,7 +116,7 @@ export const Component: React.FC<unknown> = () => {
         fieldNames: { label: 'label', value: 'id', children: 'children' },
       },
       request: async () => {
-        const res = await queryDeptTreeList();
+        const res = await queryDeptTree();
         return res.data;
       },
       hideInSearch: true,

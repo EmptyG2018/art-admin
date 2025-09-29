@@ -1,8 +1,8 @@
 import React from 'react';
 import { App } from 'antd';
 import EditRoleForm from './EditRoleForm';
-import { getRoleMenu } from '@/services/menu';
-import { updateRole, getRole } from '@/services/role';
+import { getRoleDept } from '@/services/dept';
+import { updateDataScope, getRole } from '@/services/role';
 
 interface UpdateRoleFormProps {
   values?: any;
@@ -17,13 +17,13 @@ const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
 
   return (
     <EditRoleForm
-      title="修改角色"
+      title="分配数据权限"
       request={async () => {
         const res = await getRole(values.roleId);
-        const res2 = await getRoleMenu(values.roleId);
+        const res2 = await getRoleDept(values.roleId);
         return {
           ...res.data,
-          menuIds: res2.data,
+          deptIds: res2.data,
         };
       }}
       trigger={trigger}
@@ -31,7 +31,7 @@ const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
       onFinish={async (formValues) => {
         const hide = message.loading('正在修改');
         try {
-          await updateRole({ ...values, ...formValues });
+          await updateDataScope({ ...values, ...formValues });
           onFinish?.();
           hide();
           message.success('修改成功');

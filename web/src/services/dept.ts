@@ -1,8 +1,8 @@
 import request from './_request';
 
 // 查询部门树形列表
-export const queryDeptTreeList = (params, options?: { [key: string]: any }) => {
-  return request<API.DeptTreeListResult>('/api/system/user/deptTree', {
+export const queryDeptTree = (params?: any, options?: { [key: string]: any }) => {
+  return request<API.DeptTreeListResult>('/api/system/dept/tree', {
     method: 'GET',
     params: { ...params },
     ...(options || {}),
@@ -44,6 +44,14 @@ export const updateDept = (data) => {
 // 部门详情
 export const getDept = (deptId) => {
   return request<any>('/api/system/dept/' + deptId, {
+    method: 'GET',
+  });
+};
+
+
+// 获取角色选中的部门
+export const getRoleDept = (roleId) => {
+  return request('/api/system/dept/roleDept/' + roleId, {
     method: 'GET',
   });
 };

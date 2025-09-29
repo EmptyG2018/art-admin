@@ -201,49 +201,6 @@ export class SysRoleService {
     return await this.addRuleUserPv(roleId);
   }
 
-  /* 查询部门树 */
-  async treeselect() {
-    const deptList = await this.prisma.sysDept.findMany({
-      select: {
-        deptId: true,
-        parentId: true,
-        deptName: true,
-      },
-      where: {
-        delFlag: '0',
-      },
-    });
-    const newList = deptList.map((item) => ({
-      id: item.deptId,
-      parentId: item.parentId,
-      label: item.deptName,
-    }));
-    const list = this.sharedService.handleTree(newList);
-    return list;
-  }
-
-  /* 获取角色对应的部门id数组 */
-  async getRoleDept(roleId: number) {
-    const role = await this.prisma.sysRole.findUnique({
-      include: {
-        depts: true,
-      },
-      where: {
-        roleId,
-        delFlag: '0',
-      },
-    });
-    const { depts } = role;
-    const filterRole = depts.filter((dept) => {
-      return !depts.some(
-        (dept2) =>
-          dept.deptId != dept2.deptId &&
-          ` ${dept2.ancestors}`.includes(`,${dept.deptId},`),
-      );
-    });
-    return filterRole.map((menu) => menu.deptId);
-  }
-
   /* 分页查询角色下用户列表 */
   async allocatedList(
     allocatedListDto: AllocatedListDto,

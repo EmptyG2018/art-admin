@@ -87,12 +87,6 @@ export class SysUserController {
     return await this.sysUserService.list(getSysUserListDto, dataScope);
   }
 
-  /* 获取部门树 */
-  @Get('deptTree')
-  async deptTree(@User(UserEnum.dataScope) dataScope: DataScope) {
-    return await this.sysUserService.treeselect(dataScope);
-  }
-
   /* 获取用户个人信息 */
   @Get('profile')
   async profile(@User(UserEnum.userId) userId: number) {

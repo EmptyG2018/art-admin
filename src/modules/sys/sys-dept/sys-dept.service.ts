@@ -9,6 +9,7 @@
  */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
+import { SharedService } from 'src/shared/shared.service';
 import {
   AddSysDeptDto,
   GetSysDeptListDto,
@@ -19,7 +20,57 @@ import { DataScope } from 'src/common/type/data-scope.type';
 
 @Injectable()
 export class SysDeptService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly sharedService: SharedService,
+  ) {}
+
+  /* 查询部门树 */
+  async treeselect(dataScope: DataScope) {
+    const deptList = await this.prisma.sysDept.findMany({
+      select: {
+        deptId: true,
+        parentId: true,
+        deptName: true,
+      },
+      where: {
+        AND: {
+          delFlag: '0',
+          OR: dataScope.OR,
+        },
+      },
+    });
+    const newList = deptList.map((item) => ({
+      id: item.deptId,
+      parentId: item.parentId,
+      label: item.deptName,
+    }));
+    const list = this.sharedService.handleTree(newList);
+    return list;
+  }
+
+  /* 获取角色对应的部门id数组 */
+  async getRoleDept(roleId: number) {
+    const role = await this.prisma.sysRole.findUnique({
+      include: {
+        depts: true,
+      },
+      where: {
+        roleId,
+        delFlag: '0',
+      },
+    });
+    const { depts } = role;
+    const filterRole = depts.filter((dept) => {
+      return !depts.some(
+        (dept2) =>
+          dept.deptId != dept2.deptId &&
+          ` ${dept2.ancestors}`.includes(`,${dept.deptId},`),
+      );
+    });
+    return filterRole.map((menu) => menu.deptId);
+  }
+
   /* 列表查询 */
   async list(getSysDeptListDto: GetSysDeptListDto, dataScope: DataScope) {
     const { deptName, status } = getSysDeptListDto;

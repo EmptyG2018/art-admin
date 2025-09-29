@@ -22,7 +22,6 @@ import {
   UpdateSysUserDto,
 } from './dto/req-sys-user.dto';
 import { ApiException } from 'src/common/exceptions/api.exception';
-import { SharedService } from 'src/shared/shared.service';
 import * as bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
 import { DataScope } from 'src/common/type/data-scope.type';
@@ -37,7 +36,6 @@ export class SysUserService {
     private readonly prisma: PrismaService,
     @Inject('CustomPrisma')
     private readonly customPrisma: CustomPrismaService<ExtendedPrismaClient>,
-    private readonly sharedService: SharedService,
     @InjectRedis() private readonly redis: Redis,
     private readonly loginService: LoginService,
   ) {}
@@ -200,30 +198,6 @@ export class SysUserService {
       },
     });
     return await this.addPv(userId);
-  }
-
-  /* 查询部门树 */
-  async treeselect(dataScope: DataScope) {
-    const deptList = await this.prisma.sysDept.findMany({
-      select: {
-        deptId: true,
-        parentId: true,
-        deptName: true,
-      },
-      where: {
-        AND: {
-          delFlag: '0',
-          OR: dataScope.OR,
-        },
-      },
-    });
-    const newList = deptList.map((item) => ({
-      id: item.deptId,
-      parentId: item.parentId,
-      label: item.deptName,
-    }));
-    const list = this.sharedService.handleTree(newList);
-    return list;
   }
 
   /* 重置用户密码 */

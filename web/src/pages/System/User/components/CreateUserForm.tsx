@@ -8,7 +8,7 @@ import {
   ProFormTreeSelect,
   ProFormRadio,
 } from '@ant-design/pro-components';
-import { queryDeptTreeList } from '@/services/dept';
+import { queryDeptTree } from '@/services/dept';
 import { queryDictsByType } from '@/services/dict';
 import { queryAllPost } from '@/services/post';
 import { queryAllRole } from '@/services/role';
@@ -90,7 +90,7 @@ const CreateUserForm: React.FC<CreateFormProps> = (props) => {
           fieldNames: { label: 'label', value: 'id', children: 'children' },
         }}
         request={async () => {
-          const res = await queryDeptTreeList();
+          const res = await queryDeptTree();
           return res.data;
         }}
         colProps={{ span: 12 }}

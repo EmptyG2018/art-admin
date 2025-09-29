@@ -55,3 +55,11 @@ export const getRole = (roleId) => {
     method: 'GET',
   });
 };
+
+// 数据权限
+export const updateDataScope = (data) => {
+  return request('/api/system/role/dataScope', {
+    method: 'PUT',
+    data,
+  });
+};

@@ -47,6 +47,18 @@ export class SysDeptController {
     await this.sysDeptService.add(addSysDeptDto);
   }
 
+  /* 获取部门树 */
+  @Get('tree')
+  async tree(@User(UserEnum.dataScope) dataScope: DataScope) {
+    return await this.sysDeptService.treeselect(dataScope);
+  }
+
+  /* 获取角色数据权限 */
+  @Get('roleDept/:roleId')
+  async roleDept(@Param('roleId') roleId: number) {
+    return await this.sysDeptService.getRoleDept(roleId);
+  }
+
   /* 列表查询 */
   @Get('list')
   @RequiresPermissions('system:dept:query')

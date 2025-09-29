@@ -53,3 +53,10 @@ export const getMenu = (menuId) => {
     method: 'GET',
   });
 };
+
+// 获取角色选中的菜单
+export const getRoleMenu = (roleId) => {
+  return request('/api/system/menu/roleMenu/' + roleId, {
+    method: 'GET',
+  });
+};

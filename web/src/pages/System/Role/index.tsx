@@ -1,3 +1,4 @@
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import {
   Button,
   Divider,
@@ -7,6 +8,7 @@ import {
   Tooltip,
   Form,
   Tree,
+  TreeProps,
 } from 'antd';
 import {
   ExportOutlined,
@@ -25,18 +27,20 @@ import {
   ProColumns,
   ProFormText,
   ProFormRadio,
+  ProFormSelect,
   ProFormDigit,
   ProFormTextArea,
+  ProFormDependency,
   useToken,
 } from '@ant-design/pro-components';
-
-import React, { useMemo, useRef, useState } from 'react';
 import { queryRolePage } from '@/services/role';
 import CreateRoleForm from './components/CreateRoleForm';
-import UpdateMenuForm from './components/UpdateRoleForm';
+import UpdateRoleForm from './components/UpdateRoleForm';
+import UpdateRoleDeptForm from './components/UpdateRoleDeptForm';
 import { queryDictsByType } from '@/services/dict';
 import { queryMenuTree } from '@/services/menu';
-import { useRequest, useControllableValue } from 'ahooks';
+import { queryDeptTree } from '@/services/dept';
+import { useControllableValue } from 'ahooks';
 
 interface TreeNode {
   id: number | string;
@@ -110,21 +114,40 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
   }
 };
 
-const MenuTree = (props) => {
+interface NodeTreeProps extends TreeProps {
+  defaultValue?: any[];
+  value?: any[];
+  request: any;
+  onChange?: (e: any) => void;
+}
+
+const NodeTree: React.FC<NodeTreeProps> = ({
+  request,
+  defaultValue,
+  value,
+  onChange,
+  ...rest
+}) => {
   const { token } = useToken();
-  const [state, setState] = useControllableValue<any[]>(props, {
-    defaultValue: [],
-  });
-  const { data: treeData } = useRequest(async () => {
-    const res = await queryMenuTree();
-    return res.data;
-  });
+  const [treeData, setTreeData] = useState([]);
+  const [state, setState] = useControllableValue<any[]>(
+    { defaultValue, value, onChange },
+    { defaultValue: [] },
+  );
+
+  useEffect(() => {
+    if (!request) return;
+
+    request().then((res) => {
+      setTreeData(res);
+    });
+  }, [request]);
 
   const checkeds = useMemo(() => {
-    if (!treeData) return [];
-
     return getLeafSelectedNodes(treeData, state);
   }, [treeData, state]);
+
+  if (!treeData.length) return null;
 
   return (
     <div
@@ -148,6 +171,7 @@ const MenuTree = (props) => {
         onCheck={(v: any, { halfCheckedKeys }: any) => {
           setState([...new Set([...v, ...halfCheckedKeys])]);
         }}
+        {...rest}
       />
     </div>
   );
@@ -156,6 +180,7 @@ const MenuTree = (props) => {
 export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
+
   const columns: ProColumns[] = [
     {
       title: '角色编号',
@@ -203,7 +228,7 @@ export const Component: React.FC<unknown> = () => {
           split={<Divider type="vertical" />}
           size={2}
         >
-          <UpdateMenuForm
+          <UpdateRoleForm
             values={record}
             formRender={formRender}
             trigger={
@@ -218,9 +243,18 @@ export const Component: React.FC<unknown> = () => {
           <Tooltip title="删除">
             <Button type="link" size="small" icon={<DeleteOutlined />} />
           </Tooltip>
-          <Tooltip title="数据授权">
-            <Button type="link" size="small" icon={<FileDoneOutlined />} />
-          </Tooltip>
+          <UpdateRoleDeptForm
+            values={record}
+            formRender={formRoleDeptRender}
+            trigger={
+              <Tooltip title="数据授权">
+                <Button type="link" size="small" icon={<FileDoneOutlined />} />
+              </Tooltip>
+            }
+            onFinish={() => {
+              actionRef.current?.reload();
+            }}
+          />
           <Tooltip title="分配用户">
             <Button type="link" size="small" icon={<UserOutlined />} />
           </Tooltip>
@@ -246,7 +280,12 @@ export const Component: React.FC<unknown> = () => {
         width="md"
       />
       <Form.Item name="menuIds" label="菜单权限" initialValue={[]}>
-        <MenuTree />
+        <NodeTree
+          request={async () => {
+            const res = await queryMenuTree();
+            return res.data;
+          }}
+        />
       </Form.Item>
       <ProFormDigit
         name="roleSort"
@@ -281,6 +320,57 @@ export const Component: React.FC<unknown> = () => {
         width="lg"
         placeholder="请输入备注"
       />
+    </>
+  );
+
+  const formRoleDeptRender = (
+    <>
+      <ProFormText
+        name="roleName"
+        label="角色名称"
+        placeholder="请输入角色名称"
+        rules={[{ required: true, message: '请输入角色名称' }]}
+        width="md"
+        disabled
+      />
+      <ProFormText
+        name="roleKey"
+        label="权限字符"
+        placeholder="请输入权限字符"
+        rules={[{ required: true, message: '请输入权限字符' }]}
+        width="md"
+        disabled
+      />
+      <ProFormSelect
+        name="dataScope"
+        label="权限范围"
+        placeholder="请输入权限范围"
+        width="sm"
+        options={[
+          { value: '1', label: '全部数据权限' },
+          { value: '2', label: '自定数据权限' },
+          { value: '3', label: '本部门数据权限' },
+          { value: '4', label: '本部门及以下数据权限' },
+          { value: '5', label: '仅本人数据权限' },
+        ]}
+      />
+      <ProFormDependency name={['dataScope']}>
+        {({ dataScope }) => {
+          if (dataScope !== '2') return null;
+
+          return (
+            <Form.Item name="deptIds" label="菜单权限" initialValue={[]}>
+              <NodeTree
+                defaultExpandAll
+                request={async () => {
+                  const res = await queryDeptTree();
+                  return res.data;
+                }}
+              />
+            </Form.Item>
+          );
+        }}
+      </ProFormDependency>
     </>
   );
 

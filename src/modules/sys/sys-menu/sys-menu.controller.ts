@@ -90,13 +90,8 @@ export class SysMenuController {
   }
 
   /* 获取角色对应的菜单和菜单列表 */
-  @Get('roleMenuTreeselect/:roleId')
-  async roleMenuTreeselect(@Param('roleId') roleId: number) {
-    const menus = await this.sysMenuService.treeselect();
-    const checkedKeys = await this.sysMenuService.getRoleMenu(roleId);
-    return {
-      menus,
-      checkedKeys,
-    };
+  @Get('roleMenu/:roleId')
+  async roleMenu(@Param('roleId') roleId: number) {
+    return await this.sysMenuService.getRoleMenu(roleId);
   }
 }

@@ -73,17 +73,6 @@ export class SysRoleController {
     return DataObj.create(role);
   }
 
-  /* 获取角色数据权限 */
-  @Get('deptTree/:roleId')
-  async deptTree(@Param('roleId') roleId: number) {
-    const depts = await this.sysRoleService.treeselect();
-    const checkedKeys = await this.sysRoleService.getRoleDept(roleId);
-    return {
-      depts,
-      checkedKeys,
-    };
-  }
-
   /* 更新 */
   @Put()
   @RepeatSubmit()
