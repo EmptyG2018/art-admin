@@ -29,9 +29,14 @@ const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
       trigger={trigger}
       formRender={formRender}
       onFinish={async (formValues) => {
+        const { dataScope, deptIds } = formValues;
         const hide = message.loading('正在修改');
         try {
-          await updateDataScope({ ...values, ...formValues });
+          await updateDataScope({
+            ...values,
+            ...formValues,
+            deptIds: dataScope !== '2' ? [] : deptIds,
+          });
           onFinish?.();
           hide();
           message.success('修改成功');

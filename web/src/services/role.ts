@@ -31,7 +31,7 @@ export const queryAllRole = () => {
   });
 };
 
-// 新增
+// 新增角色
 export const addRole = (data) => {
   return request('/api/system/role', {
     method: 'POST',
@@ -39,9 +39,14 @@ export const addRole = (data) => {
   });
 };
 
-// 删除
+// 删除角色
+export const deleteRole = (roleIds) => {
+  return request<any>('/api/system/role/' + roleIds, {
+    method: 'DELETE',
+  });
+};
 
-// 修改
+// 修改角色
 export const updateRole = (data) => {
   return request('/api/system/role', {
     method: 'PUT',

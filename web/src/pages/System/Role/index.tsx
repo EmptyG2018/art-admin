@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Divider,
@@ -9,6 +10,8 @@ import {
   Form,
   Tree,
   TreeProps,
+  Popconfirm,
+  Modal,
 } from 'antd';
 import {
   ExportOutlined,
@@ -40,6 +43,7 @@ import UpdateRoleDeptForm from './components/UpdateRoleDeptForm';
 import { queryDictsByType } from '@/services/dict';
 import { queryMenuTree } from '@/services/menu';
 import { queryDeptTree } from '@/services/dept';
+import { deleteRole } from '@/services/role';
 import { useControllableValue } from 'ahooks';
 
 interface TreeNode {
@@ -101,15 +105,13 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await deleteUser({
-      userId: selectedRows.find((row) => row.id)?.id || '',
-    });
+    await deleteRole(selectedRows.map((row) => row.roleId).join(','));
     hide();
-    message.success('删除成功，即将刷新');
+    message.success('删除成功');
     return true;
-  } catch (error) {
+  } catch {
     hide();
-    message.error('删除失败，请重试');
+    message.error('删除失败请重试!');
     return false;
   }
 };
@@ -186,21 +188,25 @@ export const Component: React.FC<unknown> = () => {
       title: '角色编号',
       dataIndex: 'roleId',
       hideInSearch: true,
+      width: 140,
     },
     {
       title: '角色名称',
       dataIndex: 'roleName',
       valueType: 'text',
+      width: 140,
     },
     {
       title: '权限字符',
       dataIndex: 'roleKey',
       valueType: 'text',
+      width: 180,
     },
     {
-      title: '显示顺序',
+      title: '排序',
       dataIndex: 'roleSort',
       valueType: 'text',
+      width: 120,
       hideInSearch: true,
     },
     {
@@ -211,17 +217,20 @@ export const Component: React.FC<unknown> = () => {
         0: { text: '正常', status: 'MALE' },
         1: { text: '停用', status: 'FEMALE' },
       },
+      width: 120,
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
+      width: 220,
     },
     {
       title: '操作',
       width: 180,
       dataIndex: 'option',
       valueType: 'option',
+      fixed: 'right',
       render: (_, record) => (
         <Space
           direction="horizontal"
@@ -241,7 +250,16 @@ export const Component: React.FC<unknown> = () => {
             }}
           />
           <Tooltip title="删除">
-            <Button type="link" size="small" icon={<DeleteOutlined />} />
+            <Popconfirm
+              title="删除记录"
+              description="您确定要删除此记录吗？"
+              onConfirm={async () => {
+                await handleRemove([record]);
+                actionRef.current?.reloadAndRest?.();
+              }}
+            >
+              <Button type="link" size="small" icon={<DeleteOutlined />} />
+            </Popconfirm>
           </Tooltip>
           <UpdateRoleDeptForm
             values={record}
@@ -255,8 +273,10 @@ export const Component: React.FC<unknown> = () => {
               actionRef.current?.reload();
             }}
           />
-          <Tooltip title="分配用户">
-            <Button type="link" size="small" icon={<UserOutlined />} />
+          <Tooltip title="授权用户">
+            <Link to={`../role/${record.roleId}`}>
+              <Button type="link" size="small" icon={<UserOutlined />} />
+            </Link>
           </Tooltip>
         </Space>
       ),
@@ -435,6 +455,7 @@ export const Component: React.FC<unknown> = () => {
         rowSelection={{
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
         }}
+        scroll={{ x: 1200 }}
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar
@@ -447,11 +468,21 @@ export const Component: React.FC<unknown> = () => {
           }
         >
           <Button
-            type="primary"
             onClick={async () => {
-              await handleRemove(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
+              Modal.confirm({
+                title: '删除记录',
+                content: '您确定要删除选中的记录吗？',
+                onOk: async () => {
+                  const ok = await handleRemove(selectedRowsState);
+                  if (ok) {
+                    setSelectedRows([]);
+                    actionRef.current?.reloadAndRest?.();
+                    Promise.resolve();
+                  } else {
+                    Promise.reject();
+                  }
+                },
+              });
             }}
           >
             批量删除

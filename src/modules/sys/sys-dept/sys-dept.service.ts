@@ -61,14 +61,7 @@ export class SysDeptService {
       },
     });
     const { depts } = role;
-    const filterRole = depts.filter((dept) => {
-      return !depts.some(
-        (dept2) =>
-          dept.deptId != dept2.deptId &&
-          ` ${dept2.ancestors}`.includes(`,${dept.deptId},`),
-      );
-    });
-    return filterRole.map((menu) => menu.deptId);
+    return depts.map((menu) => menu.deptId);
   }
 
   /* 列表查询 */
