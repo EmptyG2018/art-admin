@@ -760,11 +760,31 @@ async function main() {
     },
   });
 
-  const navMenu = await prisma.sysMenu.upsert({
+  const roleUserMenu = await prisma.sysMenu.upsert({
     where: { menuId: 7 },
     update: {},
     create: {
       menuId: 7,
+      menuName: '授权用户',
+      parentId: sysMenu.menuId,
+      orderNum: 2,
+      path: 'role/:roleId',
+      component: '/System/RoleUser/index',
+      menuType: 'C',
+      visible: '1',
+      status: '0',
+      icon: '',
+      perms: 'system:roleUser:list',
+      createBy: 'admin',
+      createTime: new Date(),
+    },
+  });
+
+  const navMenu = await prisma.sysMenu.upsert({
+    where: { menuId: 8 },
+    update: {},
+    create: {
+      menuId: 8,
       menuName: '菜单管理',
       parentId: sysMenu.menuId,
       orderNum: 3,
@@ -781,10 +801,10 @@ async function main() {
   });
 
   const deptMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 8 },
+    where: { menuId: 9 },
     update: {},
     create: {
-      menuId: 8,
+      menuId: 9,
       menuName: '部门管理',
       parentId: sysMenu.menuId,
       orderNum: 4,
@@ -801,10 +821,10 @@ async function main() {
   });
 
   const postMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 9 },
+    where: { menuId: 10 },
     update: {},
     create: {
-      menuId: 9,
+      menuId: 10,
       menuName: '岗位管理',
       parentId: sysMenu.menuId,
       orderNum: 5,
@@ -821,10 +841,10 @@ async function main() {
   });
 
   const dictMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 10 },
+    where: { menuId: 11 },
     update: {},
     create: {
-      menuId: 10,
+      menuId: 11,
       menuName: '字典管理',
       parentId: sysMenu.menuId,
       orderNum: 6,
@@ -841,10 +861,10 @@ async function main() {
   });
 
   const dictDataMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 11 },
+    where: { menuId: 12 },
     update: {},
     create: {
-      menuId: 11,
+      menuId: 12,
       menuName: '字典数据',
       parentId: sysMenu.menuId,
       orderNum: 7,
@@ -861,10 +881,10 @@ async function main() {
   });
 
   const configMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 12 },
+    where: { menuId: 13 },
     update: {},
     create: {
-      menuId: 12,
+      menuId: 13,
       menuName: '参数设置',
       parentId: sysMenu.menuId,
       orderNum: 8,
@@ -881,10 +901,10 @@ async function main() {
   });
 
   const noticeMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 13 },
+    where: { menuId: 14 },
     update: {},
     create: {
-      menuId: 13,
+      menuId: 14,
       menuName: '通知公告',
       parentId: sysMenu.menuId,
       orderNum: 9,
@@ -901,10 +921,10 @@ async function main() {
   });
 
   const logMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 14 },
+    where: { menuId: 15 },
     update: {},
     create: {
-      menuId: 14,
+      menuId: 15,
       menuName: '日志管理',
       parentId: sysMenu.menuId,
       orderNum: 10,
@@ -921,10 +941,10 @@ async function main() {
   });
 
   const operlogMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 15 },
+    where: { menuId: 16 },
     update: {},
     create: {
-      menuId: 15,
+      menuId: 16,
       menuName: '操作日志',
       parentId: logMenu.menuId,
       orderNum: 1,
@@ -941,10 +961,10 @@ async function main() {
   });
 
   const logininforMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 16 },
+    where: { menuId: 17 },
     update: {},
     create: {
-      menuId: 16,
+      menuId: 17,
       menuName: '登录日志',
       parentId: logMenu.menuId,
       orderNum: 2,
@@ -961,10 +981,10 @@ async function main() {
   });
 
   const onlineMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 17 },
+    where: { menuId: 18 },
     update: {},
     create: {
-      menuId: 17,
+      menuId: 18,
       menuName: '在线用户',
       parentId: moirMenu.menuId,
       orderNum: 1,
@@ -981,10 +1001,10 @@ async function main() {
   });
 
   const jobMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 18 },
+    where: { menuId: 19 },
     update: {},
     create: {
-      menuId: 18,
+      menuId: 19,
       menuName: '定时任务',
       parentId: moirMenu.menuId,
       orderNum: 2,
@@ -1001,10 +1021,10 @@ async function main() {
   });
 
   const jobLogMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 19 },
+    where: { menuId: 20 },
     update: {},
     create: {
-      menuId: 19,
+      menuId: 20,
       menuName: '调度日志',
       parentId: moirMenu.menuId,
       orderNum: 3,
@@ -1021,10 +1041,10 @@ async function main() {
   });
 
   const cacheMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 20 },
+    where: { menuId: 21 },
     update: {},
     create: {
-      menuId: 20,
+      menuId: 21,
       menuName: '缓存监控',
       parentId: moirMenu.menuId,
       orderNum: 4,
@@ -1041,10 +1061,10 @@ async function main() {
   });
 
   const cacheListMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 21 },
+    where: { menuId: 22 },
     update: {},
     create: {
-      menuId: 21,
+      menuId: 22,
       menuName: '缓存列表',
       parentId: moirMenu.menuId,
       orderNum: 5,
@@ -1061,10 +1081,10 @@ async function main() {
   });
 
   const genMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 22 },
+    where: { menuId: 23 },
     update: {},
     create: {
-      menuId: 22,
+      menuId: 23,
       menuName: '代码生成',
       parentId: toolMenu.menuId,
       orderNum: 1,
@@ -2022,9 +2042,9 @@ async function main() {
       status: '0',
       createBy: 'admin',
       createTime: new Date(),
-      remark: '测试任务'
-    }
-  })
+      remark: '测试任务',
+    },
+  });
 
   console.log('✅ SysJob 已创建');
 
@@ -2057,7 +2077,8 @@ async function main() {
   await prisma.sysWeb.create({
     data: {
       userId: user.userId,
-      theme: '{"layout":"light","colorPrimary":"#1677FF","colorInfo": "#1677FF"}',
+      theme:
+        '{"layout":"light","colorPrimary":"#1677FF","colorInfo": "#1677FF"}',
       createBy: 'admin',
       createTime: new Date(),
     },

@@ -68,3 +68,27 @@ export const updateDataScope = (data) => {
     data,
   });
 };
+
+// 用户授权
+export const updateAuthUser = (params) => {
+  return request('/api/system/role/authUser/selectAll', {
+    method: 'PUT',
+    params,
+  });
+};
+
+// 取消用户授权
+export function updateUnAuthUser(data: any) {
+  return request<any>('/api/system/role/authUser/cancel', {
+    method: 'PUT',
+    data,
+  });
+}
+
+// 批量取消用户授权
+export function updateUnAuthBatchUser(params: any) {
+  return request<any>('/api/system/role/authUser/cancelAll', {
+    method: 'PUT',
+    params,
+  });
+}

@@ -60,6 +60,22 @@ export function deleteUser(userIds) {
 export function resetUserPwd(data: any) {
   return request<any>('/api/system/user/resetPwd', {
     method: 'PUT',
-    data
+    data,
+  });
+}
+
+// 获取未授权用户列表
+export function getUnAllocatedUserList(params: any) {
+  return request<any>('/api/system/role/authUser/unallocatedList', {
+    method: 'GET',
+    params,
+  });
+}
+
+// 获取已授权用户列表
+export function getAllocatedUserList(params: any) {
+  return request<any>('/api/system/role/authUser/allocatedList', {
+    method: 'GET',
+    params,
   });
 }

@@ -9,13 +9,11 @@ import {
   Dropdown,
   Popconfirm,
   Modal,
-  Badge,
 } from 'antd';
 import {
   ExportOutlined,
   EllipsisOutlined,
-  DeleteOutlined,
-  EditOutlined,
+  MinusCircleOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
 import {
@@ -26,32 +24,18 @@ import {
   ProTable,
   ProColumns,
 } from '@ant-design/pro-components';
-import { queryDictPage, queryDictsByType, deleteDict } from '@/services/dict';
-import { getRole } from '@/services/role';
-import CreateDictDataForm from './components/CreateDictDataForm';
-import UpdateDictDataForm from './components/UpdateDictDataForm';
-
-/**
- *  删除节点
- * @param selectedRows
- */
-const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await deleteDict(selectedRows.map((row) => row.dictCode).join(','));
-    hide();
-    message.success('删除成功');
-    return true;
-  } catch {
-    hide();
-    message.error('删除失败请重试!');
-    return false;
-  }
-};
+import { queryDictsByType } from '@/services/dict';
+import { getAllocatedUserList } from '@/services/user';
+import {
+  getRole,
+  updateUnAuthUser,
+  updateUnAuthBatchUser,
+} from '@/services/role';
+import { columns as userColumns } from './components/SelectAllocatedUser';
+import SelectAllocatedUser from './components/SelectAllocatedUser';
 
 export const Component: React.FC<unknown> = () => {
-  const params = useParams();
+  const { roleId } = useParams();
   const navigate = useNavigate();
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
@@ -87,70 +71,10 @@ export const Component: React.FC<unknown> = () => {
   ];
 
   const columns: ProColumns[] = [
-    {
-      title: '用户名称',
-      dataIndex: 'userName',
-      valueType: 'text',
-      width: 140,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入字典标签' }],
-      },
-      colProps: { span: 12 },
-    },
-    {
-      title: '用户昵称',
-      dataIndex: 'nickName',
-      valueType: 'text',
-      width: 180,
-      hideInSearch: true,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入字典键值' }],
-      },
-      colProps: { span: 12 },
-    },
-    {
-      title: '邮箱',
-      dataIndex: 'email',
-      valueType: 'text',
-      hideInSearch: true,
-      colProps: { span: 12 },
-    },
-    {
-      title: '手机号码',
-      dataIndex: 'phonenumber',
-      width: 220,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入排序' }],
-      },
-      colProps: { span: 12 },
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      valueType: 'radio',
-      hideInSearch: true,
-      initialValue: '0',
-      width: 120,
-      request: async () => {
-        const res = await queryDictsByType('sys_normal_disable');
-        return res.data.map((dict) => ({
-          label: dict.dictLabel,
-          value: dict.dictValue,
-        }));
-      },
-      colProps: { span: 12 },
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime',
-      valueType: 'dateTime',
-      width: 220,
-      hideInSearch: true,
-      hideInForm: true,
-    },
+    ...userColumns,
     {
       title: '操作',
-      width: 100,
+      width: 60,
       dataIndex: 'option',
       valueType: 'option',
       fixed: 'right',
@@ -160,28 +84,29 @@ export const Component: React.FC<unknown> = () => {
           split={<Divider type="vertical" />}
           size={2}
         >
-          <UpdateDictDataForm
-            values={record}
-            columns={columns}
-            trigger={
-              <Tooltip title="修改">
-                <Button type="link" size="small" icon={<EditOutlined />} />
-              </Tooltip>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />
-          <Tooltip title="删除">
+          <Tooltip title="取消授权">
             <Popconfirm
-              title="删除记录"
-              description="您确定要删除此记录吗？"
+              title="取消授权"
+              description="您确定要取消该用户的授权吗？"
               onConfirm={async () => {
-                await handleRemove([record]);
-                actionRef.current?.reloadAndRest?.();
+                const hide = message.loading('正在取消授权');
+                try {
+                  await updateUnAuthUser({
+                    userId: record.userId,
+                    roleId,
+                  })
+                  hide();
+                  message.success('取消授权成功');
+                  actionRef.current?.reloadAndRest?.();
+                  return true;
+                } catch {
+                  hide();
+                  message.error('取消授权失败请重试!');
+                  return false;
+                }
               }}
             >
-              <Button type="link" size="small" icon={<DeleteOutlined />} />
+              <Button type="link" size="small" icon={<MinusCircleOutlined />} />
             </Popconfirm>
           </Tooltip>
         </Space>
@@ -199,7 +124,7 @@ export const Component: React.FC<unknown> = () => {
           columns={descriptionsColumns}
           column={{ sm: 1, md: 2, lg: 2, xl: 2 }}
           request={async () => {
-            const res = await getRole(params.roleId);
+            const res = await getRole(roleId);
             return { success: true, data: res.data };
           }}
         />
@@ -209,10 +134,10 @@ export const Component: React.FC<unknown> = () => {
       <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
-        rowKey="dictCode"
+        rowKey="userId"
         toolBarRender={() => [
-          <CreateDictDataForm
-            columns={columns}
+          <SelectAllocatedUser
+            roleId={roleId}
             trigger={
               <Button type="primary" icon={<PlusOutlined />} key="add">
                 新建
@@ -241,7 +166,8 @@ export const Component: React.FC<unknown> = () => {
           </Dropdown>,
         ]}
         request={async (params, sorter, filter) => {
-          const { code, rows, total } = await queryDictPage({
+          const { code, rows, total } = await getAllocatedUserList({
+            roleId,
             ...params,
             // FIXME: remove @ts-ignore
             // @ts-ignore
@@ -280,19 +206,27 @@ export const Component: React.FC<unknown> = () => {
                 title: '删除记录',
                 content: '您确定要删除选中的记录吗？',
                 onOk: async () => {
-                  const ok = await handleRemove(selectedRowsState);
-                  if (ok) {
-                    setSelectedRows([]);
+                  const hide = message.loading('正在取消授权');
+                  if (!selectedRowsState) return true;
+                  try {
+                    await updateUnAuthBatchUser({
+                      userIds: selectedRowsState.map(row => row.userId).join(','),
+                      roleId,
+                    })
+                    hide();
+                    message.success('取消授权成功');
                     actionRef.current?.reloadAndRest?.();
                     Promise.resolve();
-                  } else {
+                  } catch {
+                    hide();
+                    message.error('取消授权失败请重试!');
                     Promise.reject();
                   }
                 },
               });
             }}
           >
-            批量删除
+            批量取消授权
           </Button>
         </FooterToolbar>
       )}
