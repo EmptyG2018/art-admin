@@ -4,7 +4,7 @@
 
 ## 在线体验
 
-- [演示地址](localhost:888/login) 账号密码（admin admin123 和 guest 123456）
+- [演示地址](localhost:888/login) 账号密码（admin admin123 和 guest guest123）
 
 ## 技术要求
 

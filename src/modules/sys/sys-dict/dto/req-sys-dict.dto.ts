@@ -93,7 +93,7 @@ export class AddDictDataDto extends DataBaseDto {
   @IsOptional()
   @IsString()
   @Excel({
-    name: '样式属性（其他样式扩展）',
+    name: '样式类名（其他样式扩展）',
   })
   cssClass?: string;
 

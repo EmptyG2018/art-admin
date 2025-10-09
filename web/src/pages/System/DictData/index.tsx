@@ -93,7 +93,7 @@ const TableList: React.FC<TableListProps> = (props) => {
       colProps: { span: 12 },
     },
     {
-      title: '样式属性',
+      title: '样式类名',
       dataIndex: 'cssClass',
       valueType: 'text',
       hideInSearch: true,
@@ -112,13 +112,6 @@ const TableList: React.FC<TableListProps> = (props) => {
         Success: { text: '成功(Success)', status: 'Success' },
         Warning: { text: '警告(Warning)', status: 'Warning' },
         Error: { text: '错误(Error)', status: 'Error' },
-        space: { text: '--------------' },
-        default: { text: '默认(deafult)' },
-        primary: { text: '主要(primary)' },
-        success: { text: '成功(success)' },
-        info: { text: '信息(info)' },
-        warning: { text: '警告(warning)' },
-        danger: { text: '危险(danger)' },
       },
       fieldProps: {
         optionRender: (option) => {
@@ -131,7 +124,11 @@ const TableList: React.FC<TableListProps> = (props) => {
           };
 
           return (
-            <Badge status={statusMap[option.value] || ''} text={option.label} />
+            <Badge
+              offset={[4, 0]}
+              status={statusMap[option.value] || ''}
+              text={option.label}
+            />
           );
         },
       },

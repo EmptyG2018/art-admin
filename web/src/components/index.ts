@@ -9,6 +9,7 @@ import { Question, SelectLang } from './RightContent';
 import { AvatarDropdown, AvatarName } from './RightContent/AvatarDropdown';
 import CronSelect from './CronSelect';
 import WangEdtior from './WangEditor';
+import EditFormModal from './EditFormModal';
 
 export {
   AvatarDropdown,
@@ -17,4 +18,5 @@ export {
   SelectLang,
   CronSelect,
   WangEdtior,
+  EditFormModal,
 };

@@ -231,55 +231,62 @@ export const Component: React.FC<unknown> = () => {
       dataIndex: 'option',
       valueType: 'option',
       fixed: 'right',
-      render: (_, record) => (
-        <Space
-          direction="horizontal"
-          split={<Divider type="vertical" />}
-          size={2}
-        >
-          <UpdateRoleForm
-            values={record}
-            formRender={formRender}
-            trigger={
-              <Tooltip title="修改">
-                <Button type="link" size="small" icon={<EditOutlined />} />
-              </Tooltip>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />
-          <Tooltip title="删除">
-            <Popconfirm
-              title="删除记录"
-              description="您确定要删除此记录吗？"
-              onConfirm={async () => {
-                await handleRemove([record]);
-                actionRef.current?.reloadAndRest?.();
+      render: (_, record) => {
+        if (record.roleKey === 'admin') return;
+        return (
+          <Space
+            direction="horizontal"
+            split={<Divider type="vertical" />}
+            size={2}
+          >
+            <UpdateRoleForm
+              values={record}
+              formRender={formRender}
+              trigger={
+                <Tooltip title="修改">
+                  <Button type="link" size="small" icon={<EditOutlined />} />
+                </Tooltip>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
               }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
-          <UpdateRoleDeptForm
-            values={record}
-            formRender={formRoleDeptRender}
-            trigger={
-              <Tooltip title="数据授权">
-                <Button type="link" size="small" icon={<FileDoneOutlined />} />
-              </Tooltip>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />
-          <Tooltip title="授权用户">
-            <Link to={`../role/${record.roleId}`}>
-              <Button type="link" size="small" icon={<UserOutlined />} />
-            </Link>
-          </Tooltip>
-        </Space>
-      ),
+            />
+            <Tooltip title="删除">
+              <Popconfirm
+                title="删除记录"
+                description="您确定要删除此记录吗？"
+                onConfirm={async () => {
+                  await handleRemove([record]);
+                  actionRef.current?.reloadAndRest?.();
+                }}
+              >
+                <Button type="link" size="small" icon={<DeleteOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+            <UpdateRoleDeptForm
+              values={record}
+              formRender={formRoleDeptRender}
+              trigger={
+                <Tooltip title="数据授权">
+                  <Button
+                    type="link"
+                    size="small"
+                    icon={<FileDoneOutlined />}
+                  />
+                </Tooltip>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
+            <Tooltip title="授权用户">
+              <Link to={`../role/${record.roleId}`}>
+                <Button type="link" size="small" icon={<UserOutlined />} />
+              </Link>
+            </Tooltip>
+          </Space>
+        );
+      },
     },
   ];
 

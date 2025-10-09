@@ -177,6 +177,7 @@ async function main() {
         dictLabel: '显示',
         dictValue: '0',
         dictType: 'sys_show_hide',
+        listClass: 'Processing',
         dictSort: 4,
         status: '0',
         isDefault: 'Y',
@@ -187,6 +188,7 @@ async function main() {
         dictLabel: '隐藏',
         dictValue: '1',
         dictType: 'sys_show_hide',
+        listClass: 'Error',
         dictSort: 5,
         status: '0',
         isDefault: 'N',
@@ -197,6 +199,7 @@ async function main() {
         dictLabel: '正常',
         dictValue: '0',
         dictType: 'sys_normal_disable',
+        listClass: 'Processing',
         dictSort: 6,
         status: '0',
         isDefault: 'Y',
@@ -207,6 +210,7 @@ async function main() {
         dictLabel: '停用',
         dictValue: '1',
         dictType: 'sys_normal_disable',
+        listClass: 'Error',
         dictSort: 7,
         status: '0',
         isDefault: 'N',
@@ -217,6 +221,7 @@ async function main() {
         dictLabel: '正常',
         dictValue: '0',
         dictType: 'sys_job_status',
+        listClass: 'Processing',
         dictSort: 8,
         status: '0',
         isDefault: 'Y',
@@ -227,6 +232,7 @@ async function main() {
         dictLabel: '暂停',
         dictValue: '1',
         dictType: 'sys_job_status',
+        listClass: 'Error',
         dictSort: 9,
         status: '0',
         isDefault: 'N',
@@ -257,6 +263,7 @@ async function main() {
         dictLabel: '是',
         dictValue: 'Y',
         dictType: 'sys_yes_no',
+        listClass: 'Success',
         dictSort: 12,
         status: '0',
         isDefault: 'Y',
@@ -267,6 +274,7 @@ async function main() {
         dictLabel: '否',
         dictValue: 'N',
         dictType: 'sys_yes_no',
+        listClass: 'Error',
         dictSort: 13,
         status: '0',
         isDefault: 'N',
@@ -297,6 +305,7 @@ async function main() {
         dictLabel: '正常',
         dictValue: '0',
         dictType: 'sys_notice_status',
+        listClass: 'Processing',
         dictSort: 16,
         status: '0',
         isDefault: 'Y',
@@ -307,6 +316,7 @@ async function main() {
         dictLabel: '关闭',
         dictValue: '1',
         dictType: 'sys_notice_status',
+        listClass: 'Error',
         dictSort: 17,
         status: '0',
         isDefault: 'N',
@@ -417,6 +427,7 @@ async function main() {
         dictLabel: '成功',
         dictValue: '0',
         dictType: 'sys_common_status',
+        listClass: 'Success',
         dictSort: 28,
         status: '0',
         isDefault: 'N',
@@ -427,6 +438,7 @@ async function main() {
         dictLabel: '失败',
         dictValue: '1',
         dictType: 'sys_common_status',
+        listClass: 'Error',
         dictSort: 29,
         status: '0',
         isDefault: 'N',
@@ -446,7 +458,7 @@ async function main() {
     create: {
       deptId: 1,
       deptName: 'demo科技有限公司',
-      ancestors: ',',
+      ancestors: ',1,',
       orderNum: 0,
       status: '0',
       createBy: 'admin',
@@ -626,14 +638,14 @@ async function main() {
     update: {},
     create: {
       roleId: 2,
-      roleName: '普通角色',
-      roleKey: 'common',
+      roleName: '访客角色',
+      roleKey: 'guest',
       roleSort: 2,
       status: '0',
       dataScope: '2', // 自定权限数据
       createBy: 'admin',
       createTime: new Date(),
-      remark: '普通角色',
+      remark: '访客角色',
     },
   });
 
@@ -2049,8 +2061,10 @@ async function main() {
   console.log('✅ SysJob 已创建');
 
   // 7. 创建用户（关联部门、岗位、角色）
-  const user = await prisma.sysUser.create({
-    data: {
+  const adminUser = await prisma.sysUser.upsert({
+    where: { userId: 1 },
+    update: {},
+    create: {
       userName: 'admin',
       nickName: '超级管理员',
       password: '$2b$10$dfDByASRziLltpJ9OQ8cTuSeaz3Kqv.BR1MWQoQ1bR3UfgEKYE0w6', // 明文密码应由你加密
@@ -2071,16 +2085,41 @@ async function main() {
       },
     },
   });
+
+  const guestUser = await prisma.sysUser.upsert({
+    where: { userId: 2 },
+    update: {},
+    create: {
+      userName: 'guest',
+      nickName: '访客人员',
+      password: '$2b$10$sBGj6fy9WXsLvRZRY4bDmeSBxk/BvbD41LvtVzSk712JZmYhCkqdS', // 明文密码应由你加密
+      phonenumber: '17600008888',
+      email: 'mock.user.2025@example.com',
+      sex: '0',
+      status: '0',
+      createBy: 'admin',
+      createTime: new Date(),
+      dept: {
+        connect: { deptId: dept2.deptId },
+      },
+      roles: {
+        connect: { roleId: role1.roleId },
+      },
+    },
+  });
+
   console.log('✅ SysUser 已创建');
 
   // 8. 插入用户个性化设置（SysWeb）
   await prisma.sysWeb.create({
     data: {
-      userId: user.userId,
       theme:
-        '{"layout":"light","colorPrimary":"#1677FF","colorInfo": "#1677FF"}',
+        '{"layout":"light","colorPrimary":"#13c2c2","colorInfo": "#13c2c2"}',
       createBy: 'admin',
       createTime: new Date(),
+      user: {
+        connect: { userId: guestUser.userId },
+      },
     },
   });
 
@@ -2100,18 +2139,18 @@ async function main() {
   });
   console.log('✅ SysConfig 已创建');
 
-  // 10. （可选）给角色分配菜单权限
+  // 10. 角色分配菜单权限
   await prisma.sysRole.update({
-    where: { roleId: role.roleId },
+    where: { roleId: role1.roleId },
     data: {
       menus: {
-        connect: { menuId: sysMenu.menuId },
+        connect: { menuId: welcomeMenu.menuId },
       },
     },
   });
   console.log('✅ 角色已分配菜单权限');
 
-  // 11. （可选）给角色分配部门数据权限
+  // 11. 角色分配部门数据权限
   await prisma.sysRole.update({
     where: { roleId: role.roleId },
     data: {
@@ -2120,6 +2159,16 @@ async function main() {
       },
     },
   });
+
+  await prisma.sysRole.update({
+    where: { roleId: role1.roleId },
+    data: {
+      depts: {
+        connect: [{ deptId: 1 }, { deptId: 3 }, { deptId: 8 }, { deptId: 9 }],
+      },
+    },
+  });
+
   console.log('✅ 角色已分配部门数据权限');
 
   console.log('🎉 数据初始化完成！');

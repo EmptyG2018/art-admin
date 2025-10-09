@@ -43,6 +43,107 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
 export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
 
+  const columns: ProColumns[] = [
+    {
+      title: '菜单名称',
+      dataIndex: 'menuName',
+      valueType: 'text',
+    },
+    {
+      title: '图标',
+      dataIndex: 'icon',
+      valueType: 'text',
+      width: 140,
+      hideInSearch: true,
+      render: (_, item) => {
+        const Icon = icons[item.icon];
+        return Icon ? <Icon /> : null;
+      },
+    },
+    {
+      title: '权限标识',
+      dataIndex: 'perms',
+      valueType: 'text',
+      width: 220,
+      hideInSearch: true,
+    },
+    {
+      title: '显示顺序',
+      dataIndex: 'orderNum',
+      valueType: 'text',
+      width: 120,
+      hideInSearch: true,
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      valueType: 'select',
+      valueEnum: {
+        0: { text: '正常', status: 'MALE' },
+        1: { text: '停用', status: 'FEMALE' },
+      },
+      width: 120,
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      valueType: 'dateTime',
+      width: 220,
+      hideInSearch: true,
+    },
+    {
+      title: '操作',
+      width: 140,
+      dataIndex: 'option',
+      valueType: 'option',
+      fixed: 'right',
+      render: (_, record) => (
+        <Space
+          direction="horizontal"
+          split={<Divider type="vertical" />}
+          size={2}
+        >
+          <Tooltip title="新增">
+            <CreateMenuForm
+              values={{ parentId: record.menuId }}
+              formRender={formRender}
+              trigger={
+                <Button type="link" size="small" icon={<PlusOutlined />} />
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="修改">
+            <UpdateMenuForm
+              values={record}
+              formRender={formRender}
+              trigger={
+                <Button type="link" size="small" icon={<EditOutlined />} />
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="删除">
+            <Popconfirm
+              title="删除记录"
+              description="您确定要删除此记录吗？"
+              onConfirm={async () => {
+                await handleRemove([record]);
+                actionRef.current?.reloadAndRest?.();
+              }}
+            >
+              <Button type="link" size="small" icon={<DeleteOutlined />} />
+            </Popconfirm>
+          </Tooltip>
+        </Space>
+      ),
+    },
+  ];
+
   const formRender = (
     <>
       <ProFormTreeSelect
@@ -71,7 +172,7 @@ export const Component: React.FC<unknown> = () => {
         label="菜单类型"
         placeholder="请选择状态"
         initialValue="M"
-        radioType='button'
+        radioType="button"
         options={[
           { label: '目录', value: 'M' },
           { label: '菜单', value: 'C' },
@@ -227,107 +328,6 @@ export const Component: React.FC<unknown> = () => {
       </ProFormDependency>
     </>
   );
-
-  const columns: ProColumns[] = [
-    {
-      title: '菜单名称',
-      dataIndex: 'menuName',
-      valueType: 'text',
-    },
-    {
-      title: '图标',
-      dataIndex: 'icon',
-      valueType: 'text',
-      width: 140,
-      hideInSearch: true,
-      render: (_, item) => {
-        const Icon = icons[item.icon];
-        return Icon ? <Icon /> : null;
-      },
-    },
-    {
-      title: '权限标识',
-      dataIndex: 'perms',
-      valueType: 'text',
-      width: 220,
-      hideInSearch: true,
-    },
-    {
-      title: '显示顺序',
-      dataIndex: 'orderNum',
-      valueType: 'text',
-      width: 120,
-      hideInSearch: true,
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      valueType: 'select',
-      valueEnum: {
-        0: { text: '正常', status: 'MALE' },
-        1: { text: '停用', status: 'FEMALE' },
-      },
-      width: 120,
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime',
-      valueType: 'dateTime',
-      width: 220,
-      hideInSearch: true,
-    },
-    {
-      title: '操作',
-      width: 140,
-      dataIndex: 'option',
-      valueType: 'option',
-      fixed: 'right',
-      render: (_, record) => (
-        <Space
-          direction="horizontal"
-          split={<Divider type="vertical" />}
-          size={2}
-        >
-          <Tooltip title="新增">
-            <CreateMenuForm
-              values={{ parentId: record.menuId }}
-              formRender={formRender}
-              trigger={
-                <Button type="link" size="small" icon={<PlusOutlined />} />
-              }
-              onFinish={() => {
-                actionRef.current?.reload();
-              }}
-            />
-          </Tooltip>
-          <Tooltip title="修改">
-            <UpdateMenuForm
-              values={record}
-              formRender={formRender}
-              trigger={
-                <Button type="link" size="small" icon={<EditOutlined />} />
-              }
-              onFinish={() => {
-                actionRef.current?.reload();
-              }}
-            />
-          </Tooltip>
-          <Tooltip title="删除">
-            <Popconfirm
-              title="删除记录"
-              description="您确定要删除此记录吗？"
-              onConfirm={async () => {
-                await handleRemove([record]);
-                actionRef.current?.reloadAndRest?.();
-              }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
-        </Space>
-      ),
-    },
-  ];
 
   return (
     <PageContainer
