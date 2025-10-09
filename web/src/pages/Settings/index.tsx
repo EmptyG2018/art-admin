@@ -31,7 +31,7 @@ const useStyles = createStyles(({ token, css }) => ({
   `,
 }));
 
-export const Component = () => {
+const Settings = () => {
   const { styles } = useStyles();
   const [selectedKeys, setSelectedKeys] = useState(['profile']);
 
@@ -67,3 +67,5 @@ export const Component = () => {
     </div>
   );
 };
+
+export default Settings;

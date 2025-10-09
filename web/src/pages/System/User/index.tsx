@@ -28,6 +28,7 @@ import {
   ProTable,
   ProColumns,
   ModalForm,
+  ProForm,
   ProFormText,
   ProFormSelect,
   ProFormRadio,
@@ -109,7 +110,7 @@ export const Component: React.FC<unknown> = () => {
       renderText: (text, record) => (
         <UpdateUserForm
           formReaonly
-          formRender={formRender}
+          formRender={formRender('edit')}
           values={record}
           trigger={<a>{text}</a>}
         />
@@ -170,7 +171,7 @@ export const Component: React.FC<unknown> = () => {
             size={2}
           >
             <UpdateUserForm
-              formRender={formRender}
+              formRender={formRender('edit')}
               values={record}
               trigger={
                 <Tooltip title="修改">
@@ -238,112 +239,121 @@ export const Component: React.FC<unknown> = () => {
     },
   ];
 
-  const formRender = (
+  const formRender = (souce: '' | 'edit' | 'add' = '') => (
     <>
-      <ProFormText
-        name="userName"
-        label="用户名"
-        placeholder="请输入用户名"
-        rules={[
-          { required: true, message: '请输入用户名' },
-          { min: 2, message: '用户名不能小于2位' },
-        ]}
-        colProps={{ span: 12 }}
-      />
-      <ProFormText
-        name="nickName"
-        label="昵称"
-        placeholder="请输入昵称"
-        rules={[
-          { required: true, message: '请输入昵称' },
-          { min: 2, message: '昵称不能小于2位' },
-        ]}
-        colProps={{ span: 12 }}
-      />
-      <ProFormText
-        name="phonenumber"
-        label="手机号码"
-        placeholder="请输入手机号码"
-        rules={[{ pattern: /^1[3-9]\d{9}$/, message: '手机号码格式不正确' }]}
-        colProps={{ span: 12 }}
-      />
-      <ProFormText
-        name="email"
-        label="邮箱"
-        placeholder="请输入邮箱"
-        rules={[{ type: 'email', message: '邮箱格式不正确' }]}
-        colProps={{ span: 12 }}
-      />
-      <ProFormTreeSelect
-        name="deptId"
-        label="所属部门"
-        placeholder="请选择所属部门"
-        rules={[{ required: true, message: '请选择所属部门' }]}
-        fieldProps={{
-          fieldNames: { label: 'label', value: 'id', children: 'children' },
-        }}
-        request={async () => {
-          const res = await queryDeptTree();
-          return res.data;
-        }}
-        colProps={{ span: 12 }}
-      />
-      <ProFormSelect
-        name="postIds"
-        label="岗位"
-        placeholder="请选择岗位"
-        initialValue={[]}
-        mode="multiple"
-        request={async () => {
-          const res = await queryAllPost();
-          return res.data.map((post) => ({
-            label: post.postName,
-            value: post.postId,
-          }));
-        }}
-        colProps={{ span: 12 }}
-      />
-      <ProFormSelect
-        name="roleIds"
-        label="角色"
-        placeholder="请选择角色"
-        initialValue={[]}
-        mode="multiple"
-        request={async () => {
-          const res = await queryAllRole();
-          return res.data.map((role) => ({
-            label: role.roleName,
-            value: role.roleId,
-          }));
-        }}
-        colProps={{ span: 12 }}
-      />
-      <ProFormSelect
-        name="sex"
-        label="性别"
-        placeholder="请选择性别"
-        request={async () => {
-          const res = await queryDictsByType('sys_user_sex');
-          return res.data.map((dict) => ({
-            label: dict.dictLabel,
-            value: dict.dictValue,
-          }));
-        }}
-        colProps={{ span: 12 }}
-      />
-      <ProFormText.Password
-        name="password"
-        label="密码"
-        placeholder="请输入密码"
-        rules={[
-          { required: true, message: '请输入密码' },
-          {
-            pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/,
-            message: '密码至少包含字母和数字，且长度在6-20位之间',
-          },
-        ]}
-        colProps={{ span: 12 }}
-      />
+      <ProForm.Group title="基本信息">
+        {souce === 'add' && (
+          <ProFormText
+            name="userName"
+            label="用户名"
+            placeholder="请输入用户名"
+            rules={[
+              { required: true, message: '请输入用户名' },
+              { min: 2, message: '用户名不能小于2位' },
+            ]}
+            width="md"
+          />
+        )}
+        <ProFormText
+          name="nickName"
+          label="昵称"
+          placeholder="请输入昵称"
+          rules={[
+            { required: true, message: '请输入昵称' },
+            { min: 2, message: '昵称不能小于2位' },
+          ]}
+          width="md"
+        />
+        <ProFormText
+          name="phonenumber"
+          label="手机号码"
+          placeholder="请输入手机号码"
+          rules={[{ pattern: /^1[3-9]\d{9}$/, message: '手机号码格式不正确' }]}
+          width="md"
+        />
+        <ProFormText
+          name="email"
+          label="邮箱"
+          placeholder="请输入邮箱"
+          rules={[{ type: 'email', message: '邮箱格式不正确' }]}
+          width="md"
+        />
+        <ProFormSelect
+          name="sex"
+          label="性别"
+          placeholder="请选择性别"
+          request={async () => {
+            const res = await queryDictsByType('sys_user_sex');
+            return res.data.map((dict) => ({
+              label: dict.dictLabel,
+              value: dict.dictValue,
+            }));
+          }}
+          width="md"
+        />
+      </ProForm.Group>
+
+      <ProForm.Group title="组织与权限信息">
+        <ProFormTreeSelect
+          name="deptId"
+          label="所属部门"
+          placeholder="请选择所属部门"
+          rules={[{ required: true, message: '请选择所属部门' }]}
+          fieldProps={{
+            fieldNames: { label: 'label', value: 'id', children: 'children' },
+          }}
+          request={async () => {
+            const res = await queryDeptTree();
+            return res.data;
+          }}
+          width="md"
+        />
+        <ProFormSelect
+          name="postIds"
+          label="岗位"
+          placeholder="请选择岗位"
+          initialValue={[]}
+          mode="multiple"
+          request={async () => {
+            const res = await queryAllPost();
+            return res.data.map((post) => ({
+              label: post.postName,
+              value: post.postId,
+            }));
+          }}
+          width="md"
+        />
+        <ProFormSelect
+          name="roleIds"
+          label="角色"
+          placeholder="请选择角色"
+          initialValue={[]}
+          mode="multiple"
+          request={async () => {
+            const res = await queryAllRole();
+            return res.data.map((role) => ({
+              label: role.roleName,
+              value: role.roleId,
+            }));
+          }}
+          width="md"
+        />
+      </ProForm.Group>
+      {souce === 'add' && (
+        <ProFormText.Password
+          name="password"
+          label="密码"
+          placeholder="请输入密码"
+          rules={[
+            { required: true, message: '请输入密码' },
+            {
+              pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/,
+              message: '密码至少包含字母和数字，且长度在6-20位之间',
+            },
+          ]}
+          width="xl"
+        />
+      )}
       <ProFormRadio.Group
         name="status"
         label="状态"
@@ -379,7 +389,7 @@ export const Component: React.FC<unknown> = () => {
             rowKey="userId"
             toolBarRender={() => [
               <CreateUserForm
-                formRender={formRender}
+                formRender={formRender('add')}
                 trigger={
                   <Button type="primary" icon={<PlusOutlined />} key="add">
                     新增
@@ -428,8 +438,7 @@ export const Component: React.FC<unknown> = () => {
             }}
             columns={columns}
             pagination={{
-              current: 1,
-              pageSize: 15,
+              defaultPageSize: 12,
             }}
             rowSelection={{
               onChange: (_, selectedRows) => setSelectedRows(selectedRows),

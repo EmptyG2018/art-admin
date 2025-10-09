@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ConfigProvider, Dropdown, theme } from 'antd';
 import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import { ProLayout } from '@ant-design/pro-components';
-import { SelectLang } from '@/components/Layout';
+import { SelectLang, ToggleFullscreenBtn } from '@/components/Layout';
 import { useProfileStore, useSystemStore } from '@/stores';
 import icons from '@/constants/icons';
 
@@ -124,7 +124,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
           actionsRender={(props) => {
             if (props.isMobile) return [];
             if (typeof window === 'undefined') return [];
-            return [<SelectLang />];
+            return [<SelectLang />, <ToggleFullscreenBtn />];
           }}
           breadcrumbRender={() => []}
           menuItemRender={(item, dom) => (

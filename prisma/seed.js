@@ -1112,26 +1112,6 @@ async function main() {
     },
   });
 
-  const setMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 1000 },
-    update: {},
-    create: {
-      menuId: 1000,
-      menuName: '个人设置',
-      parentId: null,
-      orderNum: 1,
-      path: 'settings',
-      component: '/Settings/index',
-      menuType: 'C',
-      visible: '1',
-      status: '0',
-      icon: '',
-      perms: 'settings:list',
-      createBy: 'admin',
-      createTime: new Date(),
-    },
-  });
-
   await prisma.sysMenu.createMany({
     data: [
       {
@@ -2091,7 +2071,7 @@ async function main() {
     update: {},
     create: {
       userName: 'guest',
-      nickName: '访客人员',
+      nickName: '云泽',
       password: '$2b$10$sBGj6fy9WXsLvRZRY4bDmeSBxk/BvbD41LvtVzSk712JZmYhCkqdS', // 明文密码应由你加密
       phonenumber: '17600008888',
       email: 'mock.user.2025@example.com',

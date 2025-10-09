@@ -6,18 +6,20 @@ interface EditFormWrapperProps {
   values?: any;
   request?: any;
   formRender: JSX.Element;
+  formProps?: any;
   onCancel?: () => void;
   onFinish?: (values: any) => void;
 }
 
 interface EditFormMoalProps extends EditFormWrapperProps {
+  modalProps?: any;
   trigger: JSX.Element;
   title: string;
 }
 
 const EditWrapperForm: React.FC<EditFormWrapperProps> = (props) => {
   const formRef = useRef<FormInstance>();
-  const { values, request, formRender, onCancel, onFinish } = props;
+  const { values, request, formRender, formProps, onCancel, onFinish } = props;
 
   useEffect(() => {
     if (values) formRef.current?.setFieldsValue(values);
@@ -39,7 +41,7 @@ const EditWrapperForm: React.FC<EditFormWrapperProps> = (props) => {
     <ProForm
       formRef={formRef}
       submitter={{
-        render: ({ form }) => {
+        render: formProps?.readonly ? false : ({ form }) => {
           return (
             <Flex gap={8} justify="flex-end">
               <Button key="cancel" onClick={() => onCancel?.()}>
@@ -57,6 +59,7 @@ const EditWrapperForm: React.FC<EditFormWrapperProps> = (props) => {
         },
       }}
       onFinish={onFinish}
+      {...formProps}
     >
       {formRender}
     </ProForm>
@@ -64,7 +67,7 @@ const EditWrapperForm: React.FC<EditFormWrapperProps> = (props) => {
 };
 
 const EditFormModal: React.FC<EditFormMoalProps> = (props) => {
-  const { trigger, title, onFinish, ...rest } = props;
+  const { trigger, title, modalProps, onFinish, ...rest } = props;
   const [visible, setVisible] = useState<boolean>(false);
 
   return (
@@ -79,6 +82,7 @@ const EditFormModal: React.FC<EditFormMoalProps> = (props) => {
         footer={null}
         destroyOnHidden
         onCancel={() => setVisible(false)}
+        {...modalProps}
       >
         <EditWrapperForm
           onFinish={async (values) => {

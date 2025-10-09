@@ -6,7 +6,9 @@
  * 布局组件
  */
 import SelectLang from './SelectLang';
+import ToggleFullscreenBtn from './ToggleFullscreenBtn';
 import Footer from './Footer';
 import Loading from './Loading';
+import NoFound from './NoFound';
 
-export { SelectLang, Footer, Loading };
+export { SelectLang, ToggleFullscreenBtn, Footer, Loading, NoFound };

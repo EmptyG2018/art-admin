@@ -9,11 +9,11 @@ import {
 import { ProtectedRoute } from '@/components/Router';
 import { Result, Button, Typography, Skeleton } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Loading } from './components/Layout';
+import { Loading, NoFound } from './components/Layout';
 import { Admin } from '@/layouts';
 import { useProfileStore, useSystemStore } from '@/stores';
 import { Component as Login } from './pages/Login';
-import NoFound from './pages/404';
+import Settings from './pages/Settings';
 
 const LayoutMap: Record<string, React.ReactNode> = {
   Layout: <Outlet />,
@@ -151,7 +151,17 @@ const Permission = () => {
       ></Result>
     );
 
-  return <Admin element={<Routes>{dynamicRoutes}</Routes>} />;
+  return (
+    <Admin
+      element={
+        <Routes>
+          {dynamicRoutes}
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/*" element={<NoFound />} />
+        </Routes>
+      }
+    />
+  );
 };
 
 const AppRoutes = () => {
@@ -160,7 +170,7 @@ const AppRoutes = () => {
       <ProtectedRoute>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/404" element={<NoFound />} />
+          <Route path="/404" element={<NoFound showHomeBtn />} />
           <Route path="/*" element={<Permission />} />
         </Routes>
       </ProtectedRoute>

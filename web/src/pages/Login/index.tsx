@@ -1,4 +1,4 @@
-import { SelectLang, Footer } from '@/components/Layout';
+import { SelectLang, ToggleFullscreenBtn, Footer } from '@/components/Layout';
 import { queryCaptchaImage } from '@/services/auth';
 import {
   AlipayCircleOutlined,
@@ -36,11 +36,6 @@ const useStyles = createStyles(({ token }) => {
         color: token.colorPrimaryActive,
       },
     },
-    lang: {
-      position: 'fixed',
-      top: 0,
-      right: 16,
-    },
     captchaImage: {
       paddingTop: 0,
       paddingBottom: 0,
@@ -54,6 +49,12 @@ const useStyles = createStyles(({ token }) => {
       backgroundImage:
         "url('https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/V-_oS6r-i7wAAAAAAAAAAAAAFl94AQBr')",
       backgroundSize: '100% 100%',
+    },
+    tools: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      padding: token.paddingSM,
+      gap: 4,
     },
   };
 });
@@ -76,17 +77,6 @@ const ActionIcons = () => {
         className={styles.action}
       />
     </>
-  );
-};
-
-// 国际化语言
-const Lang: React.FC = () => {
-  const { styles } = useStyles();
-
-  return (
-    <div className={styles.lang} data-lang>
-      <SelectLang />
-    </div>
   );
 };
 
@@ -189,7 +179,10 @@ export const Component: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <Lang />
+      <div className={styles.tools}>
+        <SelectLang />
+        <ToggleFullscreenBtn />
+      </div>
       <div
         style={{
           flex: '1',

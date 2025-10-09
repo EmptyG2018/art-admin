@@ -17,7 +17,7 @@ export class PaginationDto {
   @Type()
   @IsNumber()
   @Min(1)
-  public pageNum?: number;
+  public current?: number;
 
   /* 每页条数 */
   @IsOptional()
