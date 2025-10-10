@@ -25,6 +25,11 @@ import {
   ProDescriptions,
   ProTable,
   ProColumns,
+  ProFormText,
+  ProFormDigit,
+  ProFormSelect,
+  ProFormRadio,
+  ProFormTextArea,
 } from '@ant-design/pro-components';
 import { useRequest } from 'ahooks';
 import {
@@ -63,23 +68,19 @@ const TableList: React.FC<TableListProps> = (props) => {
   const { dictType } = props;
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
+
   const columns: ProColumns[] = [
     {
       title: '字典编号',
       dataIndex: 'dictCode',
       width: 140,
       hideInSearch: true,
-      hideInForm: true,
     },
     {
       title: '字典标签',
       dataIndex: 'dictLabel',
       valueType: 'text',
       width: 140,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入字典标签' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: '字典键值',
@@ -87,52 +88,6 @@ const TableList: React.FC<TableListProps> = (props) => {
       valueType: 'text',
       width: 180,
       hideInSearch: true,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入字典键值' }],
-      },
-      colProps: { span: 12 },
-    },
-    {
-      title: '样式类名',
-      dataIndex: 'cssClass',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 12 },
-    },
-    {
-      title: '回显样式',
-      dataIndex: 'listClass',
-      valueType: 'select',
-      hideInSearch: true,
-      hideInTable: true,
-      valueEnum: {
-        Default: { text: '默认(Default)', status: 'Default' },
-        Processing: { text: '主要(Processing)', status: 'Processing' },
-        Success: { text: '成功(Success)', status: 'Success' },
-        Warning: { text: '警告(Warning)', status: 'Warning' },
-        Error: { text: '错误(Error)', status: 'Error' },
-      },
-      fieldProps: {
-        optionRender: (option) => {
-          const statusMap = {
-            Default: 'default',
-            Processing: 'processing',
-            Success: 'success',
-            Warning: 'warning',
-            Error: 'error',
-          };
-
-          return (
-            <Badge
-              offset={[4, 0]}
-              status={statusMap[option.value] || ''}
-              text={option.label}
-            />
-          );
-        },
-      },
-      colProps: { span: 12 },
     },
     {
       title: '排序',
@@ -141,16 +96,11 @@ const TableList: React.FC<TableListProps> = (props) => {
       width: 120,
       initialValue: 0,
       hideInSearch: true,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入排序' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: '状态',
       dataIndex: 'status',
-      valueType: 'radio',
-      initialValue: '0',
+      valueType: 'select',
       width: 120,
       request: async () => {
         const res = await queryDictsByType('sys_normal_disable');
@@ -159,14 +109,12 @@ const TableList: React.FC<TableListProps> = (props) => {
           value: dict.dictValue,
         }));
       },
-      colProps: { span: 12 },
     },
     {
       title: '备注',
       dataIndex: 'remark',
       valueType: 'textarea',
       hideInSearch: true,
-      colProps: { span: 24 },
     },
     {
       title: '创建时间',
@@ -174,7 +122,6 @@ const TableList: React.FC<TableListProps> = (props) => {
       valueType: 'dateTime',
       width: 220,
       hideInSearch: true,
-      hideInForm: true,
     },
     {
       title: '操作',
@@ -190,7 +137,7 @@ const TableList: React.FC<TableListProps> = (props) => {
         >
           <UpdateDictDataForm
             values={record}
-            columns={columns}
+            formRender={formRender}
             trigger={
               <Tooltip title="修改">
                 <Button type="link" size="small" icon={<EditOutlined />} />
@@ -217,6 +164,91 @@ const TableList: React.FC<TableListProps> = (props) => {
     },
   ];
 
+  const formRender = (
+    <>
+      <ProFormText
+        name="dictLabel"
+        label="字典标签"
+        placeholder="请输入字典标签"
+        rules={[{ required: true, message: '请输入字典标签' }]}
+        width="md"
+      />
+      <ProFormText
+        name="dictValue"
+        label="字典键值"
+        placeholder="请输入字典键值"
+        rules={[{ required: true, message: '请输入字典键值' }]}
+        width="md"
+      />
+      <ProFormText
+        name="cssClass"
+        label="样式类名"
+        placeholder="请输入回显类名"
+        width="md"
+      />
+      <ProFormSelect
+        name="listClass"
+        label="回显样式"
+        placeholder="请输入回显样式"
+        valueEnum={{
+          Default: { text: '默认(Default)', status: 'Default' },
+          Processing: { text: '主要(Processing)', status: 'Processing' },
+          Success: { text: '成功(Success)', status: 'Success' },
+          Warning: { text: '警告(Warning)', status: 'Warning' },
+          Error: { text: '错误(Error)', status: 'Error' },
+        }}
+        fieldProps={{
+          optionRender: (option) => {
+            const statusMap = {
+              Default: 'default',
+              Processing: 'processing',
+              Success: 'success',
+              Warning: 'warning',
+              Error: 'error',
+            };
+
+            return (
+              <Badge
+                offset={[4, 0]}
+                status={statusMap[option.value] || ''}
+                text={option.label}
+              />
+            );
+          },
+        }}
+        width="md"
+      />
+      <ProFormDigit
+        name="dictSort"
+        label="排序"
+        placeholder="请输入排序"
+        min={0}
+        fieldProps={{ precision: 0 }}
+        rules={[{ required: true, message: '请输入排序' }]}
+        width="xs"
+      />
+      <ProFormRadio.Group
+        name="status"
+        label="状态"
+        placeholder="请选择状态"
+        initialValue="0"
+        request={async () => {
+          const res = await queryDictsByType('sys_normal_disable');
+          return res.data.map((dict) => ({
+            label: dict.dictLabel,
+            value: dict.dictValue,
+          }));
+        }}
+      />
+      <ProFormTextArea
+        name="remark"
+        label="备注"
+        width="lg"
+        placeholder="请输入备注"
+      />
+    </>
+  );
+
   return (
     <>
       <ProTable
@@ -226,7 +258,7 @@ const TableList: React.FC<TableListProps> = (props) => {
         toolBarRender={() => [
           <CreateDictDataForm
             values={{ dictType }}
-            columns={columns}
+            formRender={formRender}
             trigger={
               <Button type="primary" icon={<PlusOutlined />} key="add">
                 新建

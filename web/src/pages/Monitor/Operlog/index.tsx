@@ -24,7 +24,7 @@ import {
 } from '@ant-design/pro-components';
 import { queryDictsByType } from '@/services/dict';
 import { queryOperlogPage, deleteOperlog, cleanOperlog } from '@/services/log';
-import UpdateOperlogForm from './components/UpdateOperlogForm';
+import ViewOperlog from './components/ViewOperlog';
 
 /**
  *  删除节点
@@ -186,8 +186,7 @@ export const Component: React.FC<unknown> = () => {
           split={<Divider type="vertical" />}
           size={2}
         >
-          <UpdateOperlogForm
-            formDisabled
+          <ViewOperlog
             values={record}
             columns={columns}
             trigger={

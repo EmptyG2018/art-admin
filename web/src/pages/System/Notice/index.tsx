@@ -7,6 +7,7 @@ import {
   Tooltip,
   Popconfirm,
   Modal,
+  Form,
 } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
@@ -15,6 +16,9 @@ import {
   PageContainer,
   ProTable,
   ProColumns,
+  ProFormText,
+  ProFormSelect,
+  ProFormRadio,
 } from '@ant-design/pro-components';
 import { queryDictsByType } from '@/services/dict';
 import { queryNoticePage, deleteNotice } from '@/services/notice';
@@ -44,26 +48,18 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
 export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
+
   const columns: ProColumns[] = [
     {
       title: '序号',
       dataIndex: 'noticeId',
       hideInSearch: true,
-      hideInForm: true,
       width: 80,
     },
     {
       title: '公告标题',
       dataIndex: 'noticeTitle',
       valueType: 'text',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '请输入公告标题',
-          },
-        ],
-      },
     },
     {
       title: '公告类型',
@@ -77,31 +73,12 @@ export const Component: React.FC<unknown> = () => {
           value: dict.dictValue,
         }));
       },
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '请选择公告类型',
-          },
-        ],
-      },
-    },
-    {
-      title: '内容',
-      dataIndex: 'noticeContent',
-      valueType: 'select',
-      hideInSearch: true,
-      hideInTable: true,
-      renderFormItem: () => {
-        return <WangEdtior />;
-      },
     },
     {
       title: '状态',
       dataIndex: 'status',
-      valueType: 'radio',
+      valueType: 'select',
       width: 120,
-      initialValue: '0',
       hideInSearch: true,
       request: async () => {
         const res = await queryDictsByType('sys_notice_status');
@@ -116,7 +93,6 @@ export const Component: React.FC<unknown> = () => {
       dataIndex: 'createBy',
       valueType: 'text',
       width: 180,
-      hideInForm: true,
     },
     {
       title: '创建时间',
@@ -140,7 +116,7 @@ export const Component: React.FC<unknown> = () => {
         >
           <UpdateNoticeForm
             values={record}
-            columns={columns}
+            formRender={formRender}
             trigger={
               <Tooltip title="修改">
                 <Button type="link" size="small" icon={<EditOutlined />} />
@@ -167,6 +143,48 @@ export const Component: React.FC<unknown> = () => {
     },
   ];
 
+  const formRender = (
+    <>
+      <ProFormText
+        name="noticeTitle"
+        label="公告标题"
+        placeholder="请输入公告标题"
+        rules={[{ required: true, message: '请输入公告标题' }]}
+        width="xl"
+      />
+      <ProFormSelect
+        name="noticeType"
+        label="公告类型"
+        placeholder="请选择公告类型"
+        request={async () => {
+          const res = await queryDictsByType('sys_notice_type');
+          return res.data.map((dict) => ({
+            label: dict.dictLabel,
+            value: dict.dictValue,
+          }));
+        }}
+        rules={[{ required: true, message: '请选择公告类型' }]}
+        width="sm"
+      />
+      <Form.Item name="noticeContent" label="内容">
+        <WangEdtior />
+      </Form.Item>
+      <ProFormRadio.Group
+        name="status"
+        label="状态"
+        placeholder="请选择状态"
+        initialValue="0"
+        request={async () => {
+          const res = await queryDictsByType('sys_notice_status');
+          return res.data.map((dict) => ({
+            label: dict.dictLabel,
+            value: dict.dictValue,
+          }));
+        }}
+      />
+    </>
+  );
+
   return (
     <PageContainer
       header={{
@@ -179,7 +197,7 @@ export const Component: React.FC<unknown> = () => {
         rowKey="noticeId"
         toolBarRender={() => [
           <CreateNoticeForm
-            columns={columns}
+            formRender={formRender}
             trigger={
               <Button type="primary" icon={<PlusOutlined />} key="add">
                 新建

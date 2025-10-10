@@ -5,6 +5,10 @@ import {
   PageContainer,
   ProTable,
   ProColumns,
+  ProFormText,
+  ProFormDigit,
+  ProFormRadio,
+  ProFormTreeSelect,
 } from '@ant-design/pro-components';
 import React, { useRef } from 'react';
 import { queryDeptList, deleteDept } from '@/services/dept';
@@ -34,17 +38,13 @@ const handleRemove = async (record) => {
 export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
 
-  const getColumns = (souce: '' | 'edit' | 'add' = ''): ProColumns[] => [
+  const columns: ProColumns[] = [
     {
       title: '上级部门',
       dataIndex: 'parentId',
       valueType: 'treeSelect',
       hideInSearch: true,
       hideInTable: true,
-      hideInForm: ['edit'].includes(souce),
-      formItemProps: {
-        rules: [{ required: true, message: '请选择上级部门' }],
-      },
       fieldProps: {
         fieldNames: {
           label: 'deptName',
@@ -56,62 +56,24 @@ export const Component: React.FC<unknown> = () => {
         const res = await queryDeptList();
         return arrayToTree(res.data, { keyField: 'deptId' });
       },
-      colProps: { span: 24 },
     },
     {
       title: '部门名称',
       dataIndex: 'deptName',
       valueType: 'text',
-      formItemProps: {
-        rules: [{ required: true, message: '请输入部门名称' }],
-      },
-      colProps: { span: 12 },
-    },
-    {
-      title: '负责人',
-      dataIndex: 'leader',
-      valueType: 'text',
-      width: 160,
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 12 },
-    },
-    {
-      title: '联系电话',
-      dataIndex: 'phone',
-      valueType: 'text',
-      width: 160,
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 12 },
-    },
-    {
-      title: '邮箱',
-      dataIndex: 'email',
-      valueType: 'text',
-      width: 160,
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 12 },
     },
     {
       title: '排序',
       dataIndex: 'orderNum',
       valueType: 'digit',
       width: 120,
-      initialValue: 0,
       hideInSearch: true,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入排序' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: '状态',
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
-      initialValue: '0',
       request: async () => {
         const res = await queryDictsByType('sys_normal_disable');
         return res.data.map((dict) => ({
@@ -119,7 +81,6 @@ export const Component: React.FC<unknown> = () => {
           value: dict.dictValue,
         }));
       },
-      colProps: { span: 12 },
     },
     {
       title: '创建时间',
@@ -127,8 +88,6 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'dateTime',
       width: 220,
       hideInSearch: true,
-      hideInForm: true,
-      colProps: { span: 12 },
     },
     {
       title: '操作',
@@ -143,7 +102,7 @@ export const Component: React.FC<unknown> = () => {
         >
           <UpdateDeptForm
             values={record}
-            columns={getColumns('edit')}
+            formRender={formRender('edit')}
             trigger={
               <Tooltip title="修改">
                 <Button type="link" size="small" icon={<EditOutlined />} />
@@ -155,7 +114,7 @@ export const Component: React.FC<unknown> = () => {
           />
           <CreateDeptForm
             values={{ parentId: record.deptId }}
-            columns={getColumns('add')}
+            formRender={formRender('add')}
             trigger={
               <Tooltip title="新增子部门">
                 <Button type="link" size="small" icon={<PlusOutlined />} />
@@ -182,6 +141,78 @@ export const Component: React.FC<unknown> = () => {
     },
   ];
 
+  const formRender = (source: '' | 'edit' | 'add' = '') => (
+    <>
+      {source === 'add' && (
+        <ProFormTreeSelect
+          name="parentId"
+          label="上级部门"
+          placeholder="请选择上级部门"
+          fieldProps={{
+            fieldNames: {
+              label: 'deptName',
+              value: 'deptId',
+              children: '',
+            },
+          }}
+          request={async () => {
+            const res = await queryDeptList();
+            return arrayToTree(res.data, { keyField: 'deptId' });
+          }}
+          rules={[{ required: true, message: '请选择上级部门' }]}
+          width="md"
+        />
+      )}
+      <ProFormText
+        name="deptName"
+        label="部门名称"
+        placeholder="请输入部门名称"
+        rules={[{ required: true, message: '请输入部门名称' }]}
+        width="md"
+      />
+      <ProFormText
+        name="leader"
+        label="负责人"
+        placeholder="请输入负责人"
+        width="md"
+      />
+      <ProFormText
+        name="phone"
+        label="联系电话"
+        placeholder="请输入联系电话"
+        width="md"
+      />
+      <ProFormText
+        name="email"
+        label="邮箱"
+        placeholder="请输入邮箱"
+        width="md"
+      />
+      <ProFormDigit
+        name="orderNum"
+        label="排序"
+        placeholder="请输入排序"
+        min={0}
+        fieldProps={{ precision: 0 }}
+        rules={[{ required: true, message: '请输入排序' }]}
+        width="xs"
+      />
+      <ProFormRadio.Group
+        name="status"
+        label="状态"
+        placeholder="请选择状态"
+        initialValue="0"
+        request={async () => {
+          const res = await queryDictsByType('sys_normal_disable');
+          return res.data.map((dict) => ({
+            label: dict.dictLabel,
+            value: dict.dictValue,
+          }));
+        }}
+      />
+    </>
+  );
+
   return (
     <PageContainer
       header={{
@@ -194,7 +225,7 @@ export const Component: React.FC<unknown> = () => {
         rowKey="deptId"
         toolBarRender={() => [
           <CreateDeptForm
-            columns={getColumns('add')}
+            formRender={formRender('add')}
             trigger={
               <Button type="primary" icon={<PlusOutlined />} key="add">
                 新建
@@ -221,7 +252,7 @@ export const Component: React.FC<unknown> = () => {
         postData={(rows: any) => {
           return arrayToTree(rows, { keyField: 'deptId' });
         }}
-        columns={getColumns('')}
+        columns={columns}
         pagination={false}
       />
     </PageContainer>

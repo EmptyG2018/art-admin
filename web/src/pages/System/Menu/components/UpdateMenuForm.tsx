@@ -1,6 +1,6 @@
 import React from 'react';
 import { App } from 'antd';
-import EditMenuForm from './EditMenuForm';
+import { EditFormModal } from '@/components';
 import { updateMenu, getMenu } from '@/services/menu';
 
 interface UpdateMenuFormProps {
@@ -15,7 +15,7 @@ const UpdateMenuForm: React.FC<UpdateMenuFormProps> = (props) => {
   const { values, trigger, formRender, onFinish } = props;
 
   return (
-    <EditMenuForm
+    <EditFormModal
       title="修改菜单"
       request={async () => {
         const res = await getMenu(values.menuId);
@@ -24,16 +24,16 @@ const UpdateMenuForm: React.FC<UpdateMenuFormProps> = (props) => {
       trigger={trigger}
       formRender={formRender}
       onFinish={async (formValues) => {
-        const hide = message.loading('正在添加');
+        const hide = message.loading('正在修改');
         try {
           await updateMenu({ ...values, ...formValues });
           onFinish?.();
           hide();
-          message.success('添加成功');
+          message.success('修改成功');
           return true;
         } catch {
           hide();
-          message.error('添加失败请重试！');
+          message.error('修改失败请重试！');
           return false;
         }
       }}

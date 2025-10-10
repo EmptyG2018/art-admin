@@ -1,31 +1,28 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { App } from 'antd';
-import { ProColumns } from '@ant-design/pro-components';
-import EditPostForm from './EditPostForm';
+import { EditFormModal } from '@/components';
 import { updatePost, getPost } from '@/services/post';
 
 interface UpdatePostFormProps {
   trigger: JSX.Element;
   values: any;
-  columns: ProColumns[];
+  formRender: JSX.Element;
   onFinish?: () => void;
 }
 
-const UpdatePostForm: React.FC<PropsWithChildren<UpdatePostFormProps>> = (
-  props,
-) => {
+const UpdatePostForm: React.FC<UpdatePostFormProps> = (props) => {
   const { message } = App.useApp();
-  const { trigger, values, columns, onFinish } = props;
+  const { trigger, values, formRender, onFinish } = props;
 
   return (
-    <EditPostForm
+    <EditFormModal
       title="修改岗位"
       request={async () => {
         const res = await getPost(values.postId);
         return res.data;
       }}
       trigger={trigger}
-      columns={columns}
+      formRender={formRender}
       onFinish={async (formValues) => {
         const hide = message.loading('正在修改');
         try {
@@ -45,4 +42,3 @@ const UpdatePostForm: React.FC<PropsWithChildren<UpdatePostFormProps>> = (
 };
 
 export default UpdatePostForm;
-

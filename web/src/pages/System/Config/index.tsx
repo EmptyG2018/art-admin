@@ -23,6 +23,9 @@ import {
   PageContainer,
   ProTable,
   ProColumns,
+  ProFormText,
+  ProFormRadio,
+  ProFormTextArea,
 } from '@ant-design/pro-components';
 import { queryDictsByType } from '@/services/dict';
 import { queryConfigPage, deleteConfig } from '@/services/config';
@@ -51,12 +54,12 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
 export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
+
   const columns: ProColumns[] = [
     {
       title: '参数主键',
       dataIndex: 'configId',
       hideInSearch: true,
-      hideInForm: true,
       width: 140,
     },
     {
@@ -64,20 +67,12 @@ export const Component: React.FC<unknown> = () => {
       dataIndex: 'configName',
       valueType: 'text',
       width: 180,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入参数名称' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: '参数键名',
       dataIndex: 'configKey',
       valueType: 'text',
       width: 180,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入参数键名' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: '参数键值',
@@ -85,16 +80,11 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'text',
       width: 180,
       hideInSearch: true,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入参数值' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: '系统内置',
       dataIndex: 'configType',
-      valueType: 'radio',
-      initialValue: 'Y',
+      valueType: 'select',
       width: 120,
       request: async () => {
         const res = await queryDictsByType('sys_yes_no');
@@ -103,20 +93,17 @@ export const Component: React.FC<unknown> = () => {
           value: dict.dictValue,
         }));
       },
-      colProps: { span: 12 },
     },
     {
       title: '备注',
       dataIndex: 'remark',
       valueType: 'textarea',
       hideInSearch: true,
-      colProps: { span: 24 },
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
-      hideInForm: true,
       width: 220,
     },
     {
@@ -133,7 +120,7 @@ export const Component: React.FC<unknown> = () => {
         >
           <UpdateConfigForm
             values={record}
-            columns={columns}
+            formRender={formRender}
             trigger={
               <Tooltip title="修改">
                 <Button type="link" size="small" icon={<EditOutlined />} />
@@ -160,6 +147,51 @@ export const Component: React.FC<unknown> = () => {
     },
   ];
 
+  const formRender = (
+    <>
+      <ProFormText
+        name="configName"
+        label="参数名称"
+        placeholder="请输入参数名称"
+        rules={[{ required: true, message: '请输入参数名称' }]}
+        width="md"
+      />
+      <ProFormText
+        name="configKey"
+        label="参数键名"
+        placeholder="请输入参数键名"
+        rules={[{ required: true, message: '请输入参数键名' }]}
+        width="md"
+      />
+      <ProFormText
+        name="configValue"
+        label="参数键值"
+        placeholder="请输入参数键值"
+        rules={[{ required: true, message: '请输入参数键值' }]}
+        width="md"
+      />
+      <ProFormRadio.Group
+        name="configType"
+        label="系统内置"
+        placeholder="请选择系统内置"
+        initialValue="Y"
+        request={async () => {
+          const res = await queryDictsByType('sys_yes_no');
+          return res.data.map((dict) => ({
+            label: dict.dictLabel,
+            value: dict.dictValue,
+          }));
+        }}
+      />
+      <ProFormTextArea
+        name="remark"
+        label="备注"
+        width="lg"
+        placeholder="请输入备注"
+      />
+    </>
+  );
+
   return (
     <PageContainer
       header={{
@@ -172,7 +204,7 @@ export const Component: React.FC<unknown> = () => {
         rowKey="configId"
         toolBarRender={() => [
           <CreateConfigForm
-            columns={columns}
+            formRender={formRender}
             trigger={
               <Button type="primary" icon={<PlusOutlined />} key="add">
                 新建

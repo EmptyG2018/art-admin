@@ -1,6 +1,6 @@
 import React from 'react';
 import { App } from 'antd';
-import EditMenuForm from './EditMenuForm';
+import { EditFormModal } from '@/components';
 import { addMenu } from '@/services/menu';
 
 interface CreateMenuFormProps {
@@ -15,7 +15,7 @@ const CreateMenuForm: React.FC<CreateMenuFormProps> = (props) => {
   const { values, trigger, formRender, onFinish } = props;
 
   return (
-    <EditMenuForm
+    <EditFormModal
       title="新建菜单"
       values={values}
       trigger={trigger}

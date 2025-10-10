@@ -375,7 +375,7 @@ export const Component: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: '管理',
+        title: '用户管理',
       }}
     >
       <Row wrap={false} gutter={16}>

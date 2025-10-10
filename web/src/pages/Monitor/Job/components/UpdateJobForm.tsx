@@ -1,31 +1,28 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { App } from 'antd';
-import { ProColumns } from '@ant-design/pro-components';
-import EditJobForm from './EditJobForm';
+import { EditFormModal } from '@/components';
 import { updateJob, getJob } from '@/services/monitor';
 
 interface UpdateJobFormProps {
   trigger: JSX.Element;
   values: any;
-  columns: ProColumns[];
+  formRender: JSX.Element;
   onFinish?: () => void;
 }
 
-const UpdateJobForm: React.FC<UpdateJobFormProps> = (
-  props,
-) => {
+const UpdateJobForm: React.FC<UpdateJobFormProps> = (props) => {
   const { message } = App.useApp();
-  const { trigger, values, columns, onFinish } = props;
+  const { trigger, values, formRender, onFinish } = props;
 
   return (
-    <EditJobForm
+    <EditFormModal
       title="修改定时任务"
       request={async () => {
         const res = await getJob(values.jobId);
         return res.data;
       }}
       trigger={trigger}
-      columns={columns}
+      formRender={formRender}
       onFinish={async (formValues) => {
         const hide = message.loading('正在修改');
         try {

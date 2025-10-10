@@ -21,6 +21,10 @@ import {
   PageContainer,
   ProTable,
   ProColumns,
+  ProFormText,
+  ProFormTextArea,
+  ProFormDigit,
+  ProFormRadio,
 } from '@ant-design/pro-components';
 import React, { useRef, useState } from 'react';
 import { queryPostPage, deletePost } from '@/services/post';
@@ -59,36 +63,16 @@ export const Component: React.FC<unknown> = () => {
       hideInForm: true,
     },
     {
-      title: '岗位名称',
-      dataIndex: 'postName',
-      valueType: 'text',
-      width: 160,
-      hideInTable: true,
-      hideInSearch: true,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入岗位名称' }],
-      },
-      colProps: { span: 12 },
-    },
-    {
       title: '岗位编码',
       dataIndex: 'postCode',
       valueType: 'text',
       width: 160,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入岗位名称' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: '岗位名称',
       dataIndex: 'postName',
       valueType: 'text',
       width: 160,
-      hideInForm: true,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入岗位名称' }],
-      },
     },
     {
       title: '排序',
@@ -97,14 +81,12 @@ export const Component: React.FC<unknown> = () => {
       width: 120,
       initialValue: 0,
       hideInSearch: true,
-      colProps: { span: 12 },
     },
     {
       title: '状态',
       dataIndex: 'status',
-      valueType: 'radio',
+      valueType: 'select',
       width: 120,
-      initialValue: '0',
       request: async () => {
         const res = await queryDictsByType('sys_normal_disable');
         return res.data.map((dict) => ({
@@ -112,22 +94,12 @@ export const Component: React.FC<unknown> = () => {
           value: dict.dictValue,
         }));
       },
-      colProps: { span: 12 },
-    },
-    {
-      title: '备注',
-      dataIndex: 'remark',
-      valueType: 'textarea',
-      hideInTable: true,
-      hideInSearch: true,
-      colProps: { span: 24 },
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
-      hideInForm: true,
     },
     {
       title: '操作',
@@ -143,7 +115,7 @@ export const Component: React.FC<unknown> = () => {
           <Tooltip title="修改">
             <UpdatePostForm
               values={record}
-              columns={columns}
+              formRender={formRender}
               trigger={
                 <Button type="link" size="small" icon={<EditOutlined />} />
               }
@@ -169,6 +141,53 @@ export const Component: React.FC<unknown> = () => {
     },
   ];
 
+  const formRender = (
+    <>
+      <ProFormText
+        name="postName"
+        label="岗位名称"
+        placeholder="请输入岗位名称"
+        rules={[{ required: true, message: '请输入岗位名称' }]}
+        width="md"
+      />
+      <ProFormText
+        name="postCode"
+        label="岗位编码"
+        placeholder="请输入岗位编码"
+        rules={[{ required: true, message: '请输入岗位编码' }]}
+        width="md"
+      />
+      <ProFormDigit
+        name="postSort"
+        label="排序"
+        placeholder="请输入排序"
+        min={0}
+        fieldProps={{ precision: 0 }}
+        rules={[{ required: true, message: '请输入排序' }]}
+        width="xs"
+      />
+      <ProFormRadio.Group
+        name="status"
+        label="状态"
+        placeholder="请选择状态"
+        initialValue="0"
+        request={async () => {
+          const res = await queryDictsByType('sys_normal_disable');
+          return res.data.map((dict) => ({
+            label: dict.dictLabel,
+            value: dict.dictValue,
+          }));
+        }}
+      />
+      <ProFormTextArea
+        name="remark"
+        label="备注"
+        width="lg"
+        placeholder="请输入备注"
+      />
+    </>
+  );
+
   return (
     <PageContainer
       header={{
@@ -181,7 +200,7 @@ export const Component: React.FC<unknown> = () => {
         rowKey="postId"
         toolBarRender={() => [
           <CreatePostForm
-            columns={columns}
+            formRedner={formRender}
             trigger={
               <Button type="primary" icon={<PlusOutlined />} key="add">
                 新建

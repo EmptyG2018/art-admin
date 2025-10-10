@@ -1,31 +1,28 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { App } from 'antd';
-import { ProColumns } from '@ant-design/pro-components';
-import EditConfigForm from './EditConfigForm';
+import { EditFormModal } from '@/components';
 import { updateConfig, getConfig } from '@/services/config';
 
 interface UpdateConfigFormProps {
   trigger: JSX.Element;
   values: any;
-  columns: ProColumns[];
+  formRender: JSX.Element;
   onFinish?: () => void;
 }
 
-const UpdateConfigForm: React.FC<PropsWithChildren<UpdateConfigFormProps>> = (
-  props,
-) => {
+const UpdateConfigForm: React.FC<UpdateConfigFormProps> = (props) => {
   const { message } = App.useApp();
-  const { trigger, values, columns, onFinish } = props;
+  const { trigger, values, formRender, onFinish } = props;
 
   return (
-    <EditConfigForm
+    <EditFormModal
       title="修改参数"
       request={async () => {
         const res = await getConfig(values.configId);
         return res.data;
       }}
       trigger={trigger}
-      columns={columns}
+      formRender={formRender}
       onFinish={async (formValues) => {
         const hide = message.loading('正在修改');
         try {

@@ -1,35 +1,32 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { App } from 'antd';
-import { ProColumns } from '@ant-design/pro-components';
-import EditDeptForm from './EditDeptForm';
+import { EditFormModal } from '@/components';
 import { updateDept, getDept } from '@/services/dept';
 
 interface UpdateDeptFormProps {
   trigger: JSX.Element;
   values: any;
-  columns: ProColumns[];
+  formRender: JSX.Element;
   onFinish?: () => void;
 }
 
-const UpdateDeptForm: React.FC<PropsWithChildren<UpdateDeptFormProps>> = (
-  props,
-) => {
+const UpdateDeptForm: React.FC<UpdateDeptFormProps> = (props) => {
   const { message } = App.useApp();
-  const { trigger, values, columns, onFinish } = props;
+  const { trigger, values, formRender, onFinish } = props;
 
   return (
-    <EditDeptForm
+    <EditFormModal
       title="修改部门"
       request={async () => {
         const res = await getDept(values.deptId);
         return res.data;
       }}
       trigger={trigger}
-      columns={columns}
+      formRender={formRender}
       onFinish={async (formValues) => {
         const hide = message.loading('正在修改');
         try {
-          await updateDept({  ...values, ...formValues, });
+          await updateDept({ ...values, ...formValues });
           onFinish?.();
           hide();
           message.success('修改成功');

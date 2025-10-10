@@ -1,28 +1,27 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { App } from 'antd';
-import { ProColumns } from '@ant-design/pro-components';
-import EditDictForm from './EditDictForm';
+import {EditFormModal} from '@/components';
 import { addDictType } from '@/services/dict';
 
 interface CreateFormProps {
   trigger: JSX.Element;
   values?: any;
-  columns: ProColumns[];
+  formRender: JSX.Element;
   onFinish?: () => void;
 }
 
-const CreateDictForm: React.FC<PropsWithChildren<CreateFormProps>> = (
+const CreateDictForm: React.FC<CreateFormProps> = (
   props,
 ) => {
   const { message } = App.useApp();
-  const { trigger, values, columns, onFinish } = props;
+  const { trigger, values, formRender, onFinish } = props;
 
   return (
-    <EditDictForm
+    <EditFormModal
       title="新增岗位"
       values={values}
-      columns={columns}
       trigger={trigger}
+      formRender={formRender}
       onFinish={async (formValues) => {
         const hide = message.loading('正在添加');
         try {

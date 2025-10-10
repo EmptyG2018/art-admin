@@ -284,7 +284,6 @@ export const Component: React.FC<unknown> = () => {
                   { label: '是', value: '0' },
                   { label: '否', value: '1' },
                 ]}
-                rules={[{ required: true, message: '请选择是否缓存' }]}
               />
             )}
             <ProForm.Group>
@@ -298,7 +297,6 @@ export const Component: React.FC<unknown> = () => {
                     { label: '是', value: '0' },
                     { label: '否', value: '1' },
                   ]}
-                  rules={[{ required: true, message: '请选择显示状态' }]}
                   request={async () => {
                     const res = await queryDictsByType('sys_show_hide');
                     return res.data.map((dict) => ({
@@ -313,7 +311,6 @@ export const Component: React.FC<unknown> = () => {
                 label="菜单状态"
                 placeholder="请选择菜单状态"
                 initialValue="0"
-                rules={[{ required: true, message: '请选择菜单状态' }]}
                 request={async () => {
                   const res = await queryDictsByType('sys_normal_disable');
                   return res.data.map((dict) => ({

@@ -1,28 +1,25 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { App } from 'antd';
-import { ProColumns } from '@ant-design/pro-components';
-import EditNoticeForm from './EditNoticeForm';
+import { EditFormModal } from '@/components';
 import { addNotice } from '@/services/notice';
 
 interface CreateNoticeFormProps {
   trigger: JSX.Element;
   values?: any;
-  columns: ProColumns[];
+  formRender: JSX.Element;
   onFinish?: () => void;
 }
 
-const CreateNoticeForm: React.FC<PropsWithChildren<CreateNoticeFormProps>> = (
-  props,
-) => {
+const CreateNoticeForm: React.FC<CreateNoticeFormProps> = (props) => {
   const { message } = App.useApp();
-  const { trigger, values, columns, onFinish } = props;
+  const { trigger, values, formRender, onFinish } = props;
 
   return (
-    <EditNoticeForm
+    <EditFormModal
       title="新增公告"
       values={values}
-      columns={columns}
       trigger={trigger}
+      formRender={formRender}
       onFinish={async (formValues) => {
         const hide = message.loading('正在添加');
         try {

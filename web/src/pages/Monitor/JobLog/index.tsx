@@ -19,6 +19,7 @@ export const Component: React.FC<unknown> = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const actionRef = useRef<ActionType>();
+  
   const columns: ProColumns[] = [
     {
       title: '日志编号',
@@ -64,8 +65,7 @@ export const Component: React.FC<unknown> = () => {
     {
       title: '状态',
       dataIndex: 'status',
-      valueType: 'radio',
-      initialValue: '0',
+      valueType: 'select',
       width: 120,
       request: async () => {
         const res = await queryDictsByType('sys_common_status');

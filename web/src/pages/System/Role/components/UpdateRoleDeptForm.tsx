@@ -1,6 +1,6 @@
 import React from 'react';
 import { App } from 'antd';
-import EditRoleForm from './EditRoleForm';
+import { EditFormModal } from '@/components';
 import { getRoleDept } from '@/services/dept';
 import { updateDataScope, getRole } from '@/services/role';
 
@@ -16,7 +16,7 @@ const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
   const { values, trigger, formRender, onFinish } = props;
 
   return (
-    <EditRoleForm
+    <EditFormModal
       title="分配数据权限"
       request={async () => {
         const res = await getRole(values.roleId);

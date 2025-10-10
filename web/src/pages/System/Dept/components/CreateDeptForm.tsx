@@ -1,28 +1,27 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { App } from 'antd';
-import { ProColumns } from '@ant-design/pro-components';
-import EditDeptForm from './EditDeptForm';
+import { EditFormModal } from '@/components';
 import { addDept } from '@/services/dept';
 
-interface CreateFormProps {
+interface CreateDeptFormProps {
   trigger: JSX.Element;
   values?: any;
-  columns: ProColumns[];
+  formRender: JSX.Element;
   onFinish?: () => void;
 }
 
-const CreateDeptForm: React.FC<PropsWithChildren<CreateFormProps>> = (
+const CreateDeptForm: React.FC<CreateDeptFormProps> = (
   props,
 ) => {
   const { message } = App.useApp();
-  const { trigger, values, columns, onFinish } = props;
+  const { trigger, values, formRender, onFinish } = props;
 
   return (
-    <EditDeptForm
+    <EditFormModal
       title="新增部门"
       values={values}
-      columns={columns}
       trigger={trigger}
+      formRender={formRender}
       onFinish={async (formValues) => {
         const hide = message.loading('正在添加');
         try {

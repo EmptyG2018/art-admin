@@ -33,11 +33,11 @@ const UpdateUserForm: React.FC<UpdateUserFormProps> = (props) => {
           await updateUser({ ...values, ...formValues });
           onFinish?.();
           hide();
-          message.success('添加修改');
+          message.success('修改成功');
           return true;
         } catch {
           hide();
-          message.error('添加修改请重试！');
+          message.error('修改失败请重试！');
           return false;
         }
       }}

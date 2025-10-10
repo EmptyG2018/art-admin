@@ -10,6 +10,7 @@ import {
   Tooltip,
   Popconfirm,
   Modal,
+  Form,
 } from 'antd';
 import {
   ExportOutlined,
@@ -26,6 +27,9 @@ import {
   PageContainer,
   ProTable,
   ProColumns,
+  ProFormText,
+  ProFormSelect,
+  ProFormRadio,
 } from '@ant-design/pro-components';
 import { queryDictsByType } from '@/services/dict';
 import { queryJobPage, deleteJob, runJob } from '@/services/monitor';
@@ -56,6 +60,7 @@ export const Component: React.FC<unknown> = () => {
   const { message } = App.useApp();
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
+
   const columns: ProColumns[] = [
     {
       title: '任务编号',
@@ -69,19 +74,12 @@ export const Component: React.FC<unknown> = () => {
       dataIndex: 'jobName',
       valueType: 'text',
       width: 180,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入任务名称' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: '任务组名',
       dataIndex: 'jobGroup',
       valueType: 'select',
       width: 180,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入任务组名' }],
-      },
       request: async () => {
         const res = await queryDictsByType('sys_job_group');
         return res.data.map((dict) => ({
@@ -89,7 +87,6 @@ export const Component: React.FC<unknown> = () => {
           value: dict.dictValue,
         }));
       },
-      colProps: { span: 12 },
     },
     {
       title: '调用函数',
@@ -97,10 +94,6 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'text',
       width: 320,
       hideInSearch: true,
-      formItemProps: {
-        rules: [{ required: true, message: '请输入调用函数' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: 'cron表达式',
@@ -108,56 +101,12 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'text',
       width: 180,
       hideInSearch: true,
-      initialValue: '* * * * *',
-      renderFormItem: () => {
-        return <CronSelect />;
-      },
-      formItemProps: {
-        rules: [{ required: true, message: '请输入cron表达式' }],
-      },
-      colProps: { span: 24 },
-    },
-    {
-      title: '执行策略',
-      dataIndex: 'misfirePolicy',
-      valueType: 'radioButton',
-      width: 120,
-      hideInSearch: true,
-      hideInTable: true,
-      initialValue: '1',
-      valueEnum: {
-        1: { text: '立即执行' },
-        2: { text: '执行一次' },
-        3: { text: '放弃执行' },
-      },
-      formItemProps: {
-        rules: [{ required: true, message: '请选择执行策略' }],
-      },
-      colProps: { span: 12 },
-    },
-    {
-      title: '是否并发',
-      dataIndex: 'concurrent',
-      valueType: 'radio',
-      width: 120,
-      hideInSearch: true,
-      hideInTable: true,
-      initialValue: '1',
-      valueEnum: {
-        0: { text: '允许' },
-        1: { text: '禁止' },
-      },
-      formItemProps: {
-        rules: [{ required: true, message: '请选择是否并发' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: '状态',
       dataIndex: 'status',
-      valueType: 'radio',
+      valueType: 'select',
       width: 120,
-      initialValue: '0',
       request: async () => {
         const res = await queryDictsByType('sys_job_status');
         return res.data.map((dict) => ({
@@ -165,17 +114,12 @@ export const Component: React.FC<unknown> = () => {
           value: dict.dictValue,
         }));
       },
-      formItemProps: {
-        rules: [{ required: true, message: '请选择状态' }],
-      },
-      colProps: { span: 12 },
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
       hideInSearch: true,
-      hideInForm: true,
       width: 220,
     },
     {
@@ -216,7 +160,7 @@ export const Component: React.FC<unknown> = () => {
           </Tooltip>
           <UpdateJobForm
             values={record}
-            columns={columns}
+            formRender={formRender}
             trigger={
               <Tooltip title="修改">
                 <Button type="link" size="small" icon={<EditOutlined />} />
@@ -250,6 +194,82 @@ export const Component: React.FC<unknown> = () => {
     },
   ];
 
+  const formRender = (
+    <>
+      <ProFormText
+        name="jobName"
+        label="任务名称"
+        placeholder="请输入任务名称"
+        rules={[{ required: true, message: '请输入任务名称' }]}
+        width="md"
+      />
+      <ProFormSelect
+        name="jobGroup"
+        label="任务组名"
+        placeholder="请选择任务组名"
+        request={async () => {
+          const res = await queryDictsByType('sys_job_group');
+          return res.data.map((dict) => ({
+            label: dict.dictLabel,
+            value: dict.dictValue,
+          }));
+        }}
+        rules={[{ required: true, message: '请选择任务组名' }]}
+        width="md"
+      />
+      <ProFormText
+        name="invokeTarget"
+        label="调用函数"
+        placeholder="请输入调用函数"
+        rules={[{ required: true, message: '请输入调用函数' }]}
+        width="md"
+      />
+      <Form.Item
+        name="cronExpression"
+        label="cron表达式"
+        initialValue="* * * * *"
+        rules={[{ required: true, message: '请输入cron表达式' }]}
+      >
+        <CronSelect />
+      </Form.Item>
+      <ProFormRadio.Group
+        radioType="button"
+        name="misfirePolicy"
+        label="执行策略"
+        placeholder="请选择执行策略"
+        initialValue="1"
+        valueEnum={{
+          '1': { text: '立即执行' },
+          '2': { text: '执行一次' },
+          '3': { text: '放弃执行' },
+        }}
+      />
+      <ProFormRadio.Group
+        name="concurrent"
+        label="是否并发"
+        placeholder="请选择是否并发"
+        initialValue="1"
+        valueEnum={{
+          '0': { text: '允许' },
+          '1': { text: '禁止' },
+        }}
+      />
+      <ProFormRadio.Group
+        name="status"
+        label="状态"
+        placeholder="请选择状态"
+        initialValue="0"
+        request={async () => {
+          const res = await queryDictsByType('sys_job_status');
+          return res.data.map((dict) => ({
+            label: dict.dictLabel,
+            value: dict.dictValue,
+          }));
+        }}
+      />
+    </>
+  );
+
   return (
     <PageContainer
       header={{
@@ -262,7 +282,7 @@ export const Component: React.FC<unknown> = () => {
         rowKey="jobId"
         toolBarRender={() => [
           <CreateJobForm
-            columns={columns}
+            formRender={formRender}
             trigger={
               <Button type="primary" icon={<PlusOutlined />} key="add">
                 新建

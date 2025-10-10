@@ -1,28 +1,25 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { App } from 'antd';
-import { ProColumns } from '@ant-design/pro-components';
-import EditPostForm from './EditPostForm';
+import { EditFormModal } from '@/components';
 import { addPost } from '@/services/post';
 
 interface CreateFormProps {
   trigger: JSX.Element;
   values?: any;
-  columns: ProColumns[];
+  formRedner: JSX.Element;
   onFinish?: () => void;
 }
 
-const CreatePostForm: React.FC<PropsWithChildren<CreateFormProps>> = (
-  props,
-) => {
+const CreatePostForm: React.FC<CreateFormProps> = (props) => {
   const { message } = App.useApp();
-  const { trigger, values, columns, onFinish } = props;
+  const { trigger, values, formRedner, onFinish } = props;
 
   return (
-    <EditPostForm
+    <EditFormModal
       title="新增岗位"
       values={values}
-      columns={columns}
       trigger={trigger}
+      formRender={formRedner}
       onFinish={async (formValues) => {
         const hide = message.loading('正在添加');
         try {

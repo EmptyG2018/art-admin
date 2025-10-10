@@ -1,31 +1,28 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { App } from 'antd';
-import { ProColumns } from '@ant-design/pro-components';
-import EditDictForm from './EditDictForm';
+import { EditFormModal } from '@/components';
 import { updateDictType, getDictType } from '@/services/dict';
 
 interface UpdateDictFormProps {
   trigger: JSX.Element;
   values: any;
-  columns: ProColumns[];
+  formRender: JSX.Element;
   onFinish?: () => void;
 }
 
-const UpdateDictForm: React.FC<PropsWithChildren<UpdateDictFormProps>> = (
-  props,
-) => {
+const UpdateDictForm: React.FC<UpdateDictFormProps> = (props) => {
   const { message } = App.useApp();
-  const { trigger, values, columns, onFinish } = props;
+  const { trigger, values, formRender, onFinish } = props;
 
   return (
-    <EditDictForm
+    <EditFormModal
       title="修改岗位"
       request={async () => {
         const res = await getDictType(values.dictId);
         return res.data;
       }}
       trigger={trigger}
-      columns={columns}
+      formRender={formRender}
       onFinish={async (formValues) => {
         const hide = message.loading('正在修改');
         try {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { App } from 'antd';
-import EditRoleForm from './EditRoleForm';
+import { EditFormModal } from '@/components';
 import { addRole } from '@/services/role';
 
 interface CreateRoleFormProps {
@@ -15,7 +15,7 @@ const CreateRoleForm: React.FC<CreateRoleFormProps> = (props) => {
   const { values, trigger, formRender, onFinish } = props;
 
   return (
-    <EditRoleForm
+    <EditFormModal
       title="新建角色"
       values={values}
       trigger={trigger}

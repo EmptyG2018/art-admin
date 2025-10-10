@@ -1,29 +1,28 @@
 import React from 'react';
 import { App } from 'antd';
-import { ProColumns } from '@ant-design/pro-components';
-import EditNoticeForm from './EditNoticeForm';
+import { EditFormModal } from '@/components';
 import { updateNotice, getNotice } from '@/services/notice';
 
 interface UpdateNoticeFormProps {
   trigger: JSX.Element;
   values: any;
-  columns: ProColumns[];
+  formRender: JSX.Element;
   onFinish?: () => void;
 }
 
 const UpdateNoticeForm: React.FC<UpdateNoticeFormProps> = (props) => {
   const { message } = App.useApp();
-  const { trigger, values, columns, onFinish } = props;
+  const { trigger, values, formRender, onFinish } = props;
 
   return (
-    <EditNoticeForm
+    <EditFormModal
       title="修改公告"
       request={async () => {
         const res = await getNotice(values.noticeId);
         return res.data;
       }}
       trigger={trigger}
-      columns={columns}
+      formRender={formRender}
       onFinish={async (formValues) => {
         const hide = message.loading('正在修改');
         try {
