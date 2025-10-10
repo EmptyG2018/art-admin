@@ -7,7 +7,6 @@ import {
   Dropdown,
   Tooltip,
   Modal,
-  Input,
 } from 'antd';
 import {
   ExportOutlined,
@@ -48,44 +47,19 @@ const handleRemove = async (selectedRows: API.UserInfo[]) => {
 export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
+
   const columns: ProColumns[] = [
     {
       title: '日志编号',
       dataIndex: 'operId',
       hideInSearch: true,
-      hideInForm: true,
       width: 140,
-    },
-    {
-      title: '登录信息',
-      dataIndex: 'loginInfo',
-      renderFormItem: (_, __, form) => {
-        const { operIp, operName, operLocation } = form.getFieldsValue(true);
-        return (
-          <Input.TextArea
-            value={`操作人：${operName} \nIP地址：${operIp}（${operLocation}）`}
-          />
-        );
-      },
-      hideInSearch: true,
-      hideInTable: true,
-      width: 240,
-      colProps: { span: 24 },
     },
     {
       title: '系统模块',
       dataIndex: 'title',
       valueType: 'text',
       width: 180,
-      colProps: { span: 12 },
-    },
-    {
-      title: '请求地址',
-      dataIndex: 'operUrl',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 12 },
     },
     {
       title: '请求动作',
@@ -99,21 +73,18 @@ export const Component: React.FC<unknown> = () => {
           value: dict.dictValue,
         }));
       },
-      colProps: { span: 12 },
     },
     {
       title: '操作人员',
       dataIndex: 'operName',
       valueType: 'text',
       width: 180,
-      hideInForm: true,
     },
     {
       title: 'IP地址',
       dataIndex: 'operIp',
       valueType: 'text',
       width: 180,
-      hideInForm: true,
     },
     {
       title: '执行状态',
@@ -127,37 +98,6 @@ export const Component: React.FC<unknown> = () => {
           value: dict.dictValue,
         }));
       },
-      colProps: { span: 12 },
-    },
-    {
-      title: '操作方法',
-      dataIndex: 'method',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 24 },
-    },
-    {
-      title: '请求参数',
-      dataIndex: 'operParam',
-      valueType: 'textarea',
-      fieldProps: {
-        autoSize: { minRows: 6, maxRows: 8 },
-      },
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 12 },
-    },
-    {
-      title: '响应参数',
-      dataIndex: 'jsonResult',
-      valueType: 'textarea',
-      fieldProps: {
-        autoSize: { minRows: 6, maxRows: 8 },
-      },
-      hideInSearch: true,
-      hideInTable: true,
-      colProps: { span: 12 },
     },
     {
       title: '耗时(ms)',
@@ -165,14 +105,12 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'text',
       hideInSearch: true,
       width: 120,
-      colProps: { span: 12 },
     },
     {
       title: '操作时间',
       dataIndex: 'operTime',
       valueType: 'dateTime',
       width: 220,
-      colProps: { span: 12 },
     },
     {
       title: '操作',
@@ -188,7 +126,6 @@ export const Component: React.FC<unknown> = () => {
         >
           <ViewOperlog
             values={record}
-            columns={columns}
             trigger={
               <Tooltip title="查看">
                 <Button type="link" size="small" icon={<EyeOutlined />} />

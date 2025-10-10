@@ -50,7 +50,7 @@ const EditOperlogWrapperForm: React.FC<EditOperlogWrapperForm> = (props) => {
       <ProDescriptions.Item label="响应结果" valueType="jsonCode">
         {values.jsonResult}
       </ProDescriptions.Item>
-      <ProDescriptions.Item label="消耗时间(ms)" valueType="digit">
+      <ProDescriptions.Item label="耗时(ms)" valueType="digit">
         {values.costTime}
       </ProDescriptions.Item>
     </ProDescriptions>
