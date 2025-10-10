@@ -80,8 +80,7 @@ const SelectAllocatedUserTable: React.FC<{
       }}
       columns={columns}
       pagination={{
-        current: 1,
-        pageSize: 15,
+        defaultPageSize: 12,
       }}
       rowSelection={{
         onChange: onSelectionChange,

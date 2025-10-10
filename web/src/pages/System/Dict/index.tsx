@@ -250,8 +250,7 @@ export const Component: React.FC<unknown> = () => {
         }}
         columns={columns}
         pagination={{
-          current: 1,
-          pageSize: 15,
+          defaultPageSize: 12,
         }}
         rowSelection={{
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),

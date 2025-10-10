@@ -94,7 +94,7 @@ export const Component: React.FC<unknown> = () => {
                   await updateUnAuthUser({
                     userId: record.userId,
                     roleId,
-                  })
+                  });
                   hide();
                   message.success('取消授权成功');
                   actionRef.current?.reloadAndRest?.();
@@ -182,8 +182,7 @@ export const Component: React.FC<unknown> = () => {
         }}
         columns={columns}
         pagination={{
-          current: 1,
-          pageSize: 15,
+          defaultPageSize: 12,
         }}
         rowSelection={{
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
@@ -210,9 +209,11 @@ export const Component: React.FC<unknown> = () => {
                   if (!selectedRowsState) return true;
                   try {
                     await updateUnAuthBatchUser({
-                      userIds: selectedRowsState.map(row => row.userId).join(','),
+                      userIds: selectedRowsState
+                        .map((row) => row.userId)
+                        .join(','),
                       roleId,
-                    })
+                    });
                     hide();
                     message.success('取消授权成功');
                     actionRef.current?.reloadAndRest?.();

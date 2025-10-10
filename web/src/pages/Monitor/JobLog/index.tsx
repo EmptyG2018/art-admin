@@ -19,7 +19,7 @@ export const Component: React.FC<unknown> = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const actionRef = useRef<ActionType>();
-  
+
   const columns: ProColumns[] = [
     {
       title: '日志编号',
@@ -150,8 +150,7 @@ export const Component: React.FC<unknown> = () => {
         }}
         columns={columns}
         pagination={{
-          current: 1,
-          pageSize: 15,
+          defaultPageSize: 12,
         }}
         scroll={{ x: 1200 }}
       />

@@ -137,9 +137,7 @@ export const Component: React.FC<unknown> = () => {
           };
         }}
         columns={columns}
-        pagination={{
-          defaultPageSize: 12,
-        }}
+        pagination={false}
         scroll={{ x: 1400 }}
       />
     </PageContainer>
