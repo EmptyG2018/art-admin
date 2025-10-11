@@ -3,7 +3,7 @@
  * @Date: 2024-04-27 22:07:09
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-11 22:59:03
- * @FilePath: /art-template/src/modules/monitor/login-infor/dto/req-login-infor.dto.ts
+ * @FilePath: /art-admin/src/modules/monitor/login-infor/dto/req-login-infor.dto.ts
  * @Description:
  *
  */

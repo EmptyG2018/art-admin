@@ -3,7 +3,7 @@
  * @Date: 2024-05-16 22:31:04
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-16 22:39:53
- * @FilePath: /art-template/src/modules/monitor/job/job.module.ts
+ * @FilePath: /art-admin/src/modules/monitor/job/job.module.ts
  * @Description: 
  * 
  */

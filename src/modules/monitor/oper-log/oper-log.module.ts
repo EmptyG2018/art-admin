@@ -3,7 +3,7 @@
  * @Date: 2024-04-27 21:55:09
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-11 14:54:53
- * @FilePath: \art-template\src\modules\monitor\oper-log\oper-log.module.ts
+ * @FilePath: \art-admin\src\modules\monitor\oper-log\oper-log.module.ts
  * @Description:
  *
  */

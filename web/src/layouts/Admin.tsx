@@ -1,7 +1,12 @@
 import React, { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ConfigProvider, Dropdown, Avatar, theme } from 'antd';
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  LogoutOutlined,
+  SettingOutlined,
+  UserOutlined,
+  GithubOutlined,
+} from '@ant-design/icons';
 import { ProLayout } from '@ant-design/pro-components';
 import { SelectLang, ToggleFullscreenBtn } from '@/components/Layout';
 import { useProfileStore, useSystemStore } from '@/stores';
@@ -45,7 +50,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
 
   return (
     <div
-      id="art-template"
+      id="art-admin"
       style={{
         height: '100vh',
         overflow: 'auto',
@@ -57,7 +62,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
           token,
         }}
         getTargetContainer={() => {
-          return document.getElementById('art-template') || document.body;
+          return document.getElementById('art-admin') || document.body;
         }}
       >
         <ProLayout
@@ -146,7 +151,16 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
                 }}
               >
                 <div>© 2025 Made with love</div>
-                <div>by Ant Design</div>
+                <div>
+                  Powered by&nbsp; 
+                  <a
+                    href="https://github.com/EmptyG2018/art-admin"
+                    target="_blank"
+                    style={{ color: 'inherit' }}
+                  >
+                    <GithubOutlined />
+                  </a>
+                </div>
               </div>
             );
           }}

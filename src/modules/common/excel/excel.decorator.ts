@@ -3,7 +3,7 @@
  * @Date: 2024-04-30 14:43:37
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-15 15:29:44
- * @FilePath: \art-template\src\modules\common\excel\excel.decorator.ts
+ * @FilePath: \art-admin\src\modules\common\excel\excel.decorator.ts
  * @Description: 
  * 
  */

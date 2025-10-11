@@ -3,7 +3,7 @@
  * @Date: 2024-05-17 19:47:46
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-18 11:19:08
- * @FilePath: /art-template/src/modules/monitor/server/server.service.ts
+ * @FilePath: /art-admin/src/modules/monitor/server/server.service.ts
  * @Description: 系统信息
  *
  */
@@ -58,14 +58,14 @@ export class ServerService {
 
   /* 获取node信息 */
   async getNode() {
-    const { title, version, execPath, argv, uptime, cwd } = process;
+    const { version, execPath, argv, uptime, cwd } = process;
     return {
-      title,
+      title: "Node",
       version,
       execPath,
       argv: argv.slice(2).join(','),
       cwd: cwd(),
-      uptime: (uptime() / 60).toFixed(0) + ' 分钟',
+      uptime: uptime().toFixed(0),
     };
   }
 

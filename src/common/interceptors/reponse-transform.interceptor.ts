@@ -3,7 +3,7 @@
  * @Date: 2024-04-23 11:02:50
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-04-30 14:31:15
- * @FilePath: \art-template\src\common\interceptors\reponse-transform.interceptor.ts
+ * @FilePath: \art-admin\src\common\interceptors\reponse-transform.interceptor.ts
  * @Description: 
  * 
  */

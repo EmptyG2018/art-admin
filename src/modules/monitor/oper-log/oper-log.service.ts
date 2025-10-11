@@ -3,7 +3,7 @@
  * @Date: 2024-04-27 21:55:32
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-11 16:13:31
- * @FilePath: \art-template\src\modules\monitor\oper-log\oper-log.service.ts
+ * @FilePath: \art-admin\src\modules\monitor\oper-log\oper-log.service.ts
  * @Description: 接口访问日志
  *
  */

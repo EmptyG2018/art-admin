@@ -3,7 +3,7 @@
  * @Date: 2024-04-23 15:27:19
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-16 11:32:35
- * @FilePath: \art-template\src\common\decorators\user.decorator.ts
+ * @FilePath: \art-admin\src\common\decorators\user.decorator.ts
  * @Description: 参数获取用户信息装饰器
  *
  */

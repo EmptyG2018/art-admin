@@ -3,7 +3,7 @@
  * @Date: 2024-04-23 19:15:56
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-15 23:16:35
- * @FilePath: /art-template/src/modules/auth/auth.module.ts
+ * @FilePath: /art-admin/src/modules/auth/auth.module.ts
  * @Description:
  *
  */

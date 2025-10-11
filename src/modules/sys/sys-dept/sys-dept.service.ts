@@ -3,7 +3,7 @@
  * @Date: 2024-05-13 13:59:22
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-16 21:10:17
- * @FilePath: /art-template/src/modules/sys/sys-dept/sys-dept.service.ts
+ * @FilePath: /art-admin/src/modules/sys/sys-dept/sys-dept.service.ts
  * @Description:
  *
  */

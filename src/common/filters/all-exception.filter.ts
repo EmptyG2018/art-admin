@@ -3,7 +3,7 @@
  * @Date: 2024-04-23 09:32:25
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-15 14:59:44
- * @FilePath: \art-template\src\common\filters\all-exception.filter.ts
+ * @FilePath: \art-admin\src\common\filters\all-exception.filter.ts
  * @Description:
  *
  */

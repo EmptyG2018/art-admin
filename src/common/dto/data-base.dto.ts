@@ -6,7 +6,7 @@ import { Excel } from 'src/modules/common/excel/excel.decorator';
  * @Date: 2024-04-28 10:26:49
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-17 10:25:34
- * @FilePath: \art-template\src\common\dto\data-base.dto.ts
+ * @FilePath: \art-admin\src\common\dto\data-base.dto.ts
  * @Description: 基础类型
  *
  */

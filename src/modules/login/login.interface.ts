@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-09-13 23:41:17
  * @LastEditors: Please set LastEditors
  * @Description: 生成token的接口
- * @FilePath: /art-template/src/modules/login/login.interface.ts
+ * @FilePath: /art-admin/src/modules/login/login.interface.ts
  * You can you up，no can no bb！！
  */
 

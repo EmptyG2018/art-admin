@@ -4,7 +4,7 @@
  * @LastEditTime: 2024-04-23 15:31:57
  * @LastEditors: HuChao 491623426@qq.com
  * @Description: 防止重复提交守卫
- * @FilePath: \art-template\src\common\guards\repeat-submit.guard.ts
+ * @FilePath: \art-admin\src\common\guards\repeat-submit.guard.ts
  * You can you up，no can no bb！！
  */
 

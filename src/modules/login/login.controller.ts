@@ -4,7 +4,7 @@
  * @LastEditTime: 2024-05-17 17:08:30
  * @LastEditors: HuChao 491623426@qq.com
  * @Description: 登录 controller
- * @FilePath: \art-template\src\modules\login\login.controller.ts
+ * @FilePath: \art-admin\src\modules\login\login.controller.ts
  * You can you up，no can no bb！！
  */
 

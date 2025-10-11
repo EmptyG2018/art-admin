@@ -3,7 +3,7 @@
  * @Date: 2024-04-24 21:57:34
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-17 20:11:34
- * @FilePath: /art-template/src/common/contants/redis.contant.ts
+ * @FilePath: /art-admin/src/common/contants/redis.contant.ts
  * @Description: reids缓存信息的key前缀
  */
 /* 图片key */

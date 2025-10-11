@@ -3,7 +3,7 @@
  * @Date: 2024-04-22 08:52:21
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-04-30 14:44:17
- * @FilePath: \art-template\src\app.module.ts
+ * @FilePath: \art-admin\src\app.module.ts
  * @Description:根模块
  *
  */

@@ -3,7 +3,7 @@
  * @Date: 2024-05-17 15:45:25
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-17 20:07:11
- * @FilePath: /art-template/src/modules/sys/sys-web/sys-web.service.ts
+ * @FilePath: /art-admin/src/modules/sys/sys-web/sys-web.service.ts
  * @Description:
  *
  */

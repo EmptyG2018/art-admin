@@ -3,7 +3,7 @@
  * @Date: 2024-05-17 11:07:14
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-17 13:52:03
- * @FilePath: \art-template\src\modules\monitor\cache\cache.service.ts
+ * @FilePath: \art-admin\src\modules\monitor\cache\cache.service.ts
  * @Description:
  *
  */

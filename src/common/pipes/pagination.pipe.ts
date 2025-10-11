@@ -4,7 +4,7 @@
  * @LastEditTime: 2024-04-27 17:45:47
  * @LastEditors: hu.chao 491623426@qq.com
  * @Description: 分页器管道
- * @FilePath: /art-template/src/common/pipes/pagination.pipe.ts
+ * @FilePath: /art-admin/src/common/pipes/pagination.pipe.ts
  * You can you up，no can no bb！！
  */
 

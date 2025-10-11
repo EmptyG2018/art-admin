@@ -3,7 +3,7 @@
  * @Date: 2024-04-23 09:25:47
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-04-23 16:03:51
- * @FilePath: \art-template\src\common\class\ajax-result.class.ts
+ * @FilePath: \art-admin\src\common\class\ajax-result.class.ts
  * @Description:
  *
  */

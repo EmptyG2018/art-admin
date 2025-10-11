@@ -3,7 +3,7 @@
  * @Date: 2024-05-11 13:32:00
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-18 10:27:01
- * @FilePath: /art-template/src/modules/sys/sys-role/sys-role.service.ts
+ * @FilePath: /art-admin/src/modules/sys/sys-role/sys-role.service.ts
  * @Description:
  *
  */

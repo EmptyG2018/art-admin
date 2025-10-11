@@ -3,7 +3,7 @@
  * @Date: 2024-04-20 17:42:55
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-05-19 01:36:57
- * @FilePath: /art-template/src/main.ts
+ * @FilePath: /art-admin/src/main.ts
  * @Description: 主入口
  *
  */

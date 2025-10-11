@@ -1,13 +1,11 @@
-import { useState } from 'react';
-import { Statistic, Row, Col, Progress, Spin } from 'antd';
-import { DatabaseOutlined } from '@ant-design/icons';
+import { Tooltip, Button, Statistic, Row, Col, Progress, Spin } from 'antd';
+import { DatabaseOutlined, ReloadOutlined } from '@ant-design/icons';
 import {
   PageContainer,
   ProCard,
   StatisticCard,
 } from '@ant-design/pro-components';
-import RcResizeObserver from 'rc-resize-observer';
-import { useRequest } from 'ahooks';
+import { useRequest, useResponsive } from 'ahooks';
 import { queryServerInfo } from '@/services/monitor';
 
 const DiskList: React.FC<{ list: any }> = ({ list }) => {
@@ -28,12 +26,12 @@ const DiskList: React.FC<{ list: any }> = ({ list }) => {
             </div>
             <Progress
               percent={disk.usage}
-              showInfo={false}
+              percentPosition={{ align: 'end', type: 'inner' }}
               strokeLinecap="butt"
               size={{ height: 20 }}
             />
             <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 4 }}>
-              {disk.usage}% ({disk.used} GB / {disk.total} GB)
+              已使用 {disk.used} GB ，共 {disk.total} GB
             </div>
           </div>
         </div>
@@ -43,8 +41,12 @@ const DiskList: React.FC<{ list: any }> = ({ list }) => {
 };
 
 export const Component = () => {
-  const [responsive, setResponsive] = useState(false);
-  const { data: info, loading } = useRequest(async () => {
+  const responsive = useResponsive();
+  const {
+    data: info,
+    loading,
+    refresh,
+  } = useRequest(async () => {
     const res = await queryServerInfo();
     const { cpu, mem, node, sys, sysFiles } = res.data;
     return {
@@ -56,123 +58,129 @@ export const Component = () => {
     };
   });
 
+  const cpuUsed = info?.cpu?.used ? parseFloat(info.cpu.used) : 0;
+  const cpuSys = info?.cpu?.sys ? parseFloat(info.cpu.sys) : 0;
+  const cpuUsage = (cpuUsed * 100 + cpuSys * 100) / 100;
+
   return (
     <PageContainer header={{ title: false }}>
-      <RcResizeObserver
-        key="resize-observer"
-        onResize={(offset) => {
-          setResponsive(offset.width < 596);
-        }}
+      <ProCard
+        title="服务监控"
+        extra={
+          <Tooltip title="刷新">
+            <Button
+              type="link"
+              icon={<ReloadOutlined />}
+              disabled={loading}
+              onClick={() => refresh()}
+            />
+          </Tooltip>
+        }
+        split="horizontal"
+        loading={
+          loading ? (
+            <div style={{ paddingBlock: 40, textAlign: 'center' }}>
+              <Spin />
+            </div>
+          ) : null
+        }
+        headerBordered
       >
-        <ProCard
-          title="服务监控"
-          extra="2025年10月11日 星期六"
-          split="horizontal"
-          loading={
-            loading ? (
-              <div style={{ paddingBlock: 40, textAlign: 'center' }}>
-                <Spin />
-              </div>
-            ) : null
-          }
-          headerBordered
-        >
-          <ProCard split="vertical">
-            <ProCard title="资源消耗" split="horizontal">
-              <StatisticCard
-                statistic={{
-                  title: 'CPU占用比率',
-                  value: info?.cpu?.used + info?.cpu?.sys,
-                  suffix: '%',
-                  description: (
-                    <>
-                      <StatisticCard.Statistic
-                        layout="inline"
-                        title="用户占用比率"
-                        value={`${info?.cpu?.used}%`}
-                      />
-                      <StatisticCard.Statistic
-                        layout="inline"
-                        title="系统占用比率"
-                        value={`${info?.cpu?.sys}%`}
-                      />
-                    </>
-                  ),
-                }}
-                chart={
-                  <div
-                    style={{
-                      width: '100%',
-                      height: '10px',
-                      background: '#13c2c2',
-                    }}
-                  />
-                }
-              />
-              <StatisticCard
-                statistic={{
-                  title: '内存占用比率',
-                  value: 20.3,
-                  suffix: '%',
-                  description: (
-                    <>
-                      <StatisticCard.Statistic
-                        title="总内存"
-                        value={`${info?.mem?.total}GB`}
-                      />
-                      <StatisticCard.Statistic
-                        layout="horizontal"
-                        title="已占用"
-                        value={`${info?.mem?.used}GB`}
-                      />
-                    </>
-                  ),
-                }}
-                chart={
-                  <Progress
-                    percent={info?.mem?.usage}
-                    showInfo={false}
-                    strokeLinecap="butt"
-                    size={{ height: 10 }}
-                  />
-                }
-              />
-            </ProCard>
-            <ProCard title="服务器信息">
-              <Row gutter={[12, 24]} wrap>
-                <Col span={24}>
-                  <Statistic.Timer
-                    type="countdown"
-                    title="已运行时长"
-                    format="HH:mm:ss:SSS"
-                  />
-                </Col>
-                <Col span={12}>
-                  <Statistic
-                    title="服务器IP"
-                    value={`${info?.sys?.computerIp}`}
-                  />
-                </Col>
-                <Col span={12}>
-                  <Statistic title="操作系统" value={`${info?.sys?.osName}`} />
-                </Col>
-                <Col span={12}>
-                  <Statistic title="服务平台" value={`${info?.node?.title}`} />
-                </Col>
-                <Col span={12}>
-                  <Statistic
-                    title="服务平台版本"
-                    value={`${info?.node?.version}`}
-                  />
-                </Col>
-              </Row>
-            </ProCard>
+        <ProCard split={responsive.lg ? 'vertical' : 'horizontal'}>
+          <ProCard title="资源消耗" split="horizontal">
+            <StatisticCard
+              statistic={{
+                title: 'CPU占用比率',
+                value: cpuUsage,
+                suffix: '%',
+                description: (
+                  <>
+                    <StatisticCard.Statistic
+                      layout="inline"
+                      title="用户占用比率"
+                      value={`${cpuUsed}%`}
+                    />
+                    <StatisticCard.Statistic
+                      layout="inline"
+                      title="系统占用比率"
+                      value={`${cpuSys}%`}
+                    />
+                  </>
+                ),
+              }}
+              chart={
+                <Progress
+                  percent={cpuUsage}
+                  showInfo={false}
+                  strokeLinecap="butt"
+                  size={{ height: 10 }}
+                />
+              }
+            />
+            <StatisticCard
+              statistic={{
+                title: '内存占用比率',
+                value: 20.3,
+                suffix: '%',
+                description: (
+                  <>
+                    <StatisticCard.Statistic
+                      title="总内存"
+                      value={`${info?.mem?.total}GB`}
+                    />
+                    <StatisticCard.Statistic
+                      layout="horizontal"
+                      title="已占用"
+                      value={`${info?.mem?.used}GB`}
+                    />
+                  </>
+                ),
+              }}
+              chart={
+                <Progress
+                  percent={info?.mem?.usage}
+                  showInfo={false}
+                  strokeLinecap="butt"
+                  size={{ height: 10 }}
+                />
+              }
+            />
           </ProCard>
-          <ProCard title="磁盘状态">
-            <DiskList list={info?.sysFiles} />
+          <ProCard title="服务器信息">
+            <Row gutter={[12, 24]} wrap>
+              <Col span={24}>
+                <Statistic.Timer
+                  type="countup"
+                  value={new Date().getTime() - info?.node?.uptime * 1000}
+                  title="已运行时长"
+                  format="D 天 HH 时 mm 分 ss 秒"
+                />
+              </Col>
+              <Col span={12}>
+                <Statistic
+                  title="服务器IP"
+                  value={`${info?.sys?.computerIp}`}
+                />
+              </Col>
+              <Col span={12}>
+                <Statistic title="操作系统" value={`${info?.sys?.osName}`} />
+              </Col>
+              <Col span={12}>
+                <Statistic title="服务平台" value={`${info?.node?.title}`} />
+              </Col>
+              <Col span={12}>
+                <Statistic
+                  title="服务平台版本"
+                  value={`${info?.node?.version}`}
+                />
+              </Col>
+            </Row>
           </ProCard>
         </ProCard>
-      </RcResizeObserver>
+        <ProCard title="磁盘状态">
+          <DiskList list={info?.sysFiles} />
+        </ProCard>
+      </ProCard>
     </PageContainer>
   );
 };

@@ -3,7 +3,7 @@
  * @Date: 2024-04-27 16:58:02
  * @LastEditors: hu.chao 491623426@qq.com
  * @LastEditTime: 2024-04-27 17:44:39
- * @FilePath: /art-template/src/common/dto/pagination.dto.ts
+ * @FilePath: /art-admin/src/common/dto/pagination.dto.ts
  * @Description: 分页器参数
  *
  */

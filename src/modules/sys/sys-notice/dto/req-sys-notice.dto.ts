@@ -3,7 +3,7 @@
  * @Date: 2024-05-11 10:34:07
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-11 10:40:28
- * @FilePath: \art-template\src\modules\sys\sys-notice\dto\req-sys-notice.dto.ts
+ * @FilePath: \art-admin\src\modules\sys\sys-notice\dto\req-sys-notice.dto.ts
  * @Description:
  *
  */

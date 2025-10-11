@@ -3,7 +3,7 @@
  * @Date: 2024-04-23 18:59:25
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-04-28 11:04:17
- * @FilePath: \art-template\src\common\guards\permission-auth.guard.ts
+ * @FilePath: \art-admin\src\common\guards\permission-auth.guard.ts
  * @Description: 权限标识守卫
  *
  */
