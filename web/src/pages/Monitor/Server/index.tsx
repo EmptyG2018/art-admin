@@ -129,12 +129,11 @@ export const Component = () => {
                   ),
                 }}
                 chart={
-                  <div
-                    style={{
-                      width: '100%',
-                      height: '10px',
-                      background: '#13c2c2',
-                    }}
+                  <Progress
+                    percent={info?.mem?.usage}
+                    showInfo={false}
+                    strokeLinecap="butt"
+                    size={{ height: 10 }}
                   />
                 }
               />
