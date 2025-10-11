@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ConfigProvider, Dropdown, theme } from 'antd';
-import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { ConfigProvider, Dropdown, Avatar, theme } from 'antd';
+import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { ProLayout } from '@ant-design/pro-components';
 import { SelectLang, ToggleFullscreenBtn } from '@/components/Layout';
 import { useProfileStore, useSystemStore } from '@/stores';
@@ -88,7 +88,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
             return <>{defaultDom}</>;
           }}
           avatarProps={{
-            src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
+            src: <Avatar icon={<UserOutlined />} />,
             size: 'small',
             title: profile.user.nickName,
             render: (props, dom) => {
@@ -150,26 +150,6 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
               </div>
             );
           }}
-          bgLayoutImgList={[
-            {
-              src: 'https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png',
-              left: 85,
-              bottom: 100,
-              height: '303px',
-            },
-            {
-              src: 'https://img.alicdn.com/imgextra/i2/O1CN01O4etvp1DvpFLKfuWq_!!6000000000279-2-tps-609-606.png',
-              bottom: -68,
-              right: -45,
-              height: '303px',
-            },
-            {
-              src: 'https://img.alicdn.com/imgextra/i3/O1CN018NxReL1shX85Yz6Cx_!!6000000005798-2-tps-884-496.png',
-              bottom: 0,
-              left: 0,
-              width: '331px',
-            },
-          ]}
           waterMarkProps={{
             content: `${profile.user.nickName}`,
             fontSize: 20,

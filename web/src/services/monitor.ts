@@ -117,3 +117,10 @@ export const cleanJobLog = () => {
     method: 'DELETE',
   });
 };
+
+// 查询服务状态
+export const queryServerInfo = () => {
+  return request('/api/monitor/server', {
+    method: 'GET',
+  });
+};

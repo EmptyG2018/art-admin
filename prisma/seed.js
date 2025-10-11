@@ -1052,14 +1052,34 @@ async function main() {
     },
   });
 
-  const cacheMenu = await prisma.sysMenu.upsert({
+  const serverMenu = await prisma.sysMenu.upsert({
     where: { menuId: 21 },
     update: {},
     create: {
       menuId: 21,
-      menuName: '缓存监控',
+      menuName: '服务监控',
       parentId: moirMenu.menuId,
       orderNum: 4,
+      path: 'server',
+      component: '/Monitor/Server/index',
+      menuType: 'C',
+      visible: '0',
+      status: '0',
+      icon: '',
+      perms: 'monitor:server:list',
+      createBy: 'admin',
+      createTime: new Date(),
+    },
+  });
+
+  const cacheMenu = await prisma.sysMenu.upsert({
+    where: { menuId: 22 },
+    update: {},
+    create: {
+      menuId: 22,
+      menuName: '缓存监控',
+      parentId: moirMenu.menuId,
+      orderNum: 5,
       path: 'cache',
       component: '/Monitor/Cache/index',
       menuType: 'C',
@@ -1073,13 +1093,13 @@ async function main() {
   });
 
   const cacheListMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 22 },
+    where: { menuId: 23 },
     update: {},
     create: {
-      menuId: 22,
+      menuId: 23,
       menuName: '缓存列表',
       parentId: moirMenu.menuId,
-      orderNum: 5,
+      orderNum: 6,
       path: 'cacheList',
       component: '/Monitor/CacheList/index',
       menuType: 'C',
@@ -1093,10 +1113,10 @@ async function main() {
   });
 
   const genMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 23 },
+    where: { menuId: 24 },
     update: {},
     create: {
-      menuId: 23,
+      menuId: 24,
       menuName: '代码生成',
       parentId: toolMenu.menuId,
       orderNum: 1,

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Statistic, Row, Col, Progress, Tooltip } from 'antd';
+import { Statistic, Row, Col, Progress, Spin } from 'antd';
 import { DatabaseOutlined } from '@ant-design/icons';
 import {
   PageContainer,
@@ -7,9 +7,54 @@ import {
   StatisticCard,
 } from '@ant-design/pro-components';
 import RcResizeObserver from 'rc-resize-observer';
+import { useRequest } from 'ahooks';
+import { queryServerInfo } from '@/services/monitor';
+
+const DiskList: React.FC<{ list: any }> = ({ list }) => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+      }}
+    >
+      {list.map((disk) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <DatabaseOutlined style={{ fontSize: 24 }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 4 }}>
+              {disk.dirName}
+            </div>
+            <Progress
+              percent={disk.usage}
+              showInfo={false}
+              strokeLinecap="butt"
+              size={{ height: 20 }}
+            />
+            <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 4 }}>
+              {disk.usage}% ({disk.used} GB / {disk.total} GB)
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export const Component = () => {
   const [responsive, setResponsive] = useState(false);
+  const { data: info, loading } = useRequest(async () => {
+    const res = await queryServerInfo();
+    const { cpu, mem, node, sys, sysFiles } = res.data;
+    return {
+      cpu: cpu || {},
+      mem: mem || {},
+      node: node || {},
+      sys: sys || {},
+      sysFiles: sysFiles || [],
+    };
+  });
 
   return (
     <PageContainer header={{ title: false }}>
@@ -23,6 +68,13 @@ export const Component = () => {
           title="服务监控"
           extra="2025年10月11日 星期六"
           split="horizontal"
+          loading={
+            loading ? (
+              <div style={{ paddingBlock: 40, textAlign: 'center' }}>
+                <Spin />
+              </div>
+            ) : null
+          }
           headerBordered
         >
           <ProCard split="vertical">
@@ -30,19 +82,19 @@ export const Component = () => {
               <StatisticCard
                 statistic={{
                   title: 'CPU占用比率',
-                  value: 87.3,
+                  value: info?.cpu?.used + info?.cpu?.sys,
                   suffix: '%',
                   description: (
                     <>
                       <StatisticCard.Statistic
                         layout="inline"
                         title="用户占用比率"
-                        value="8.04%"
+                        value={`${info?.cpu?.used}%`}
                       />
                       <StatisticCard.Statistic
                         layout="inline"
                         title="系统占用比率"
-                        value="8.04%"
+                        value={`${info?.cpu?.sys}%`}
                       />
                     </>
                   ),
@@ -64,11 +116,14 @@ export const Component = () => {
                   suffix: '%',
                   description: (
                     <>
-                      <StatisticCard.Statistic title="总内存" value="16GB" />
+                      <StatisticCard.Statistic
+                        title="总内存"
+                        value={`${info?.mem?.total}GB`}
+                      />
                       <StatisticCard.Statistic
                         layout="horizontal"
                         title="已占用"
-                        value="6.8GB"
+                        value={`${info?.mem?.used}GB`}
                       />
                     </>
                   ),
@@ -94,38 +149,28 @@ export const Component = () => {
                   />
                 </Col>
                 <Col span={12}>
-                  <Statistic title="服务器IP" value="127.0.0.1" />
+                  <Statistic
+                    title="服务器IP"
+                    value={`${info?.sys?.computerIp}`}
+                  />
                 </Col>
                 <Col span={12}>
-                  <Statistic title="操作系统" value="darwin" />
+                  <Statistic title="操作系统" value={`${info?.sys?.osName}`} />
                 </Col>
                 <Col span={12}>
-                  <Statistic title="服务平台" value="Node.js" />
+                  <Statistic title="服务平台" value={`${info?.node?.title}`} />
                 </Col>
                 <Col span={12}>
-                  <Statistic title="服务平台版本" value="v16.20.2" />
+                  <Statistic
+                    title="服务平台版本"
+                    value={`${info?.node?.version}`}
+                  />
                 </Col>
               </Row>
             </ProCard>
           </ProCard>
           <ProCard title="磁盘状态">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <DatabaseOutlined style={{ fontSize: 24 }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 4 }}>
-                  磁盘使用情况
-                </div>
-                <Progress
-                  percent={40}
-                  showInfo={false}
-                  strokeLinecap="butt"
-                  size={{ height: 20 }}
-                />
-                <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 4 }}>
-                  45% (23.4 GB / 50 GB)
-                </div>
-              </div>
-            </div>
+            <DiskList list={info?.sysFiles} />
           </ProCard>
         </ProCard>
       </RcResizeObserver>
