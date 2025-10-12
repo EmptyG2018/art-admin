@@ -8,7 +8,7 @@ import {
   GithubOutlined,
 } from '@ant-design/icons';
 import { ProLayout } from '@ant-design/pro-components';
-import { SelectLang, ToggleFullscreenBtn } from '@/components/Layout';
+import { Logo, SelectLang, ToggleFullscreenBtn } from '@/components/Layout';
 import { useProfileStore, useSystemStore } from '@/stores';
 import icons from '@/constants/icons';
 
@@ -78,20 +78,8 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
             path: '/',
             routes,
           }}
-          headerTitleRender={(logo, title, _) => {
-            const defaultDom = (
-              <a>
-                {logo}
-                {title}
-              </a>
-            );
-            if (typeof window === 'undefined') return defaultDom;
-            if (document.body.clientWidth < 1400) {
-              return defaultDom;
-            }
-            if (_.isMobile) return defaultDom;
-            return <>{defaultDom}</>;
-          }}
+          logo={<Logo style={{ fontSize: 32 }} />}
+          title="ART Admin"
           avatarProps={{
             src: <Avatar icon={<UserOutlined />} />,
             size: 'small',
@@ -152,7 +140,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
               >
                 <div>© 2025 Made with love</div>
                 <div>
-                  Powered by&nbsp; 
+                  Powered by&nbsp;
                   <a
                     href="https://github.com/EmptyG2018/art-admin"
                     target="_blank"

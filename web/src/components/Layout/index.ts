@@ -5,10 +5,11 @@
 /**
  * 布局组件
  */
+import Logo from './Logo';
 import SelectLang from './SelectLang';
 import ToggleFullscreenBtn from './ToggleFullscreenBtn';
 import Footer from './Footer';
 import Loading from './Loading';
 import NoFound from './NoFound';
 
-export { SelectLang, ToggleFullscreenBtn, Footer, Loading, NoFound };
+export { Logo, SelectLang, ToggleFullscreenBtn, Footer, Loading, NoFound };

@@ -1,13 +1,10 @@
 import { SelectLang, ToggleFullscreenBtn, Footer } from '@/components/Layout';
 import { queryCaptchaImage } from '@/services/auth';
 import {
-  AlipayCircleOutlined,
   LockOutlined,
   MobileOutlined,
   SafetyOutlined,
-  TaobaoCircleOutlined,
   UserOutlined,
-  WeiboCircleOutlined,
 } from '@ant-design/icons';
 import {
   LoginForm,
@@ -18,6 +15,7 @@ import {
 import { useIntl, FormattedMessage } from 'react-intl';
 import { useRequest } from 'ahooks';
 import { App, Alert, Button, message, Space, Tabs } from 'antd';
+import { Logo } from '@/components/Layout';
 import { createStyles } from 'antd-style';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -58,27 +56,6 @@ const useStyles = createStyles(({ token }) => {
     },
   };
 });
-
-const ActionIcons = () => {
-  const { styles } = useStyles();
-
-  return (
-    <>
-      <AlipayCircleOutlined
-        key="AlipayCircleOutlined"
-        className={styles.action}
-      />
-      <TaobaoCircleOutlined
-        key="TaobaoCircleOutlined"
-        className={styles.action}
-      />
-      <WeiboCircleOutlined
-        key="WeiboCircleOutlined"
-        className={styles.action}
-      />
-    </>
-  );
-};
 
 // 登录提示信息
 const LoginMessage: React.FC<{
@@ -194,8 +171,8 @@ export const Component: React.FC = () => {
             minWidth: 280,
             maxWidth: '75vw',
           }}
-          logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
+          logo={<Logo style={{ fontSize: 44 }} />}
+          title="ART Admin"
           subTitle={intl.formatMessage({
             id: 'pages.layouts.userLayout.title',
           })}
@@ -204,14 +181,6 @@ export const Component: React.FC = () => {
             password: 'admin123',
             autoLogin: true,
           }}
-          actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <ActionIcons key="icons" />,
-          ]}
           onFinish={async (values: any) => {
             await handleSubmit(values);
           }}

@@ -124,3 +124,10 @@ export const queryServerInfo = () => {
     method: 'GET',
   });
 };
+
+// 查询缓存信息
+export const queryCacheInfo = () => {
+  return request('/api/monitor/cache', {
+    method: 'GET',
+  });
+};
