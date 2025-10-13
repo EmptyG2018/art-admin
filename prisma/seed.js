@@ -178,7 +178,7 @@ async function main() {
         dictValue: '0',
         dictType: 'sys_show_hide',
         listClass: 'Processing',
-        dictSort: 4,
+        dictSort: 1,
         status: '0',
         isDefault: 'Y',
         createBy: 'admin',
@@ -189,7 +189,7 @@ async function main() {
         dictValue: '1',
         dictType: 'sys_show_hide',
         listClass: 'Error',
-        dictSort: 5,
+        dictSort: 2,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -200,7 +200,7 @@ async function main() {
         dictValue: '0',
         dictType: 'sys_normal_disable',
         listClass: 'Processing',
-        dictSort: 6,
+        dictSort: 1,
         status: '0',
         isDefault: 'Y',
         createBy: 'admin',
@@ -211,7 +211,7 @@ async function main() {
         dictValue: '1',
         dictType: 'sys_normal_disable',
         listClass: 'Error',
-        dictSort: 7,
+        dictSort: 2,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -222,7 +222,7 @@ async function main() {
         dictValue: '0',
         dictType: 'sys_job_status',
         listClass: 'Processing',
-        dictSort: 8,
+        dictSort: 1,
         status: '0',
         isDefault: 'Y',
         createBy: 'admin',
@@ -233,7 +233,7 @@ async function main() {
         dictValue: '1',
         dictType: 'sys_job_status',
         listClass: 'Error',
-        dictSort: 9,
+        dictSort: 2,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -243,7 +243,7 @@ async function main() {
         dictLabel: '默认',
         dictValue: 'DEFAULT',
         dictType: 'sys_job_group',
-        dictSort: 10,
+        dictSort: 1,
         status: '0',
         isDefault: 'Y',
         createBy: 'admin',
@@ -253,7 +253,7 @@ async function main() {
         dictLabel: '系统',
         dictValue: 'SYSTEM',
         dictType: 'sys_job_group',
-        dictSort: 11,
+        dictSort: 2,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -264,7 +264,7 @@ async function main() {
         dictValue: 'Y',
         dictType: 'sys_yes_no',
         listClass: 'Success',
-        dictSort: 12,
+        dictSort: 1,
         status: '0',
         isDefault: 'Y',
         createBy: 'admin',
@@ -275,7 +275,7 @@ async function main() {
         dictValue: 'N',
         dictType: 'sys_yes_no',
         listClass: 'Error',
-        dictSort: 13,
+        dictSort: 2,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -285,7 +285,7 @@ async function main() {
         dictLabel: '通知',
         dictValue: '1',
         dictType: 'sys_notice_type',
-        dictSort: 14,
+        dictSort: 1,
         status: '0',
         isDefault: 'Y',
         createBy: 'admin',
@@ -295,7 +295,7 @@ async function main() {
         dictLabel: '公告',
         dictValue: '2',
         dictType: 'sys_notice_type',
-        dictSort: 15,
+        dictSort: 2,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -306,7 +306,7 @@ async function main() {
         dictValue: '0',
         dictType: 'sys_notice_status',
         listClass: 'Processing',
-        dictSort: 16,
+        dictSort: 1,
         status: '0',
         isDefault: 'Y',
         createBy: 'admin',
@@ -317,7 +317,7 @@ async function main() {
         dictValue: '1',
         dictType: 'sys_notice_status',
         listClass: 'Error',
-        dictSort: 17,
+        dictSort: 2,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -327,7 +327,7 @@ async function main() {
         dictLabel: '其他',
         dictValue: '0',
         dictType: 'sys_oper_type',
-        dictSort: 18,
+        dictSort: 1,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -337,7 +337,7 @@ async function main() {
         dictLabel: '新增',
         dictValue: '1',
         dictType: 'sys_oper_type',
-        dictSort: 19,
+        dictSort: 2,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -347,7 +347,7 @@ async function main() {
         dictLabel: '修改',
         dictValue: '2',
         dictType: 'sys_oper_type',
-        dictSort: 20,
+        dictSort: 3,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -357,7 +357,7 @@ async function main() {
         dictLabel: '删除',
         dictValue: '3',
         dictType: 'sys_oper_type',
-        dictSort: 21,
+        dictSort: 4,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -367,7 +367,7 @@ async function main() {
         dictLabel: '授权',
         dictValue: '4',
         dictType: 'sys_oper_type',
-        dictSort: 22,
+        dictSort: 5,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -377,7 +377,7 @@ async function main() {
         dictLabel: '导出',
         dictValue: '5',
         dictType: 'sys_oper_type',
-        dictSort: 23,
+        dictSort: 6,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -387,7 +387,7 @@ async function main() {
         dictLabel: '导入',
         dictValue: '6',
         dictType: 'sys_oper_type',
-        dictSort: 24,
+        dictSort: 7,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -397,7 +397,7 @@ async function main() {
         dictLabel: '强退',
         dictValue: '7',
         dictType: 'sys_oper_type',
-        dictSort: 25,
+        dictSort: 8,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -407,7 +407,7 @@ async function main() {
         dictLabel: '生成代码',
         dictValue: '8',
         dictType: 'sys_oper_type',
-        dictSort: 26,
+        dictSort: 9,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -417,7 +417,7 @@ async function main() {
         dictLabel: '清空数据',
         dictValue: '9',
         dictType: 'sys_oper_type',
-        dictSort: 27,
+        dictSort: 10,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -428,7 +428,7 @@ async function main() {
         dictValue: '0',
         dictType: 'sys_common_status',
         listClass: 'Success',
-        dictSort: 28,
+        dictSort: 1,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -439,7 +439,7 @@ async function main() {
         dictValue: '1',
         dictType: 'sys_common_status',
         listClass: 'Error',
-        dictSort: 29,
+        dictSort: 2,
         status: '0',
         isDefault: 'N',
         createBy: 'admin',
@@ -712,31 +712,11 @@ async function main() {
     },
   });
 
-  const toolMenu = await prisma.sysMenu.upsert({
+  const userMenu = await prisma.sysMenu.upsert({
     where: { menuId: 4 },
     update: {},
     create: {
       menuId: 4,
-      menuName: '系统工具',
-      parentId: null,
-      orderNum: 4,
-      path: 'tool',
-      component: 'Layout',
-      menuType: 'M',
-      visible: '0',
-      status: '0',
-      icon: 'ToolOutlined',
-      perms: null,
-      createBy: 'admin',
-      createTime: new Date(),
-    },
-  });
-
-  const userMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 5 },
-    update: {},
-    create: {
-      menuId: 5,
       menuName: '用户管理',
       parentId: sysMenu.menuId,
       orderNum: 1,
@@ -753,10 +733,10 @@ async function main() {
   });
 
   const roleMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 6 },
+    where: { menuId: 5 },
     update: {},
     create: {
-      menuId: 6,
+      menuId: 5,
       menuName: '角色管理',
       parentId: sysMenu.menuId,
       orderNum: 2,
@@ -773,10 +753,10 @@ async function main() {
   });
 
   const roleUserMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 7 },
+    where: { menuId: 6 },
     update: {},
     create: {
-      menuId: 7,
+      menuId: 6,
       menuName: '授权用户',
       parentId: sysMenu.menuId,
       orderNum: 2,
@@ -793,10 +773,10 @@ async function main() {
   });
 
   const navMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 8 },
+    where: { menuId: 7 },
     update: {},
     create: {
-      menuId: 8,
+      menuId: 7,
       menuName: '菜单管理',
       parentId: sysMenu.menuId,
       orderNum: 3,
@@ -813,10 +793,10 @@ async function main() {
   });
 
   const deptMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 9 },
+    where: { menuId: 8 },
     update: {},
     create: {
-      menuId: 9,
+      menuId: 8,
       menuName: '部门管理',
       parentId: sysMenu.menuId,
       orderNum: 4,
@@ -833,10 +813,10 @@ async function main() {
   });
 
   const postMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 10 },
+    where: { menuId: 9 },
     update: {},
     create: {
-      menuId: 10,
+      menuId: 9,
       menuName: '岗位管理',
       parentId: sysMenu.menuId,
       orderNum: 5,
@@ -853,10 +833,10 @@ async function main() {
   });
 
   const dictMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 11 },
+    where: { menuId: 10 },
     update: {},
     create: {
-      menuId: 11,
+      menuId: 10,
       menuName: '字典管理',
       parentId: sysMenu.menuId,
       orderNum: 6,
@@ -873,10 +853,10 @@ async function main() {
   });
 
   const dictDataMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 12 },
+    where: { menuId: 11 },
     update: {},
     create: {
-      menuId: 12,
+      menuId: 11,
       menuName: '字典数据',
       parentId: sysMenu.menuId,
       orderNum: 7,
@@ -893,10 +873,10 @@ async function main() {
   });
 
   const configMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 13 },
+    where: { menuId: 12 },
     update: {},
     create: {
-      menuId: 13,
+      menuId: 12,
       menuName: '参数设置',
       parentId: sysMenu.menuId,
       orderNum: 8,
@@ -913,10 +893,10 @@ async function main() {
   });
 
   const noticeMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 14 },
+    where: { menuId: 13 },
     update: {},
     create: {
-      menuId: 14,
+      menuId: 13,
       menuName: '通知公告',
       parentId: sysMenu.menuId,
       orderNum: 9,
@@ -933,10 +913,10 @@ async function main() {
   });
 
   const logMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 15 },
+    where: { menuId: 14 },
     update: {},
     create: {
-      menuId: 15,
+      menuId: 14,
       menuName: '日志管理',
       parentId: sysMenu.menuId,
       orderNum: 10,
@@ -953,10 +933,10 @@ async function main() {
   });
 
   const operlogMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 16 },
+    where: { menuId: 15 },
     update: {},
     create: {
-      menuId: 16,
+      menuId: 15,
       menuName: '操作日志',
       parentId: logMenu.menuId,
       orderNum: 1,
@@ -973,10 +953,10 @@ async function main() {
   });
 
   const logininforMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 17 },
+    where: { menuId: 16 },
     update: {},
     create: {
-      menuId: 17,
+      menuId: 16,
       menuName: '登录日志',
       parentId: logMenu.menuId,
       orderNum: 2,
@@ -993,10 +973,10 @@ async function main() {
   });
 
   const onlineMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 18 },
+    where: { menuId: 17 },
     update: {},
     create: {
-      menuId: 18,
+      menuId: 17,
       menuName: '在线用户',
       parentId: moirMenu.menuId,
       orderNum: 1,
@@ -1013,10 +993,10 @@ async function main() {
   });
 
   const jobMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 19 },
+    where: { menuId: 18 },
     update: {},
     create: {
-      menuId: 19,
+      menuId: 18,
       menuName: '定时任务',
       parentId: moirMenu.menuId,
       orderNum: 2,
@@ -1033,10 +1013,10 @@ async function main() {
   });
 
   const jobLogMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 20 },
+    where: { menuId: 19 },
     update: {},
     create: {
-      menuId: 20,
+      menuId: 19,
       menuName: '调度日志',
       parentId: moirMenu.menuId,
       orderNum: 3,
@@ -1053,10 +1033,10 @@ async function main() {
   });
 
   const serverMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 21 },
+    where: { menuId: 20 },
     update: {},
     create: {
-      menuId: 21,
+      menuId: 20,
       menuName: '服务监控',
       parentId: moirMenu.menuId,
       orderNum: 4,
@@ -1073,10 +1053,10 @@ async function main() {
   });
 
   const cacheMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 22 },
+    where: { menuId: 21 },
     update: {},
     create: {
-      menuId: 22,
+      menuId: 21,
       menuName: '缓存监控',
       parentId: moirMenu.menuId,
       orderNum: 5,
@@ -1093,10 +1073,10 @@ async function main() {
   });
 
   const cacheListMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 23 },
+    where: { menuId: 22 },
     update: {},
     create: {
-      menuId: 23,
+      menuId: 22,
       menuName: '缓存列表',
       parentId: moirMenu.menuId,
       orderNum: 6,
@@ -1107,26 +1087,6 @@ async function main() {
       status: '0',
       icon: '',
       perms: 'monitor:cacheList:list',
-      createBy: 'admin',
-      createTime: new Date(),
-    },
-  });
-
-  const genMenu = await prisma.sysMenu.upsert({
-    where: { menuId: 24 },
-    update: {},
-    create: {
-      menuId: 24,
-      menuName: '代码生成',
-      parentId: toolMenu.menuId,
-      orderNum: 1,
-      path: 'gen',
-      component: '/Tool/gen/index',
-      menuType: 'C',
-      visible: '0',
-      status: '0',
-      icon: '',
-      perms: 'tool:gen:list',
       createBy: 'admin',
       createTime: new Date(),
     },
@@ -1958,81 +1918,6 @@ async function main() {
         createBy: 'admin',
         createTime: new Date(),
         remark: '任务导出',
-      },
-      {
-        menuName: '生成查询',
-        parentId: genMenu.menuId,
-        orderNum: 1,
-        path: null,
-        component: null,
-        menuType: 'F',
-        visible: '0',
-        status: '0',
-        icon: '',
-        perms: 'tool:gen:query',
-        createBy: 'admin',
-        createTime: new Date(),
-        remark: '生成查询',
-      },
-      {
-        menuName: '生成修改',
-        parentId: genMenu.menuId,
-        orderNum: 2,
-        path: null,
-        component: null,
-        menuType: 'F',
-        visible: '0',
-        status: '0',
-        icon: '',
-        perms: 'tool:gen:edit',
-        createBy: 'admin',
-        createTime: new Date(),
-        remark: '生成修改',
-      },
-      {
-        menuName: '生成删除',
-        parentId: genMenu.menuId,
-        orderNum: 3,
-        path: null,
-        component: null,
-        menuType: 'F',
-        visible: '0',
-        status: '0',
-        icon: '',
-        perms: 'tool:gen:remove',
-        createBy: 'admin',
-        createTime: new Date(),
-        remark: '生成删除',
-      },
-      {
-        menuName: '导入代码',
-        parentId: genMenu.menuId,
-        orderNum: 4,
-        path: null,
-        component: null,
-        menuType: 'F',
-        visible: '0',
-        status: '0',
-        icon: '',
-        perms: 'tool:gen:import',
-        createBy: 'admin',
-        createTime: new Date(),
-        remark: '导入代码',
-      },
-      {
-        menuName: '预览代码',
-        parentId: genMenu.menuId,
-        orderNum: 5,
-        path: null,
-        component: null,
-        menuType: 'F',
-        visible: '0',
-        status: '0',
-        icon: '',
-        perms: 'tool:gen:preview',
-        createBy: 'admin',
-        createTime: new Date(),
-        remark: '预览代码',
       },
     ],
   });

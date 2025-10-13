@@ -167,7 +167,7 @@ export const Component: React.FC<unknown> = () => {
               });
             }}
           >
-            清空
+            清空日志
           </Button>,
           <Dropdown
             menu={{

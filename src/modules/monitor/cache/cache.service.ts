@@ -29,19 +29,19 @@ export class CacheService {
     return { cacheValue, cacheName, cacheKey };
   }
 
-  async clearCacheName(cacheName: string) {
+  async deleteCacheName(cacheName: string) {
     const keys = await this.getKeys(cacheName);
     await this.redis.del(keys);
   }
 
-  async clearCacheKey(key: string) {
+  async deleteCacheKey(key: string) {
     await this.redis.del(key);
   }
 
   async clearCacheAll() {
     const cacheList = await this.getNames();
     const prismaArr = cacheList.map((item) => {
-      return this.clearCacheName(item.cacheName);
+      return this.deleteCacheName(item.cacheName);
     });
     return await Promise.all(prismaArr);
   }
@@ -53,16 +53,6 @@ export class CacheService {
     const dbSize = (await this.redis.keys('*')).length;
     return {
       dbSize,
-      commandStats: [
-        {
-          name: '缓存命中成功',
-          value: redisIfo.keyspace_hits,
-        },
-        {
-          name: '缓存命中失败',
-          value: redisIfo.keyspace_misses,
-        },
-      ],
       info: redisIfo,
     };
   }

@@ -131,3 +131,46 @@ export const queryCacheInfo = () => {
     method: 'GET',
   });
 };
+
+// 查询缓存列表
+export const queryCacheList = (params) => {
+  return request('/api/monitor/cache/getNames', {
+    method: 'GET',
+    params,
+  });
+};
+
+// 查询缓存键名列表
+export const queryCacheKeyList = (cacheName) => {
+  return request('/api/monitor/cache/getKeys/' + cacheName, {
+    method: 'GET',
+  });
+};
+
+// 查询缓存键值
+export const queryCacheValue = (cacheName, cacheKey) => {
+  return request('/api/monitor/cache/getValue/' + cacheName + '/' + cacheKey, {
+    method: 'GET',
+  });
+};
+
+// 删除缓存名称
+export const deleteCacheName = (cacheName) => {
+  return request('/api/monitor/cache/deleteCacheName/' + cacheName, {
+    method: 'DELETE',
+  });
+};
+
+// 删除缓存键名
+export const deleteCacheKey = (cacheKey) => {
+  return request('/api/monitor/cache/deleteCacheKey/' + cacheKey, {
+    method: 'DELETE',
+  });
+};
+
+// 清空缓存
+export const cleanCache = () => {
+  return request('/api/monitor/cache/clearCacheAll', {
+    method: 'DELETE',
+  });
+};

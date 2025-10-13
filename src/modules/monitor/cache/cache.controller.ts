@@ -37,14 +37,14 @@ export class CacheController {
     return DataObj.create(data);
   }
 
-  @Delete('clearCacheName/:cacheName')
-  async clearCacheName(@Param('cacheName') cacheName: string) {
-    return this.cacheService.clearCacheName(cacheName);
+  @Delete('deleteCacheName/:cacheName')
+  async deleteCacheName(@Param('cacheName') cacheName: string) {
+    return this.cacheService.deleteCacheName(cacheName);
   }
 
-  @Delete('clearCacheKey/:key')
-  async clearCacheKey(@Param('key') key: string) {
-    return this.cacheService.clearCacheKey(key);
+  @Delete('deleteCacheKey/:key')
+  async deleteCacheKey(@Param('key') key: string) {
+    return this.cacheService.deleteCacheKey(key);
   }
 
   @Delete('clearCacheAll')

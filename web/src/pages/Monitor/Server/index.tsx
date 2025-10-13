@@ -87,6 +87,36 @@ export const Component = () => {
         headerBordered
       >
         <ProCard split={responsive.lg ? 'vertical' : 'horizontal'}>
+          <ProCard title="服务器信息">
+            <Row gutter={[12, 24]} wrap>
+              <Col span={24}>
+                <Statistic.Timer
+                  type="countup"
+                  value={new Date().getTime() - info?.node?.uptime * 1000}
+                  title="已运行时长"
+                  format="D 天 HH 时 mm 分 ss 秒"
+                />
+              </Col>
+              <Col span={12}>
+                <Statistic
+                  title="服务器IP"
+                  value={`${info?.sys?.computerIp}`}
+                />
+              </Col>
+              <Col span={12}>
+                <Statistic title="操作系统" value={`${info?.sys?.osName}`} />
+              </Col>
+              <Col span={12}>
+                <Statistic title="服务平台" value={`${info?.node?.title}`} />
+              </Col>
+              <Col span={12}>
+                <Statistic
+                  title="服务平台版本"
+                  value={`${info?.node?.version}`}
+                />
+              </Col>
+            </Row>
+          </ProCard>
           <ProCard title="资源消耗" split="horizontal">
             <StatisticCard
               statistic={{
@@ -145,36 +175,6 @@ export const Component = () => {
                 />
               }
             />
-          </ProCard>
-          <ProCard title="服务器信息">
-            <Row gutter={[12, 24]} wrap>
-              <Col span={24}>
-                <Statistic.Timer
-                  type="countup"
-                  value={new Date().getTime() - info?.node?.uptime * 1000}
-                  title="已运行时长"
-                  format="D 天 HH 时 mm 分 ss 秒"
-                />
-              </Col>
-              <Col span={12}>
-                <Statistic
-                  title="服务器IP"
-                  value={`${info?.sys?.computerIp}`}
-                />
-              </Col>
-              <Col span={12}>
-                <Statistic title="操作系统" value={`${info?.sys?.osName}`} />
-              </Col>
-              <Col span={12}>
-                <Statistic title="服务平台" value={`${info?.node?.title}`} />
-              </Col>
-              <Col span={12}>
-                <Statistic
-                  title="服务平台版本"
-                  value={`${info?.node?.version}`}
-                />
-              </Col>
-            </Row>
           </ProCard>
         </ProCard>
         <ProCard title="磁盘状态">
