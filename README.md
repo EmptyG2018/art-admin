@@ -166,6 +166,7 @@ cd web && npm run dev
 📝 测试账号：
 
 管理员账号：admin / admin123
+
 普通用户账号：guest / guest123
 
 > ⚠️ 温馨提示：
