@@ -21,6 +21,9 @@ const KeyspacePie: React.FC<KeyspacePieProps> = ({ data }) => {
       tooltip: {
         trigger: 'item',
       },
+      label: {
+        formatter: '{b} ({d}%)',
+      },
       series: [
         {
           type: 'pie',
