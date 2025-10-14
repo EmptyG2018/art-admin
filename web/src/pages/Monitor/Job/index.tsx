@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import {
   App,
   Button,
-  Divider,
   Space,
   message,
   Dropdown,
@@ -129,11 +128,7 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'option',
       fixed: 'right',
       render: (_, record) => (
-        <Space
-          direction="horizontal"
-          split={<Divider type="vertical" />}
-          size={2}
-        >
+        <Space direction="horizontal" size={16}>
           <Tooltip title="执行一次">
             <Popconfirm
               title="提示"
