@@ -1,4 +1,4 @@
-import { Button, Divider, Space, message, Tooltip, Popconfirm } from 'antd';
+import { Button, Space, message, Tooltip, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   ActionType,
@@ -13,6 +13,7 @@ import {
 import React, { useRef } from 'react';
 import { queryDeptList, deleteDept } from '@/services/dept';
 import { queryDictsByType } from '@/services/dict';
+import { PermissionGuard } from '@/components/Layout';
 import CreateDeptForm from './components/CreateDeptForm';
 import UpdateDeptForm from './components/UpdateDeptForm';
 import { arrayToTree } from '@/utils/data';
@@ -95,47 +96,49 @@ export const Component: React.FC<unknown> = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => (
-        <Space
-          direction="horizontal"
-          split={<Divider type="vertical" />}
-          size={2}
-        >
-          <UpdateDeptForm
-            values={record}
-            formRender={formRender('edit')}
-            trigger={
-              <Tooltip title="修改">
-                <Button type="link" size="small" icon={<EditOutlined />} />
-              </Tooltip>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />
-          <CreateDeptForm
-            values={{ parentId: record.deptId }}
-            formRender={formRender('add')}
-            trigger={
-              <Tooltip title="新增子部门">
-                <Button type="link" size="small" icon={<PlusOutlined />} />
-              </Tooltip>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />
-          <Tooltip title="删除">
-            <Popconfirm
-              title="删除记录"
-              description="您确定要删除此记录吗？"
-              onConfirm={async () => {
-                await handleRemove(record);
-                actionRef.current?.reloadAndRest?.();
+        <Space direction="horizontal" size={16}>
+          <PermissionGuard requireds={['system:dept:edit']}>
+            <UpdateDeptForm
+              values={record}
+              formRender={formRender('edit')}
+              trigger={
+                <Tooltip title="修改">
+                  <Button type="link" size="small" icon={<EditOutlined />} />
+                </Tooltip>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
               }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
+            />
+          </PermissionGuard>
+          <PermissionGuard requireds={['system:dept:add']}>
+            <CreateDeptForm
+              values={{ parentId: record.deptId }}
+              formRender={formRender('add')}
+              trigger={
+                <Tooltip title="新增子部门">
+                  <Button type="link" size="small" icon={<PlusOutlined />} />
+                </Tooltip>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
+          </PermissionGuard>
+          <PermissionGuard requireds={['system:dept:remove']}>
+            <Tooltip title="删除">
+              <Popconfirm
+                title="删除记录"
+                description="您确定要删除此记录吗？"
+                onConfirm={async () => {
+                  await handleRemove(record);
+                  actionRef.current?.reloadAndRest?.();
+                }}
+              >
+                <Button type="link" size="small" icon={<DeleteOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+          </PermissionGuard>
         </Space>
       ),
     },
@@ -224,17 +227,19 @@ export const Component: React.FC<unknown> = () => {
         actionRef={actionRef}
         rowKey="deptId"
         toolBarRender={() => [
-          <CreateDeptForm
-            formRender={formRender('add')}
-            trigger={
-              <Button type="primary" icon={<PlusOutlined />} key="add">
-                新建
-              </Button>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />,
+          <PermissionGuard requireds={['system:dept:add']}>
+            <CreateDeptForm
+              formRender={formRender('add')}
+              trigger={
+                <Button type="primary" icon={<PlusOutlined />} key="add">
+                  新建
+                </Button>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
+          </PermissionGuard>,
         ]}
         request={async (params, sorter, filter) => {
           const { data } = await queryDeptList({

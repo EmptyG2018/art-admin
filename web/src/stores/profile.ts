@@ -5,6 +5,8 @@ import { loginForAccount, getUserInfo } from '@/services/auth';
 type Store = {
   token: any;
   profile: any;
+  roles: string[];
+  permissions: string[];
   fetchProfile: () => void;
   loginAccount: (params: any) => void;
   logoutAccount: () => void;
@@ -15,12 +17,14 @@ const useProfileStore = create<Store>()(
     (set) => ({
       token: null,
       profile: null,
+      roles: [],
+      permissions: [],
 
       fetchProfile: async () => {
-        const { code, msg, ...profile } = await getUserInfo();
-        set((state) => ({ ...state, profile }));
+        const { code, msg, user, ...rest } = await getUserInfo();
+        set((state) => ({ ...state, profile: user, ...rest }));
 
-        return { code, msg, ...profile };
+        return { code, msg, user, ...rest };
       },
 
       // 登录账号

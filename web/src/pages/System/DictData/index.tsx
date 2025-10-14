@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Button,
-  Divider,
   Space,
   Tooltip,
   message,
@@ -130,11 +129,7 @@ const TableList: React.FC<TableListProps> = (props) => {
       valueType: 'option',
       fixed: 'right',
       render: (_, record) => (
-        <Space
-          direction="horizontal"
-          split={<Divider type="vertical" />}
-          size={2}
-        >
+        <Space direction="horizontal" size={16}>
           <UpdateDictDataForm
             values={record}
             formRender={formRender}

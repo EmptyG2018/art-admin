@@ -1,13 +1,5 @@
 import React, { useRef, useState } from 'react';
-import {
-  Button,
-  Divider,
-  Space,
-  message,
-  Dropdown,
-  Tooltip,
-  Modal,
-} from 'antd';
+import { Button, Space, message, Dropdown, Tooltip, Modal } from 'antd';
 import {
   ExportOutlined,
   EllipsisOutlined,
@@ -119,11 +111,7 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'option',
       fixed: 'right',
       render: (_, record) => (
-        <Space
-          direction="horizontal"
-          split={<Divider type="vertical" />}
-          size={2}
-        >
+        <Space direction="horizontal" size={16}>
           <ViewOperlog
             values={record}
             trigger={

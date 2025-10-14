@@ -83,7 +83,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
           avatarProps={{
             src: <Avatar icon={<UserOutlined />} />,
             size: 'small',
-            title: profile.user.nickName,
+            title: profile?.nickName,
             render: (props, dom) => {
               return (
                 <Dropdown
@@ -153,7 +153,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
             );
           }}
           waterMarkProps={{
-            content: `${profile.user.nickName}`,
+            content: `${profile?.nickName}`,
             fontSize: 20,
             gapX: 100,
             gapY: 100,

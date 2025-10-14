@@ -2,7 +2,6 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Button,
-  Divider,
   Space,
   message,
   Dropdown,
@@ -37,6 +36,7 @@ import {
   useToken,
 } from '@ant-design/pro-components';
 import { queryRolePage } from '@/services/role';
+import { PermissionGuard } from '@/components/Layout';
 import CreateRoleForm from './components/CreateRoleForm';
 import UpdateRoleForm from './components/UpdateRoleForm';
 import UpdateRoleDeptForm from './components/UpdateRoleDeptForm';
@@ -234,56 +234,60 @@ export const Component: React.FC<unknown> = () => {
       render: (_, record) => {
         if (record.roleKey === 'admin') return;
         return (
-          <Space
-            direction="horizontal"
-            split={<Divider type="vertical" />}
-            size={2}
-          >
-            <UpdateRoleForm
-              values={record}
-              formRender={formRender}
-              trigger={
-                <Tooltip title="修改">
-                  <Button type="link" size="small" icon={<EditOutlined />} />
-                </Tooltip>
-              }
-              onFinish={() => {
-                actionRef.current?.reload();
-              }}
-            />
-            <Tooltip title="删除">
-              <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
-                onConfirm={async () => {
-                  await handleRemove([record]);
-                  actionRef.current?.reloadAndRest?.();
+          <Space direction="horizontal" size={16}>
+            <PermissionGuard requireds={['system:role:edit']}>
+              <UpdateRoleForm
+                values={record}
+                formRender={formRender}
+                trigger={
+                  <Tooltip title="修改">
+                    <Button type="link" size="small" icon={<EditOutlined />} />
+                  </Tooltip>
+                }
+                onFinish={() => {
+                  actionRef.current?.reload();
                 }}
-              >
-                <Button type="link" size="small" icon={<DeleteOutlined />} />
-              </Popconfirm>
-            </Tooltip>
-            <UpdateRoleDeptForm
-              values={record}
-              formRender={formRoleDeptRender}
-              trigger={
-                <Tooltip title="数据授权">
-                  <Button
-                    type="link"
-                    size="small"
-                    icon={<FileDoneOutlined />}
-                  />
-                </Tooltip>
-              }
-              onFinish={() => {
-                actionRef.current?.reload();
-              }}
-            />
-            <Tooltip title="授权用户">
-              <Link to={`../role/${record.roleId}`}>
-                <Button type="link" size="small" icon={<UserOutlined />} />
-              </Link>
-            </Tooltip>
+              />
+            </PermissionGuard>
+            <PermissionGuard requireds={['system:role:remove']}>
+              <Tooltip title="删除">
+                <Popconfirm
+                  title="删除记录"
+                  description="您确定要删除此记录吗？"
+                  onConfirm={async () => {
+                    await handleRemove([record]);
+                    actionRef.current?.reloadAndRest?.();
+                  }}
+                >
+                  <Button type="link" size="small" icon={<DeleteOutlined />} />
+                </Popconfirm>
+              </Tooltip>
+            </PermissionGuard>
+            <PermissionGuard requireds={['system:role:edit']}>
+              <UpdateRoleDeptForm
+                values={record}
+                formRender={formRoleDeptRender}
+                trigger={
+                  <Tooltip title="数据授权">
+                    <Button
+                      type="link"
+                      size="small"
+                      icon={<FileDoneOutlined />}
+                    />
+                  </Tooltip>
+                }
+                onFinish={() => {
+                  actionRef.current?.reload();
+                }}
+              />
+            </PermissionGuard>
+            <PermissionGuard requireds={['system:role:edit']}>
+              <Tooltip title="授权用户">
+                <Link to={`../role/${record.roleId}`}>
+                  <Button type="link" size="small" icon={<UserOutlined />} />
+                </Link>
+              </Tooltip>
+            </PermissionGuard>
           </Space>
         );
       },
@@ -412,17 +416,19 @@ export const Component: React.FC<unknown> = () => {
         actionRef={actionRef}
         rowKey="roleId"
         toolBarRender={() => [
-          <CreateRoleForm
-            formRender={formRender}
-            trigger={
-              <Button type="primary" icon={<PlusOutlined />} key="add">
-                新增
-              </Button>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />,
+          <PermissionGuard requireds={['system:role:add']} key="add">
+            <CreateRoleForm
+              formRender={formRender}
+              trigger={
+                <Button type="primary" icon={<PlusOutlined />}>
+                  新增
+                </Button>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
+          </PermissionGuard>,
           <Dropdown
             key="menu"
             menu={{

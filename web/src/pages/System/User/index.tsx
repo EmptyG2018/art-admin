@@ -1,6 +1,5 @@
 import {
   Button,
-  Divider,
   Space,
   Tree,
   Empty,
@@ -42,6 +41,7 @@ import { queryDeptTree } from '@/services/dept';
 import { queryAllPost } from '@/services/post';
 import { queryAllRole } from '@/services/role';
 import { queryDictsByType } from '@/services/dict';
+import { PermissionGuard } from '@/components/Layout';
 import CreateUserForm from './components/CreateUserForm';
 import UpdateUserForm from './components/UpdateUserForm';
 
@@ -165,74 +165,79 @@ export const Component: React.FC<unknown> = () => {
       render: (_, record) => {
         if (record.userName === 'admin') return;
         return (
-          <Space
-            direction="horizontal"
-            split={<Divider type="vertical" />}
-            size={2}
-          >
-            <UpdateUserForm
-              formRender={formRender('edit')}
-              values={record}
-              trigger={
-                <Tooltip title="修改">
-                  <Button type="link" size="small" icon={<EditOutlined />} />
-                </Tooltip>
-              }
-              onFinish={() => {
-                actionRef.current?.reload();
-              }}
-            />
-            <Tooltip title="删除">
-              <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
-                onConfirm={async () => {
-                  await handleRemove([record]);
-                  actionRef.current?.reloadAndRest?.();
+          <Space direction="horizontal" size={16}>
+            <PermissionGuard requireds={['system:user:edit']}>
+              <UpdateUserForm
+                formRender={formRender('edit')}
+                values={record}
+                trigger={
+                  <Tooltip title="修改">
+                    <Button type="link" size="small" icon={<EditOutlined />} />
+                  </Tooltip>
+                }
+                onFinish={() => {
+                  actionRef.current?.reload();
+                }}
+              />
+            </PermissionGuard>
+            <PermissionGuard requireds={['system:user:remove']}>
+              <Tooltip title="删除">
+                <Popconfirm
+                  title="删除记录"
+                  description="您确定要删除此记录吗？"
+                  onConfirm={async () => {
+                    await handleRemove([record]);
+                    actionRef.current?.reloadAndRest?.();
+                  }}
+                >
+                  <Button type="link" size="small" icon={<DeleteOutlined />} />
+                </Popconfirm>
+              </Tooltip>
+            </PermissionGuard>
+            <PermissionGuard requireds={['system:user:resetPwd']}>
+              <ModalForm
+                title="重置密码"
+                width={400}
+                trigger={
+                  <Tooltip title="重置密码">
+                    <Button type="link" size="small" icon={<KeyOutlined />} />
+                  </Tooltip>
+                }
+                modalProps={{
+                  destroyOnHidden: true,
+                }}
+                onFinish={async (formValues) => {
+                  const hide = message.loading('正在重置');
+                  try {
+                    await resetUserPwd({
+                      ...formValues,
+                      userId: record.userId,
+                    });
+                    hide();
+                    message.success('重置成功');
+                    return true;
+                  } catch {
+                    hide();
+                    message.error('重置失败请重试！');
+                    return false;
+                  }
                 }}
               >
-                <Button type="link" size="small" icon={<DeleteOutlined />} />
-              </Popconfirm>
-            </Tooltip>
-            <ModalForm
-              title="重置密码"
-              width={400}
-              trigger={
-                <Tooltip title="重置密码">
-                  <Button type="link" size="small" icon={<KeyOutlined />} />
-                </Tooltip>
-              }
-              modalProps={{
-                destroyOnHidden: true,
-              }}
-              onFinish={async (formValues) => {
-                const hide = message.loading('正在重置');
-                try {
-                  await resetUserPwd({ ...formValues, userId: record.userId });
-                  hide();
-                  message.success('重置成功');
-                  return true;
-                } catch {
-                  hide();
-                  message.error('重置失败请重试！');
-                  return false;
-                }
-              }}
-            >
-              <ProFormText.Password
-                name="password"
-                label="新密码"
-                placeholder="请输入新密码"
-                rules={[
-                  { required: true, message: '请输入密码' },
-                  {
-                    pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/,
-                    message: '密码至少包含字母和数字，且长度在6-20位之间',
-                  },
-                ]}
-                colProps={{ span: 24 }}
-              />
-            </ModalForm>
+                <ProFormText.Password
+                  name="password"
+                  label="新密码"
+                  placeholder="请输入新密码"
+                  rules={[
+                    { required: true, message: '请输入密码' },
+                    {
+                      pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/,
+                      message: '密码至少包含字母和数字，且长度在6-20位之间',
+                    },
+                  ]}
+                  colProps={{ span: 24 }}
+                />
+              </ModalForm>
+            </PermissionGuard>
           </Space>
         );
       },
@@ -388,17 +393,19 @@ export const Component: React.FC<unknown> = () => {
             actionRef={actionRef}
             rowKey="userId"
             toolBarRender={() => [
-              <CreateUserForm
-                formRender={formRender('add')}
-                trigger={
-                  <Button type="primary" icon={<PlusOutlined />} key="add">
-                    新增
-                  </Button>
-                }
-                onFinish={() => {
-                  actionRef.current?.reload();
-                }}
-              />,
+              <PermissionGuard requireds={['system:user:add']}>
+                <CreateUserForm
+                  formRender={formRender('add')}
+                  trigger={
+                    <Button type="primary" icon={<PlusOutlined />} key="add">
+                      新增
+                    </Button>
+                  }
+                  onFinish={() => {
+                    actionRef.current?.reload();
+                  }}
+                />
+              </PermissionGuard>,
               <Dropdown
                 menu={{
                   items: [

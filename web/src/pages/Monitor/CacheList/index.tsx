@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {
   Space,
-  Divider,
   Button,
   Row,
   Col,
@@ -78,11 +77,7 @@ const CacheKeyList: React.FC<CacheKeyListProps> = ({ cacheName }) => {
       fixed: 'right',
       render: (_, record) => {
         return (
-          <Space
-            direction="horizontal"
-            split={<Divider type="vertical" />}
-            size={2}
-          >
+          <Space direction="horizontal" size={16}>
             <Tooltip title="删除">
               <Popconfirm
                 title="删除记录"
@@ -225,11 +220,7 @@ const CacheList: React.FC<CacheListProps> = forwardRef(
         fixed: 'right',
         render: (_, record) => {
           return (
-            <Space
-              direction="horizontal"
-              split={<Divider type="vertical" />}
-              size={2}
-            >
+            <Space direction="horizontal" size={16}>
               <Tooltip title="删除">
                 <Popconfirm
                   title="删除记录"

@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Button,
-  Divider,
   Space,
   message,
   Dropdown,
@@ -34,6 +33,7 @@ import {
   queryDictsByType,
   deleteDictType,
 } from '@/services/dict';
+import { PermissionGuard } from '@/components/Layout';
 import CreateDictForm from './components/CreateDictForm';
 import UpdateDictForm from './components/UpdateDictForm';
 
@@ -111,40 +111,40 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'option',
       fixed: 'right',
       render: (_, record) => (
-        <Space
-          direction="horizontal"
-          split={<Divider type="vertical" />}
-          size={2}
-        >
+        <Space direction="horizontal" size={16}>
           <Tooltip title="字典数据">
             <Link to={`../dict/${record.dictId}`}>
               <Button type="link" size="small" icon={<HddOutlined />} />
             </Link>
           </Tooltip>
-          <UpdateDictForm
-            values={record}
-            formRender={formRender}
-            trigger={
-              <Tooltip title="修改">
-                <Button type="link" size="small" icon={<EditOutlined />} />
-              </Tooltip>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />
-          <Tooltip title="删除">
-            <Popconfirm
-              title="删除记录"
-              description="您确定要删除此记录吗？"
-              onConfirm={async () => {
-                await handleRemove([record]);
-                actionRef.current?.reloadAndRest?.();
+          <PermissionGuard requireds={['system:dict:edit']}>
+            <UpdateDictForm
+              values={record}
+              formRender={formRender}
+              trigger={
+                <Tooltip title="修改">
+                  <Button type="link" size="small" icon={<EditOutlined />} />
+                </Tooltip>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
               }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
+            />
+          </PermissionGuard>
+          <PermissionGuard requireds={['system:dict:remove']}>
+            <Tooltip title="删除">
+              <Popconfirm
+                title="删除记录"
+                description="您确定要删除此记录吗？"
+                onConfirm={async () => {
+                  await handleRemove([record]);
+                  actionRef.current?.reloadAndRest?.();
+                }}
+              >
+                <Button type="link" size="small" icon={<DeleteOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+          </PermissionGuard>
         </Space>
       ),
     },
@@ -199,17 +199,19 @@ export const Component: React.FC<unknown> = () => {
         actionRef={actionRef}
         rowKey="dictId"
         toolBarRender={() => [
-          <CreateDictForm
-            formRender={formRender}
-            trigger={
-              <Button type="primary" icon={<PlusOutlined />} key="add">
-                新建
-              </Button>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />,
+          <PermissionGuard requireds={['system:dict:add']}>
+            <CreateDictForm
+              formRender={formRender}
+              trigger={
+                <Button type="primary" icon={<PlusOutlined />} key="add">
+                  新建
+                </Button>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
+          </PermissionGuard>,
           <Button
             icon={<ReloadOutlined />}
             key="export"

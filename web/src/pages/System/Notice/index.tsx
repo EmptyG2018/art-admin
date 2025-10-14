@@ -1,14 +1,5 @@
 import React, { useRef, useState } from 'react';
-import {
-  Button,
-  Divider,
-  Space,
-  message,
-  Tooltip,
-  Popconfirm,
-  Modal,
-  Form,
-} from 'antd';
+import { Button, Space, message, Tooltip, Popconfirm, Modal, Form } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {
   ActionType,
@@ -109,11 +100,7 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'option',
       fixed: 'right',
       render: (_, record) => (
-        <Space
-          direction="horizontal"
-          split={<Divider type="vertical" />}
-          size={2}
-        >
+        <Space direction="horizontal" size={16}>
           <UpdateNoticeForm
             values={record}
             formRender={formRender}

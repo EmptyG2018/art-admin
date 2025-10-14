@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Button, Divider, Space, message, Tooltip, Popconfirm } from 'antd';
+import { Button, Space, message, Tooltip, Popconfirm } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import {
   ActionType,
@@ -90,11 +90,7 @@ export const Component: React.FC<unknown> = () => {
       valueType: 'option',
       fixed: 'right',
       render: (_, record) => (
-        <Space
-          direction="horizontal"
-          split={<Divider type="vertical" />}
-          size={2}
-        >
+        <Space direction="horizontal" size={16}>
           <Tooltip title="踢出">
             <Popconfirm
               title="提示"
