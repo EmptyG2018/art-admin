@@ -1,10 +1,11 @@
-import { SelectLang, ToggleFullscreenBtn, Footer } from '@/components/Layout';
+import { SelectLang, ToggleFullscreenBtn } from '@/components/Layout';
 import { queryCaptchaImage } from '@/services/auth';
 import {
   LockOutlined,
   MobileOutlined,
   SafetyOutlined,
   UserOutlined,
+  GithubOutlined,
 } from '@ant-design/icons';
 import {
   LoginForm,
@@ -21,7 +22,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProfileStore } from '@/stores';
 
-const useStyles = createStyles(({ token }) => {
+const useStyles = createStyles(({ token, css }) => {
   return {
     action: {
       marginLeft: '8px',
@@ -54,6 +55,18 @@ const useStyles = createStyles(({ token }) => {
       padding: token.paddingSM,
       gap: 4,
     },
+    footer: css`
+      padding-block-start: ${token.paddingXL}px;
+      padding-block-end: ${token.paddingLG}px;
+      padding-inline: ${token.padding}px;
+      text-align: center;
+
+      p {
+        color: ${token.colorTextTertiary};
+        font-size: ${token.fontSize}px;
+        margin-bottom: 0;
+      }
+    `,
   };
 });
 
@@ -392,9 +405,19 @@ export const Component: React.FC = () => {
           </div>
         </LoginForm>
       </div>
-      <Footer />
+      <div className={styles.footer}>
+        <p>© 2025 Made with love</p>
+        <p>
+          Powered by{' '}
+          <a
+            href="https://github.com/EmptyG2018/art-admin"
+            target="_blank"
+            style={{ color: 'inherit' }}
+          >
+            <GithubOutlined />
+          </a>
+        </p>
+      </div>
     </div>
   );
 };
-
-Component.displayName = 'LoginPage';

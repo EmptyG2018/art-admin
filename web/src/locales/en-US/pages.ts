@@ -1,7 +1,7 @@
 export default {
   'pages.loading': 'Loading',
   'pages.layouts.userLayout.title':
-    'Ant Design is the most influential web design specification in Xihu district',
+    'ART Admin is a ready-to-use backend management solution',
   'pages.login.accountLogin.tab': 'Account Login',
   'pages.login.accountLogin.errorMessage': 'Incorrect username/password',
   'pages.login.failure': 'Login failed, please try again!',

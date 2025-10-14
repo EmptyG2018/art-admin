@@ -9,7 +9,6 @@ import Logo from './Logo';
 import SelectLang from './SelectLang';
 import ToggleFullscreenBtn from './ToggleFullscreenBtn';
 import PermissionGuard from './PermissionGuard';
-import Footer from './Footer';
 import Loading from './Loading';
 import NoFound from './NoFound';
 
@@ -18,7 +17,6 @@ export {
   SelectLang,
   ToggleFullscreenBtn,
   PermissionGuard,
-  Footer,
   Loading,
   NoFound,
 };
