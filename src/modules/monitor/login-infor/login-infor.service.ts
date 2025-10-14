@@ -1,7 +1,7 @@
 /*
- * @Author: hu.chao 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-04-27 21:55:32
- * @LastEditors: YunZe 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-05-13 14:56:12
  * @FilePath: \art-admin\src\modules\monitor\login-infor\login-infor.service.ts
  * @Description:

@@ -1,7 +1,7 @@
 /*
- * @Author: YunZe 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-04-28 10:31:51
- * @LastEditors: YunZe 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-04-28 10:54:10
  * @FilePath: \art-admin\src\common\pipes\createmessage.pipe.ts
  * @Description: 参数中增加创建信息管道

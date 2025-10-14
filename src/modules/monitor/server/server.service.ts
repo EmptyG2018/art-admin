@@ -1,7 +1,7 @@
 /*
- * @Author: hu.chao 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-05-17 19:47:46
- * @LastEditors: hu.chao 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-05-18 11:19:08
  * @FilePath: /art-admin/src/modules/monitor/server/server.service.ts
  * @Description: 系统信息

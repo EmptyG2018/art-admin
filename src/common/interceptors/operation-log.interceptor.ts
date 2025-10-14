@@ -1,7 +1,7 @@
 /*
- * @Author: hu.chao 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-04-23 18:59:25
- * @LastEditors: YunZe 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-07-11 20:09:22
  * @FilePath: \admin-prisma-vue3\art-admin\src\common\interceptors\operation-log.interceptor.ts
  * @Description: 接口访问日志拦截器

@@ -1,7 +1,7 @@
 /*
- * @Author: YunZe 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-04-22 08:52:21
- * @LastEditors: YunZe 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-04-30 14:44:17
  * @FilePath: \art-admin\src\app.module.ts
  * @Description:根模块

@@ -1,7 +1,7 @@
 /*
- * @Author: YunZe 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-05-20 18:34:10
- * @LastEditors: YunZe 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-06-27 10:40:44
  * @FilePath: \admin-prisma-vue3\art-admin\src\modules\common\upload\upload.module.ts
  * @Description:

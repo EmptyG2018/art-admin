@@ -1,7 +1,7 @@
 /*
- * @Author: hu.chao 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-04-23 19:15:56
- * @LastEditors: hu.chao 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-05-18 10:19:04
  * @FilePath: /art-admin/src/modules/auth/auth.service.ts
  * @Description: 用户身份校验

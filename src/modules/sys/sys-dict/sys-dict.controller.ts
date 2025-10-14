@@ -1,7 +1,7 @@
 /*
- * @Author: YunZe 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-04-30 15:17:47
- * @LastEditors: hu.chao 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-05-11 22:21:22
  * @FilePath: /art-admin/src/modules/sys/sys-dict/sys-dict.controller.ts
  * @Description:

@@ -1,7 +1,7 @@
 /*
- * @Author: YunZe 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-05-11 13:32:00
- * @LastEditors: hu.chao 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-05-18 10:27:01
  * @FilePath: /art-admin/src/modules/sys/sys-role/sys-role.service.ts
  * @Description:

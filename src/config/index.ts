@@ -1,7 +1,7 @@
 /*
- * @Author: hu.chao 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-04-22 19:22:42
- * @LastEditors: hu.chao 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-04-22 21:13:53
  * @FilePath: /art-admin/src/config/index.ts
  * @Description: 环境变量入口

@@ -1,7 +1,7 @@
 /*
- * @Author: YunZe 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-05-13 16:22:47
- * @LastEditors: YunZe 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-05-15 17:02:32
  * @FilePath: \art-admin\src\modules\sys\sys-user\dto\req-sys-user.dto.ts
  * @Description:

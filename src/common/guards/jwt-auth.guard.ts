@@ -1,7 +1,7 @@
 /*
- * @Author: YunZe 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-04-23 15:21:54
- * @LastEditors: hu.chao 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-05-18 10:16:13
  * @FilePath: /art-admin/src/common/guards/jwt-auth.guard.ts
  * @Description: jwt 校验守卫

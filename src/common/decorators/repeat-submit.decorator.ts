@@ -1,7 +1,7 @@
 /*
- * @Author: hu.chao 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-04-23 18:59:25
- * @LastEditors: hu.chao 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-04-27 18:02:57
  * @FilePath: /art-admin/src/common/decorators/repeat-submit.decorator.ts
  * @Description: 防重复提交装饰器

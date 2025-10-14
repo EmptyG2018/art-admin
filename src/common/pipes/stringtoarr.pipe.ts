@@ -1,7 +1,7 @@
 /*
- * @Author: YunZe 491623426@qq.com
+ * @Author: yun.ze 491623426@qq.com
  * @Date: 2024-05-10 16:02:38
- * @LastEditors: YunZe 491623426@qq.com
+ * @LastEditors: yun.ze 491623426@qq.com
  * @LastEditTime: 2024-05-10 16:57:05
  * @FilePath: \art-admin\src\common\pipes\stringtoarr.pipe.ts
  * @Description: 将 ‘,’ 拼接的字符串转化为数组
