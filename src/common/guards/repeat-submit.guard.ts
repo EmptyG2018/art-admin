@@ -2,7 +2,7 @@
  * @Author: Sheng.Jiang
  * @Date: 2022-01-29 11:06:07
  * @LastEditTime: 2024-04-23 15:31:57
- * @LastEditors: HuChao 491623426@qq.com
+ * @LastEditors: YunZe 491623426@qq.com
  * @Description: 防止重复提交守卫
  * @FilePath: \art-admin\src\common\guards\repeat-submit.guard.ts
  * You can you up，no can no bb！！

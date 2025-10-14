@@ -1,7 +1,7 @@
 /*
  * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-05-11 20:53:17
- * @LastEditors: HuChao 491623426@qq.com
+ * @LastEditors: YunZe 491623426@qq.com
  * @LastEditTime: 2024-05-15 17:22:44
  * @FilePath: \art-admin\src\modules\sys\sys-notice\sys-notice.controller.ts
  * @Description:

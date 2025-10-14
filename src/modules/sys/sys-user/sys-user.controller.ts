@@ -1,7 +1,7 @@
 /*
- * @Author: HuChao 491623426@qq.com
+ * @Author: YunZe 491623426@qq.com
  * @Date: 2024-05-20 13:39:36
- * @LastEditors: HuChao 491623426@qq.com
+ * @LastEditors: YunZe 491623426@qq.com
  * @LastEditTime: 2024-06-27 10:42:21
  * @FilePath: \admin-prisma-vue3\art-admin\src\modules\sys\sys-user\sys-user.controller.ts
  * @Description:

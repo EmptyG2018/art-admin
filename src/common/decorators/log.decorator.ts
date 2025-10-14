@@ -1,7 +1,7 @@
 /*
  * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-04-27 18:03:28
- * @LastEditors: HuChao 491623426@qq.com
+ * @LastEditors: YunZe 491623426@qq.com
  * @LastEditTime: 2024-05-11 15:56:22
  * @FilePath: \art-admin\src\common\decorators\log.decorator.ts
  * @Description: 接口日志装饰器

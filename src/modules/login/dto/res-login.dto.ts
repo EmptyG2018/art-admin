@@ -1,7 +1,7 @@
 /*
- * @Author: HuChao 491623426@qq.com
+ * @Author: YunZe 491623426@qq.com
  * @Date: 2024-04-23 16:58:36
- * @LastEditors: HuChao 491623426@qq.com
+ * @LastEditors: YunZe 491623426@qq.com
  * @LastEditTime: 2024-05-13 15:54:22
  * @FilePath: \art-admin\src\modules\login\dto\res-login.dto.ts
  * @Description:

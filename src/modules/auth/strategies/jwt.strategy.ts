@@ -1,7 +1,7 @@
 /*
- * @Author: HuChao 491623426@qq.com
+ * @Author: YunZe 491623426@qq.com
  * @Date: 2024-04-24 08:35:55
- * @LastEditors: HuChao 491623426@qq.com
+ * @LastEditors: YunZe 491623426@qq.com
  * @LastEditTime: 2024-04-24 11:35:05
  * @FilePath: \art-admin\src\modules\auth\strategies\jwt.strategy.ts
  * @Description:

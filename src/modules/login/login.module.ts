@@ -1,7 +1,7 @@
 /*
  * @Author: hu.chao 491623426@qq.com
  * @Date: 2024-04-23 18:59:25
- * @LastEditors: HuChao 491623426@qq.com
+ * @LastEditors: YunZe 491623426@qq.com
  * @LastEditTime: 2024-06-27 11:15:38
  * @FilePath: \admin-prisma-vue3\art-admin\src\modules\login\login.module.ts
  * @Description: 登录模块

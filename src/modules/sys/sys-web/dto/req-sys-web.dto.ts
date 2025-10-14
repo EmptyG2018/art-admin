@@ -1,7 +1,7 @@
 /*
- * @Author: HuChao 491623426@qq.com
+ * @Author: YunZe 491623426@qq.com
  * @Date: 2024-05-17 17:21:17
- * @LastEditors: HuChao 491623426@qq.com
+ * @LastEditors: YunZe 491623426@qq.com
  * @LastEditTime: 2024-05-17 17:30:04
  * @FilePath: \art-admin\src\modules\sys\sys-web\dto\req-sys-web.dto.ts
  * @Description:

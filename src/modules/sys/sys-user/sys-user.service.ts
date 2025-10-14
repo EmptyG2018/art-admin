@@ -1,7 +1,7 @@
 /*
- * @Author: HuChao 491623426@qq.com
+ * @Author: YunZe 491623426@qq.com
  * @Date: 2024-05-11 13:32:00
- * @LastEditors: HuChao 491623426@qq.com
+ * @LastEditors: YunZe 491623426@qq.com
  * @LastEditTime: 2024-06-27 11:17:14
  * @FilePath: \admin-prisma-vue3\art-admin\src\modules\sys\sys-user\sys-user.service.ts
  * @Description:

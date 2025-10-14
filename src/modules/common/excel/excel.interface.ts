@@ -1,7 +1,7 @@
 /*
- * @Author: HuChao 491623426@qq.com
+ * @Author: YunZe 491623426@qq.com
  * @Date: 2024-04-30 14:43:37
- * @LastEditors: HuChao 491623426@qq.com
+ * @LastEditors: YunZe 491623426@qq.com
  * @LastEditTime: 2024-05-15 15:26:09
  * @FilePath: \art-admin\src\modules\common\excel\excel.interface.ts
  * @Description:
