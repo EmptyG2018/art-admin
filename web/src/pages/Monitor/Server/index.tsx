@@ -150,7 +150,7 @@ export const Component = () => {
             <StatisticCard
               statistic={{
                 title: '内存占用比率',
-                value: 20.3,
+                value: info?.mem?.usage,
                 suffix: '%',
                 description: (
                   <>
