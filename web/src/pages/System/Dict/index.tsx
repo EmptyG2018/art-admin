@@ -112,11 +112,13 @@ export const Component: React.FC<unknown> = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
-          <Tooltip title="字典数据">
-            <Link to={`../dict/${record.dictId}`}>
-              <Button type="link" size="small" icon={<HddOutlined />} />
-            </Link>
-          </Tooltip>
+          <PermissionGuard requireds={['system:dictData:list']}>
+            <Tooltip title="字典数据">
+              <Link to={`../dict/${record.dictId}`}>
+                <Button type="link" size="small" icon={<HddOutlined />} />
+              </Link>
+            </Tooltip>
+          </PermissionGuard>
           <PermissionGuard requireds={['system:dict:edit']}>
             <UpdateDictForm
               values={record}
@@ -269,26 +271,28 @@ export const Component: React.FC<unknown> = () => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              Modal.confirm({
-                title: '删除记录',
-                content: '您确定要删除选中的记录吗？',
-                onOk: async () => {
-                  const ok = await handleRemove(selectedRowsState);
-                  if (ok) {
-                    setSelectedRows([]);
-                    actionRef.current?.reloadAndRest?.();
-                    Promise.resolve();
-                  } else {
-                    Promise.reject();
-                  }
-                },
-              });
-            }}
-          >
-            批量删除
-          </Button>
+          <PermissionGuard requireds={['system:dict:remove']}>
+            <Button
+              onClick={async () => {
+                Modal.confirm({
+                  title: '删除记录',
+                  content: '您确定要删除选中的记录吗？',
+                  onOk: async () => {
+                    const ok = await handleRemove(selectedRowsState);
+                    if (ok) {
+                      setSelectedRows([]);
+                      actionRef.current?.reloadAndRest?.();
+                      Promise.resolve();
+                    } else {
+                      Promise.reject();
+                    }
+                  },
+                });
+              }}
+            >
+              批量删除
+            </Button>
+          </PermissionGuard>
         </FooterToolbar>
       )}
     </PageContainer>

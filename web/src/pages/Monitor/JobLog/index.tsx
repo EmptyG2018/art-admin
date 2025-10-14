@@ -14,6 +14,7 @@ import {
 } from '@ant-design/pro-components';
 import { queryDictsByType } from '@/services/dict';
 import { queryJobLogPage, cleanJobLog } from '@/services/monitor';
+import { PermissionGuard } from '@/components/Layout';
 
 export const Component: React.FC<unknown> = () => {
   const [searchParams] = useSearchParams();
@@ -95,28 +96,29 @@ export const Component: React.FC<unknown> = () => {
         actionRef={actionRef}
         rowKey="jobLogId"
         toolBarRender={() => [
-          <Button
-            icon={<ClearOutlined />}
-            key="clear"
-            onClick={() => {
-              Modal.confirm({
-                title: '删除记录',
-                content: '您确定要清空全部记录吗？',
-                onOk: async () => {
-                  try {
-                    await cleanJobLog();
-                    actionRef.current?.reloadAndRest?.();
-                    Promise.resolve();
-                  } catch {
-                    Promise.reject();
-                  }
-                },
-              });
-            }}
-          >
-            清空日志
-          </Button>,
-
+          <PermissionGuard requireds={['monitor:job:remove']}>
+            <Button
+              icon={<ClearOutlined />}
+              key="clear"
+              onClick={() => {
+                Modal.confirm({
+                  title: '删除记录',
+                  content: '您确定要清空全部记录吗？',
+                  onOk: async () => {
+                    try {
+                      await cleanJobLog();
+                      actionRef.current?.reloadAndRest?.();
+                      Promise.resolve();
+                    } catch {
+                      Promise.reject();
+                    }
+                  },
+                });
+              }}
+            >
+              清空日志
+            </Button>
+          </PermissionGuard>,
           <Dropdown
             menu={{
               items: [

@@ -35,7 +35,7 @@ import {
   ProFormTextArea,
 } from '@ant-design/pro-components';
 import React, { useRef, useState } from 'react';
-import { useRequest } from 'ahooks';
+import { useRequest, useResponsive } from 'ahooks';
 import { queryUserPage, deleteUser, resetUserPwd } from '@/services/user';
 import { queryDeptTree } from '@/services/dept';
 import { queryAllPost } from '@/services/post';
@@ -94,6 +94,7 @@ export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
   const [deptId, setDeptId] = useState<React.Key>();
+  const responsive = useResponsive();
 
   const columns: ProColumns[] = [
     {
@@ -383,8 +384,8 @@ export const Component: React.FC<unknown> = () => {
         title: '用户管理',
       }}
     >
-      <Row wrap={false} gutter={16}>
-        <Col flex="220px" style={{ minHeight: 360 }}>
+      <Row wrap={!responsive.md} gutter={[16, 16]}>
+        <Col flex={responsive.md ? '220px' : 'auto'}>
           <DeptTree onSelect={setDeptId} />
         </Col>
         <Col flex="auto">
@@ -462,27 +463,28 @@ export const Component: React.FC<unknown> = () => {
                 </div>
               }
             >
-              <Button
-                type="primary"
-                onClick={async () => {
-                  Modal.confirm({
-                    title: '删除记录',
-                    content: '您确定要删除选中的记录吗？',
-                    onOk: async () => {
-                      const ok = await handleRemove(selectedRowsState);
-                      if (ok) {
-                        setSelectedRows([]);
-                        actionRef.current?.reloadAndRest?.();
-                        Promise.resolve();
-                      } else {
-                        Promise.reject();
-                      }
-                    },
-                  });
-                }}
-              >
-                批量删除
-              </Button>
+              <PermissionGuard requireds={['system:user:remove']}>
+                <Button
+                  onClick={async () => {
+                    Modal.confirm({
+                      title: '删除记录',
+                      content: '您确定要删除选中的记录吗？',
+                      onOk: async () => {
+                        const ok = await handleRemove(selectedRowsState);
+                        if (ok) {
+                          setSelectedRows([]);
+                          actionRef.current?.reloadAndRest?.();
+                          Promise.resolve();
+                        } else {
+                          Promise.reject();
+                        }
+                      },
+                    });
+                  }}
+                >
+                  批量删除
+                </Button>
+              </PermissionGuard>
             </FooterToolbar>
           )}
         </Col>

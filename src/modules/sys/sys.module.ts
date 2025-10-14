@@ -4,8 +4,8 @@
  * @LastEditors: HuChao 491623426@qq.com
  * @LastEditTime: 2024-05-17 15:44:23
  * @FilePath: \art-admin\src\modules\sys\sys.module.ts
- * @Description: 
- * 
+ * @Description:
+ *
  */
 import { Module } from '@nestjs/common';
 import { SysUserModule } from './sys-user/sys-user.module';
@@ -16,7 +16,6 @@ import { SysPostModule } from './sys-post/sys-post.module';
 import { SysDeptModule } from './sys-dept/sys-dept.module';
 import { SysMenuModule } from './sys-menu/sys-menu.module';
 import { SysRoleModule } from './sys-role/sys-role.module';
-import { SysTableModule } from './sys-table/sys-table.module';
 import { SysWebModule } from './sys-web/sys-web.module';
 
 @Module({
@@ -29,8 +28,7 @@ import { SysWebModule } from './sys-web/sys-web.module';
     SysDeptModule,
     SysMenuModule,
     SysRoleModule,
-    SysTableModule,
-    SysWebModule
+    SysWebModule,
   ],
 })
 export class SysModule {}

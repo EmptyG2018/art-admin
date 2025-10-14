@@ -13,6 +13,7 @@ import {
 } from '@ant-design/pro-components';
 import { queryDictsByType } from '@/services/dict';
 import { queryNoticePage, deleteNotice } from '@/services/notice';
+import { PermissionGuard } from '@/components/Layout';
 import { WangEdtior } from '@/components';
 import CreateNoticeForm from './components/CreateNoticeForm';
 import UpdateNoticeForm from './components/UpdateNoticeForm';
@@ -101,30 +102,34 @@ export const Component: React.FC<unknown> = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
-          <UpdateNoticeForm
-            values={record}
-            formRender={formRender}
-            trigger={
-              <Tooltip title="修改">
-                <Button type="link" size="small" icon={<EditOutlined />} />
-              </Tooltip>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />
-          <Tooltip title="删除">
-            <Popconfirm
-              title="删除记录"
-              description="您确定要删除此记录吗？"
-              onConfirm={async () => {
-                await handleRemove([record]);
-                actionRef.current?.reloadAndRest?.();
+          <PermissionGuard requireds={['system:notice:edit']}>
+            <UpdateNoticeForm
+              values={record}
+              formRender={formRender}
+              trigger={
+                <Tooltip title="修改">
+                  <Button type="link" size="small" icon={<EditOutlined />} />
+                </Tooltip>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
               }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
+            />
+          </PermissionGuard>
+          <PermissionGuard requireds={['system:notice:remove']}>
+            <Tooltip title="删除">
+              <Popconfirm
+                title="删除记录"
+                description="您确定要删除此记录吗？"
+                onConfirm={async () => {
+                  await handleRemove([record]);
+                  actionRef.current?.reloadAndRest?.();
+                }}
+              >
+                <Button type="link" size="small" icon={<DeleteOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+          </PermissionGuard>
         </Space>
       ),
     },
@@ -183,17 +188,19 @@ export const Component: React.FC<unknown> = () => {
         actionRef={actionRef}
         rowKey="noticeId"
         toolBarRender={() => [
-          <CreateNoticeForm
-            formRender={formRender}
-            trigger={
-              <Button type="primary" icon={<PlusOutlined />} key="add">
-                新建
-              </Button>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />,
+          <PermissionGuard requireds={['system:notice:add']}>
+            <CreateNoticeForm
+              formRender={formRender}
+              trigger={
+                <Button type="primary" icon={<PlusOutlined />} key="add">
+                  新建
+                </Button>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
+          </PermissionGuard>,
         ]}
         request={async (params, sorter, filter) => {
           const { code, rows, total } = await queryNoticePage({
@@ -228,26 +235,28 @@ export const Component: React.FC<unknown> = () => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              Modal.confirm({
-                title: '删除记录',
-                content: '您确定要删除选中的记录吗？',
-                onOk: async () => {
-                  const ok = await handleRemove(selectedRowsState);
-                  if (ok) {
-                    setSelectedRows([]);
-                    actionRef.current?.reloadAndRest?.();
-                    Promise.resolve();
-                  } else {
-                    Promise.reject();
-                  }
-                },
-              });
-            }}
-          >
-            批量删除
-          </Button>
+          <PermissionGuard requireds={['system:notice:remove']}>
+            <Button
+              onClick={async () => {
+                Modal.confirm({
+                  title: '删除记录',
+                  content: '您确定要删除选中的记录吗？',
+                  onOk: async () => {
+                    const ok = await handleRemove(selectedRowsState);
+                    if (ok) {
+                      setSelectedRows([]);
+                      actionRef.current?.reloadAndRest?.();
+                      Promise.resolve();
+                    } else {
+                      Promise.reject();
+                    }
+                  },
+                });
+              }}
+            >
+              批量删除
+            </Button>
+          </PermissionGuard>
         </FooterToolbar>
       )}
     </PageContainer>

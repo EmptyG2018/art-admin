@@ -15,6 +15,7 @@ import {
 } from '@ant-design/pro-components';
 import { queryDictsByType } from '@/services/dict';
 import { queryOperlogPage, deleteOperlog, cleanOperlog } from '@/services/log';
+import { PermissionGuard } from '@/components/Layout';
 import ViewOperlog from './components/ViewOperlog';
 
 /**
@@ -136,27 +137,29 @@ export const Component: React.FC<unknown> = () => {
         actionRef={actionRef}
         rowKey="operId"
         toolBarRender={() => [
-          <Button
-            icon={<ClearOutlined />}
-            key="clear"
-            onClick={() => {
-              Modal.confirm({
-                title: '删除记录',
-                content: '您确定要清空全部记录吗？',
-                onOk: async () => {
-                  try {
-                    await cleanOperlog();
-                    actionRef.current?.reloadAndRest?.();
-                    Promise.resolve();
-                  } catch {
-                    Promise.reject();
-                  }
-                },
-              });
-            }}
-          >
-            清空日志
-          </Button>,
+          <PermissionGuard requireds={['monitor:operlog:remove']}>
+            <Button
+              icon={<ClearOutlined />}
+              key="clear"
+              onClick={() => {
+                Modal.confirm({
+                  title: '删除记录',
+                  content: '您确定要清空全部记录吗？',
+                  onOk: async () => {
+                    try {
+                      await cleanOperlog();
+                      actionRef.current?.reloadAndRest?.();
+                      Promise.resolve();
+                    } catch {
+                      Promise.reject();
+                    }
+                  },
+                });
+              }}
+            >
+              清空日志
+            </Button>
+          </PermissionGuard>,
           <Dropdown
             menu={{
               items: [
@@ -207,26 +210,28 @@ export const Component: React.FC<unknown> = () => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              Modal.confirm({
-                title: '删除记录',
-                content: '您确定要删除选中的记录吗？',
-                onOk: async () => {
-                  const ok = await handleRemove(selectedRowsState);
-                  if (ok) {
-                    setSelectedRows([]);
-                    actionRef.current?.reloadAndRest?.();
-                    Promise.resolve();
-                  } else {
-                    Promise.reject();
-                  }
-                },
-              });
-            }}
-          >
-            批量删除
-          </Button>
+          <PermissionGuard requireds={['monitor:operlog:remove']}>
+            <Button
+              onClick={async () => {
+                Modal.confirm({
+                  title: '删除记录',
+                  content: '您确定要删除选中的记录吗？',
+                  onOk: async () => {
+                    const ok = await handleRemove(selectedRowsState);
+                    if (ok) {
+                      setSelectedRows([]);
+                      actionRef.current?.reloadAndRest?.();
+                      Promise.resolve();
+                    } else {
+                      Promise.reject();
+                    }
+                  },
+                });
+              }}
+            >
+              批量删除
+            </Button>
+          </PermissionGuard>
         </FooterToolbar>
       )}
     </PageContainer>

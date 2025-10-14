@@ -37,6 +37,7 @@ import {
   getDictType,
   deleteDict,
 } from '@/services/dict';
+import { PermissionGuard } from '@/components/Layout';
 import CreateDictDataForm from './components/CreateDictDataForm';
 import UpdateDictDataForm from './components/UpdateDictDataForm';
 
@@ -130,30 +131,34 @@ const TableList: React.FC<TableListProps> = (props) => {
       fixed: 'right',
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
-          <UpdateDictDataForm
-            values={record}
-            formRender={formRender}
-            trigger={
-              <Tooltip title="修改">
-                <Button type="link" size="small" icon={<EditOutlined />} />
-              </Tooltip>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />
-          <Tooltip title="删除">
-            <Popconfirm
-              title="删除记录"
-              description="您确定要删除此记录吗？"
-              onConfirm={async () => {
-                await handleRemove([record]);
-                actionRef.current?.reloadAndRest?.();
+          <PermissionGuard requireds={['system:dict:edit']}>
+            <UpdateDictDataForm
+              values={record}
+              formRender={formRender}
+              trigger={
+                <Tooltip title="修改">
+                  <Button type="link" size="small" icon={<EditOutlined />} />
+                </Tooltip>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
               }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
+            />
+          </PermissionGuard>
+          <PermissionGuard requireds={['system:dict:remove']}>
+            <Tooltip title="删除">
+              <Popconfirm
+                title="删除记录"
+                description="您确定要删除此记录吗？"
+                onConfirm={async () => {
+                  await handleRemove([record]);
+                  actionRef.current?.reloadAndRest?.();
+                }}
+              >
+                <Button type="link" size="small" icon={<DeleteOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+          </PermissionGuard>
         </Space>
       ),
     },
@@ -251,19 +256,20 @@ const TableList: React.FC<TableListProps> = (props) => {
         actionRef={actionRef}
         rowKey="dictCode"
         toolBarRender={() => [
-          <CreateDictDataForm
-            values={{ dictType }}
-            formRender={formRender}
-            trigger={
-              <Button type="primary" icon={<PlusOutlined />} key="add">
-                新建
-              </Button>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />,
-
+          <PermissionGuard requireds={['system:dict:add']}>
+            <CreateDictDataForm
+              values={{ dictType }}
+              formRender={formRender}
+              trigger={
+                <Button type="primary" icon={<PlusOutlined />} key="add">
+                  新建
+                </Button>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
+          </PermissionGuard>,
           <Dropdown
             menu={{
               items: [
@@ -315,26 +321,28 @@ const TableList: React.FC<TableListProps> = (props) => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              Modal.confirm({
-                title: '删除记录',
-                content: '您确定要删除选中的记录吗？',
-                onOk: async () => {
-                  const ok = await handleRemove(selectedRowsState);
-                  if (ok) {
-                    setSelectedRows([]);
-                    actionRef.current?.reloadAndRest?.();
-                    Promise.resolve();
-                  } else {
-                    Promise.reject();
-                  }
-                },
-              });
-            }}
-          >
-            批量删除
-          </Button>
+          <PermissionGuard requireds={['system:dict:remove']}>
+            <Button
+              onClick={async () => {
+                Modal.confirm({
+                  title: '删除记录',
+                  content: '您确定要删除选中的记录吗？',
+                  onOk: async () => {
+                    const ok = await handleRemove(selectedRowsState);
+                    if (ok) {
+                      setSelectedRows([]);
+                      actionRef.current?.reloadAndRest?.();
+                      Promise.resolve();
+                    } else {
+                      Promise.reject();
+                    }
+                  },
+                });
+              }}
+            >
+              批量删除
+            </Button>
+          </PermissionGuard>
         </FooterToolbar>
       )}
     </>

@@ -12,6 +12,7 @@ import {
   ProTable,
   ProColumns,
 } from '@ant-design/pro-components';
+import { PermissionGuard } from '@/components/Layout';
 import { queryDictsByType } from '@/services/dict';
 import {
   queryLogininforPage,
@@ -113,27 +114,29 @@ export const Component: React.FC<unknown> = () => {
         actionRef={actionRef}
         rowKey="infoId"
         toolBarRender={() => [
-          <Button
-            icon={<ClearOutlined />}
-            key="clear"
-            onClick={() => {
-              Modal.confirm({
-                title: '删除记录',
-                content: '您确定要清空全部记录吗？',
-                onOk: async () => {
-                  try {
-                    await cleanLogininfor();
-                    actionRef.current?.reloadAndRest?.();
-                    Promise.resolve();
-                  } catch {
-                    Promise.reject();
-                  }
-                },
-              });
-            }}
-          >
-            清空日志
-          </Button>,
+          <PermissionGuard requireds={['monitor:logininfor:remove']}>
+            <Button
+              icon={<ClearOutlined />}
+              key="clear"
+              onClick={() => {
+                Modal.confirm({
+                  title: '删除记录',
+                  content: '您确定要清空全部记录吗？',
+                  onOk: async () => {
+                    try {
+                      await cleanLogininfor();
+                      actionRef.current?.reloadAndRest?.();
+                      Promise.resolve();
+                    } catch {
+                      Promise.reject();
+                    }
+                  },
+                });
+              }}
+            >
+              清空日志
+            </Button>
+          </PermissionGuard>,
           <Dropdown
             menu={{
               items: [
@@ -184,26 +187,28 @@ export const Component: React.FC<unknown> = () => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              Modal.confirm({
-                title: '删除记录',
-                content: '您确定要删除选中的记录吗？',
-                onOk: async () => {
-                  const ok = await handleRemove(selectedRowsState);
-                  if (ok) {
-                    setSelectedRows([]);
-                    actionRef.current?.reloadAndRest?.();
-                    Promise.resolve();
-                  } else {
-                    Promise.reject();
-                  }
-                },
-              });
-            }}
-          >
-            批量删除
-          </Button>
+          <PermissionGuard requireds={['monitor:logininfor:remove']}>
+            <Button
+              onClick={async () => {
+                Modal.confirm({
+                  title: '删除记录',
+                  content: '您确定要删除选中的记录吗？',
+                  onOk: async () => {
+                    const ok = await handleRemove(selectedRowsState);
+                    if (ok) {
+                      setSelectedRows([]);
+                      actionRef.current?.reloadAndRest?.();
+                      Promise.resolve();
+                    } else {
+                      Promise.reject();
+                    }
+                  },
+                });
+              }}
+            >
+              批量删除
+            </Button>
+          </PermissionGuard>
         </FooterToolbar>
       )}
     </PageContainer>

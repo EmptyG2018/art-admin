@@ -1026,7 +1026,7 @@ async function main() {
       visible: '1',
       status: '0',
       icon: '',
-      perms: 'monitor:user:list',
+      perms: 'monitor:jobLog:list',
       createBy: 'admin',
       createTime: new Date(),
     },

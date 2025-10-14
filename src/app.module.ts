@@ -14,7 +14,7 @@ import { SysModule } from './modules/sys/sys.module';
 import { LoginModule } from './modules/login/login.module';
 import { MonitorModule } from './modules/monitor/monitor.module';
 import { CommonModule } from './modules/common/common.module';
-// import { NotifyModule } from './modules/notify/notify.module';
+import { NotifyModule } from './modules/notify/notify.module';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { CommonModule } from './modules/common/common.module';
     SysModule,
     LoginModule,
     MonitorModule,
-    // NotifyModule,
+    NotifyModule,
   ],
   controllers: [AppController],
 })

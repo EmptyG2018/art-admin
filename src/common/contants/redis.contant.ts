@@ -26,9 +26,6 @@ export const DICTTYPE_KEY = 'sys:dictType';
 /* 用户页面配置 */
 export const WEB_CONFIG_KEY = 'sys:webConfig';
 
-/* 用户表格配置 */
-export const TABLE_CONFIG_KEY = 'sys:tableConfig';
-
 export const cacheList = [
   {
     cacheName: CAPTCHA_IMG_KEY,
@@ -61,9 +58,5 @@ export const cacheList = [
   {
     cacheName: WEB_CONFIG_KEY,
     remark: '用户页面配置',
-  },
-  {
-    cacheName: TABLE_CONFIG_KEY,
-    remark: '用户表格配置',
   },
 ];

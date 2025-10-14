@@ -7,6 +7,7 @@ import {
   ProTable,
   ProColumns,
 } from '@ant-design/pro-components';
+import { PermissionGuard } from '@/components/Layout';
 import { queryOnlinePage, deleteOnline } from '@/services/monitor';
 
 /**
@@ -91,18 +92,20 @@ export const Component: React.FC<unknown> = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
-          <Tooltip title="踢出">
-            <Popconfirm
-              title="提示"
-              description="确定要踢出此用户的登录吗？"
-              onConfirm={async () => {
-                await handleRemove([record]);
-                actionRef.current?.reloadAndRest?.();
-              }}
-            >
-              <Button type="link" size="small" icon={<LogoutOutlined />} />
-            </Popconfirm>
-          </Tooltip>
+          <PermissionGuard requireds={['monitor:online:forceLogout']}>
+            <Tooltip title="踢出">
+              <Popconfirm
+                title="提示"
+                description="确定要踢出此用户的登录吗？"
+                onConfirm={async () => {
+                  await handleRemove([record]);
+                  actionRef.current?.reloadAndRest?.();
+                }}
+              >
+                <Button type="link" size="small" icon={<LogoutOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+          </PermissionGuard>
         </Space>
       ),
     },

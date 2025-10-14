@@ -32,6 +32,7 @@ import {
 } from '@ant-design/pro-components';
 import { queryDictsByType } from '@/services/dict';
 import { queryJobPage, deleteJob, runJob } from '@/services/monitor';
+import { PermissionGuard } from '@/components/Layout';
 import { CronSelect } from '@/components';
 import CreateJobForm from './components/CreateJobForm';
 import UpdateJobForm from './components/UpdateJobForm';
@@ -129,42 +130,50 @@ export const Component: React.FC<unknown> = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
-          <Tooltip title="执行一次">
-            <Popconfirm
-              title="提示"
-              description="您确定要执行一次此任务吗？"
-              onConfirm={async () => {
-                const hide = message.loading('正在执行');
-                try {
-                  await runJob({
-                    jobId: record.jobId,
-                    jobGroup: record.jobGroup,
-                  });
-                  hide();
-                  message.success('执行成功');
-                  return true;
-                } catch {
-                  hide();
-                  message.error('执行失败请重试!');
-                  return false;
-                }
+          <PermissionGuard requireds={['monitor:job:edit']}>
+            <Tooltip title="执行一次">
+              <Popconfirm
+                title="提示"
+                description="您确定要执行一次此任务吗？"
+                onConfirm={async () => {
+                  const hide = message.loading('正在执行');
+                  try {
+                    await runJob({
+                      jobId: record.jobId,
+                      jobGroup: record.jobGroup,
+                    });
+                    hide();
+                    message.success('执行成功');
+                    return true;
+                  } catch {
+                    hide();
+                    message.error('执行失败请重试!');
+                    return false;
+                  }
+                }}
+              >
+                <Button
+                  type="link"
+                  size="small"
+                  icon={<CaretRightOutlined />}
+                />
+              </Popconfirm>
+            </Tooltip>
+          </PermissionGuard>
+          <PermissionGuard requireds={['monitor:job:edit']}>
+            <UpdateJobForm
+              values={record}
+              formRender={formRender}
+              trigger={
+                <Tooltip title="修改">
+                  <Button type="link" size="small" icon={<EditOutlined />} />
+                </Tooltip>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
               }}
-            >
-              <Button type="link" size="small" icon={<CaretRightOutlined />} />
-            </Popconfirm>
-          </Tooltip>
-          <UpdateJobForm
-            values={record}
-            formRender={formRender}
-            trigger={
-              <Tooltip title="修改">
-                <Button type="link" size="small" icon={<EditOutlined />} />
-              </Tooltip>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />
+            />
+          </PermissionGuard>
           <Tooltip title="调度日志">
             <Link
               to={`../job/log?jobName=${record.jobName}&jobGroup=${record.jobGroup}`}
@@ -172,18 +181,20 @@ export const Component: React.FC<unknown> = () => {
               <Button type="link" size="small" icon={<ClockCircleOutlined />} />
             </Link>
           </Tooltip>
-          <Tooltip title="删除">
-            <Popconfirm
-              title="删除记录"
-              description="您确定要删除此记录吗？"
-              onConfirm={async () => {
-                await handleRemove([record]);
-                actionRef.current?.reloadAndRest?.();
-              }}
-            >
-              <Button type="link" size="small" icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
+          <PermissionGuard requireds={['monitor:job:remove']}>
+            <Tooltip title="删除">
+              <Popconfirm
+                title="删除记录"
+                description="您确定要删除此记录吗？"
+                onConfirm={async () => {
+                  await handleRemove([record]);
+                  actionRef.current?.reloadAndRest?.();
+                }}
+              >
+                <Button type="link" size="small" icon={<DeleteOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+          </PermissionGuard>
         </Space>
       ),
     },
@@ -276,17 +287,19 @@ export const Component: React.FC<unknown> = () => {
         actionRef={actionRef}
         rowKey="jobId"
         toolBarRender={() => [
-          <CreateJobForm
-            formRender={formRender}
-            trigger={
-              <Button type="primary" icon={<PlusOutlined />} key="add">
-                新建
-              </Button>
-            }
-            onFinish={() => {
-              actionRef.current?.reload();
-            }}
-          />,
+          <PermissionGuard requireds={['monitor:job:add']}>
+            <CreateJobForm
+              formRender={formRender}
+              trigger={
+                <Button type="primary" icon={<PlusOutlined />} key="add">
+                  新建
+                </Button>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
+          </PermissionGuard>,
           <Link to="../job/log">
             <Button icon={<ClockCircleOutlined />} key="log">
               调度日志
@@ -343,26 +356,28 @@ export const Component: React.FC<unknown> = () => {
             </div>
           }
         >
-          <Button
-            onClick={async () => {
-              Modal.confirm({
-                title: '删除记录',
-                content: '您确定要删除选中的记录吗？',
-                onOk: async () => {
-                  const ok = await handleRemove(selectedRowsState);
-                  if (ok) {
-                    setSelectedRows([]);
-                    actionRef.current?.reloadAndRest?.();
-                    Promise.resolve();
-                  } else {
-                    Promise.reject();
-                  }
-                },
-              });
-            }}
-          >
-            批量删除
-          </Button>
+          <PermissionGuard requireds={['monitor:job:remove']}>
+            <Button
+              onClick={async () => {
+                Modal.confirm({
+                  title: '删除记录',
+                  content: '您确定要删除选中的记录吗？',
+                  onOk: async () => {
+                    const ok = await handleRemove(selectedRowsState);
+                    if (ok) {
+                      setSelectedRows([]);
+                      actionRef.current?.reloadAndRest?.();
+                      Promise.resolve();
+                    } else {
+                      Promise.reject();
+                    }
+                  },
+                });
+              }}
+            >
+              批量删除
+            </Button>
+          </PermissionGuard>
         </FooterToolbar>
       )}
     </PageContainer>
