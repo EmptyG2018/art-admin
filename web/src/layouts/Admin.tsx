@@ -24,10 +24,10 @@ const generateDeepRoutes = (routes: any) => {
   return routes
     .filter((route: any) => !route.hidden)
     .map((route: any) => {
-      const Icon = icons[route.meta.icon];
+      const Icon = icons[route.icon];
       return {
         path: route.path,
-        name: route.meta.title,
+        name: route.title,
         icon: Icon ? <Icon /> : null,
         routes: generateDeepRoutes(route?.children),
       };
@@ -123,7 +123,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
           menuItemRender={(item, dom) => (
             <div
               onClick={() => {
-                navigate(item.path || '/');
+                if (!item.isUrl) navigate(item.path || '/');
               }}
             >
               {dom}

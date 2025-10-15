@@ -165,6 +165,7 @@ model SysMenu {
   menuType   String?   @default("") @db.Char(1)
   visible    String?   @default("0") @db.Char(1)
   status     String?   @default("0") @db.Char(1)
+  i18nKey    String?   @db.VarChar(100)
   perms      String?   @db.VarChar(100)
   icon       String?   @default("") @db.VarChar(100)
   createBy   String?   @default("") @db.VarChar(64)

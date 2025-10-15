@@ -73,6 +73,11 @@ export class AddSysMenuDto extends DataBaseDto {
   @IsString()
   perms?: string;
 
+  /* 国际化标识 */
+  @IsOptional()
+  @IsString()
+  i18nKey?: string;
+
   /* 菜单图标 */
   @IsOptional()
   @IsString()

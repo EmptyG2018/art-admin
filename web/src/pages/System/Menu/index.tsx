@@ -218,6 +218,14 @@ export const Component: React.FC<unknown> = () => {
                   )}
                 />
               )}
+              {['M', 'C'].includes(menuType) && (
+                <ProFormText
+                  name="i18nKey"
+                  label="国际化key"
+                  placeholder="请输入国际化key"
+                  width="md"
+                />
+              )}
             </ProForm.Group>
             {['C'].includes(menuType) && (
               <ProFormRadio.Group

@@ -43,12 +43,11 @@ export class Route {
   path: string;
   redirect?: string;
   query?: string;
-  meta?: {
-    title?: string;
-    icon?: string;
-    noCache?: boolean;
-    link?: string | null;
-  };
+  title?: string;
+  i18nKey?: string;
+  icon?: string;
+  noCache?: boolean;
+  link?: string | null;
   children?: Route[];
   constructor(menu: Menu) {
     if (menu.menuType === 'M') {
@@ -71,12 +70,11 @@ export class Route {
     } else {
       this.path = menu.path;
     }
-    this.meta = {
-      icon: menu.icon,
-      link: menu.isFrame === '0' ? menu.path : null,
-      noCache: menu.isCache === '1',
-      title: menu.menuName,
-    };
+    this.icon = menu.icon;
+    this.link = menu.isFrame === '0' ? menu.path : null;
+    this.noCache = menu.isCache === '1';
+    this.title = menu.menuName;
+    this.i18nKey = menu.i18nKey;
     if (menu.children && menu.children.length) {
       this.children = menu.children.map((item) => new Route(item));
     }
