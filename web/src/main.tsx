@@ -11,7 +11,7 @@ import {
   ConfigProvider as AntdProvier,
   ConfigProviderProps,
 } from 'antd';
-import { getLang, locales } from './locales';
+import { getLang, locales, getIntl } from './locales';
 import AppRoutes from './routes';
 import dayjs from 'dayjs';
 import './App.css';
@@ -38,17 +38,11 @@ function AppProvider({ children }: { children: React.ReactNode }) {
 
     // 加载 app 语言包
     locale.messages().then((messages) => {
-      setIntl(
-        createIntl(
-          {
-            locale: lang,
-            messages: messages.default,
-          },
-          createIntlCache(),
-        ),
-      );
+      if (intl) return;
+
+      setIntl(getIntl(lang, messages.default));
     });
-  }, []);
+  }, [intl]);
 
   if (!intl || !locale) return;
 

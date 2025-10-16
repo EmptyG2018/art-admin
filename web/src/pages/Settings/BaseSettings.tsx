@@ -1,5 +1,6 @@
 import { App, Button } from 'antd';
 import { ProForm, ProFormText, ProFormRadio } from '@ant-design/pro-components';
+import { FormattedMessage } from 'react-intl';
 import { queryDictsByType } from '@/services/dict';
 import { getProfile, updateProfile } from '@/services/system';
 
@@ -26,22 +27,25 @@ const BaseSettings = () => {
               key="submit"
               onClick={() => form?.submit?.()}
             >
-              更新资料
+              <FormattedMessage
+                id="settings.form.updateSubmit"
+                defaultMessage="更新资料"
+              />
             </Button>,
           ];
         },
       }}
       onFinish={async (formValues) => {
         const { deptStr, roleStr, ...data } = formValues;
-        const hide = app.message.loading('正在更新');
+        const hide = app.message.loading('正在修改');
         try {
           await updateProfile({ ...data });
           hide();
-          app.message.success('更新成功');
+          app.message.success('修改成功');
           return true;
         } catch {
           hide();
-          app.message.error('更新失败请重试！');
+          app.message.error('修改失败请重试！');
           return false;
         }
       }}

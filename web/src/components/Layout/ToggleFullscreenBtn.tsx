@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button, Tooltip } from 'antd';
 import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 // 全屏兼容性工具函数
 const Fullscreen = {
@@ -73,8 +74,8 @@ const Fullscreen = {
 // 全屏切换按钮组件
 const ToggleFullscreenBtn = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  // 检查是否支持全屏
   const [isSupported] = useState(Fullscreen.isEnabled());
+  const intl = useIntl();
 
   useEffect(() => {
     const handleChange = () => {
@@ -96,17 +97,34 @@ const ToggleFullscreenBtn = () => {
 
   const toggle = () => {
     if (!isSupported) {
-      console.error('当前浏览器不支持全屏功能');
+      console.error(
+        intl.formatMessage({
+          id: 'app.tools.fullscreen.unsupport',
+          defaultMessage: '当前浏览器不支持全屏功能',
+        }),
+      );
       return;
     }
 
     if (!Fullscreen.getFullscreenElement()) {
       Fullscreen.request(document.documentElement).catch((err) => {
-        console.error('进入全屏失败:', err);
+        console.error(
+          intl.formatMessage({
+            id: 'app.tools.fullscreen.on.error',
+            defaultMessage: '进入全屏失败：',
+          }),
+          err,
+        );
       });
     } else {
       Fullscreen.exit().catch((err) => {
-        console.error('退出全屏失败:', err);
+        console.error(
+          intl.formatMessage({
+            id: 'app.tools.fullscreen.off.error',
+            defaultMessage: '退出全屏失败：',
+          }),
+          err,
+        );
       });
     }
   };
@@ -116,7 +134,21 @@ const ToggleFullscreenBtn = () => {
   }
 
   return (
-    <Tooltip title={isFullscreen ? '退出全屏' : '进入全屏'}>
+    <Tooltip
+      title={
+        isFullscreen ? (
+          <FormattedMessage
+            id="app.tools.fullscreen.off"
+            defaultMessage="退出全屏"
+          />
+        ) : (
+          <FormattedMessage
+            id="app.tools.fullscreen.on"
+            defaultMessage="进入全屏"
+          />
+        )
+      }
+    >
       <Button
         type="text"
         icon={

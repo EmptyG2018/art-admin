@@ -11,6 +11,7 @@ import { ProLayout } from '@ant-design/pro-components';
 import { Logo, SelectLang, ToggleFullscreenBtn } from '@/components/Layout';
 import { useProfileStore, useSystemStore } from '@/stores';
 import icons from '@/constants/icons';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 const themeLayout: any = {
   light: theme.defaultAlgorithm,
@@ -39,6 +40,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
   const { menus, theme } = useSystemStore();
   const location = useLocation();
   const navigate = useNavigate();
+  const intl = useIntl();
 
   const routes = useMemo(() => {
     return generateDeepRoutes(menus);
@@ -92,7 +94,12 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
                       {
                         key: 'settings',
                         icon: <SettingOutlined />,
-                        label: '设置',
+                        label: (
+                          <FormattedMessage
+                            id="layout.header.profile.setting"
+                            defaultMessage="设置"
+                          />
+                        ),
                         onClick: async () => {
                           navigate('/settings');
                         },
@@ -100,7 +107,12 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
                       {
                         key: 'logout',
                         icon: <LogoutOutlined />,
-                        label: '退出登录',
+                        label: (
+                          <FormattedMessage
+                            id="layout.header.profile.logout"
+                            defaultMessage="退出登录"
+                          />
+                        ),
                         onClick: async () => {
                           await logoutAccount();
                           navigate('/login', { replace: true });

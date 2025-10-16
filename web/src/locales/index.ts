@@ -1,3 +1,4 @@
+import { createIntl, createIntlCache, IntlShape } from 'react-intl';
 import storage from 'store';
 
 type Locale = {
@@ -20,6 +21,8 @@ type LocaleConfigMap = Record<
 >;
 
 const LOCALE = 'locale';
+
+export let intl: IntlShape;
 
 export const locales: LocaleConfigMap = {
   'zh-CN': {
@@ -61,11 +64,10 @@ export const locales: LocaleConfigMap = {
 };
 
 export const getLang = () => {
-  const lang = navigator.cookieEnabled && storage.get(LOCALE);
-  let browserLang;
+  const lang = storage.enabled && storage.get(LOCALE);
   const isNavigatorLanguageValid =
     typeof navigator !== 'undefined' && typeof navigator.language === 'string';
-  browserLang = isNavigatorLanguageValid
+  const browserLang = isNavigatorLanguageValid
     ? navigator.language.split('-').join('-')
     : '';
   return lang || browserLang || 'zh-CN';
@@ -78,3 +80,17 @@ export const changeLocale = (locale: string) => {
 
 export const getLocales = () =>
   Object.keys(locales).map((lang) => locales[lang]);
+
+export const getIntl = (locale: string, messages: Record<string, string>) => {
+  if (!intl) {
+    intl = createIntl(
+      {
+        locale,
+        messages,
+      },
+      createIntlCache(),
+    );
+  }
+
+  return intl;
+};

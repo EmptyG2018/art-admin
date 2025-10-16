@@ -181,6 +181,13 @@ const TableList: React.FC<TableListProps> = (props) => {
         width="md"
       />
       <ProFormText
+        name="i18nKey"
+        label="国际化key"
+        placeholder="请输入国际化key"
+        tooltip="用于多语言显示的唯一标识。系统会根据此 Key 自动匹配当前语言的翻译文本。"
+        width="md"
+      />
+      <ProFormText
         name="cssClass"
         label="样式类名"
         placeholder="请输入回显类名"

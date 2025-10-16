@@ -16,7 +16,7 @@ const UpdateDictForm: React.FC<UpdateDictFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="修改岗位"
+      title="修改字典"
       request={async () => {
         const res = await getDictType(values.dictId);
         return res.data;

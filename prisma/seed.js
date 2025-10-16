@@ -152,6 +152,7 @@ async function main() {
         isDefault: 'Y',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '男',
       },
       {
         dictLabel: '女',
@@ -162,6 +163,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '女',
       },
       {
         dictLabel: '未知',
@@ -172,6 +174,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '未知',
       },
       {
         dictLabel: '显示',
@@ -183,6 +186,7 @@ async function main() {
         isDefault: 'Y',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '显示',
       },
       {
         dictLabel: '隐藏',
@@ -194,6 +198,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '隐藏',
       },
       {
         dictLabel: '正常',
@@ -205,6 +210,7 @@ async function main() {
         isDefault: 'Y',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '正常',
       },
       {
         dictLabel: '停用',
@@ -216,6 +222,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '停用',
       },
       {
         dictLabel: '正常',
@@ -227,6 +234,7 @@ async function main() {
         isDefault: 'Y',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '正常',
       },
       {
         dictLabel: '暂停',
@@ -238,6 +246,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '暂停',
       },
       {
         dictLabel: '默认',
@@ -248,6 +257,7 @@ async function main() {
         isDefault: 'Y',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '默认',
       },
       {
         dictLabel: '系统',
@@ -258,6 +268,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '系统',
       },
       {
         dictLabel: '是',
@@ -269,6 +280,7 @@ async function main() {
         isDefault: 'Y',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '是',
       },
       {
         dictLabel: '否',
@@ -280,6 +292,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '否',
       },
       {
         dictLabel: '通知',
@@ -290,6 +303,7 @@ async function main() {
         isDefault: 'Y',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '通知',
       },
       {
         dictLabel: '公告',
@@ -300,6 +314,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '公告',
       },
       {
         dictLabel: '正常',
@@ -311,6 +326,7 @@ async function main() {
         isDefault: 'Y',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '正常',
       },
       {
         dictLabel: '关闭',
@@ -322,6 +338,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '关闭',
       },
       {
         dictLabel: '其他',
@@ -332,6 +349,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '其他',
       },
       {
         dictLabel: '新增',
@@ -342,6 +360,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '新增',
       },
       {
         dictLabel: '修改',
@@ -352,6 +371,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '修改',
       },
       {
         dictLabel: '删除',
@@ -362,6 +382,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '删除',
       },
       {
         dictLabel: '授权',
@@ -372,6 +393,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '授权',
       },
       {
         dictLabel: '导出',
@@ -382,6 +404,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '导出',
       },
       {
         dictLabel: '导入',
@@ -392,6 +415,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '导入',
       },
       {
         dictLabel: '强退',
@@ -402,6 +426,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '强退',
       },
       {
         dictLabel: '生成代码',
@@ -412,6 +437,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '生成代码',
       },
       {
         dictLabel: '清空数据',
@@ -422,6 +448,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '清空数据',
       },
       {
         dictLabel: '成功',
@@ -433,6 +460,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '成功',
       },
       {
         dictLabel: '失败',
@@ -444,6 +472,7 @@ async function main() {
         isDefault: 'N',
         createBy: 'admin',
         createTime: new Date(),
+        remark: '失败',
       },
     ],
     skipDuplicates: true,

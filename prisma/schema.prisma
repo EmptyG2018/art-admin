@@ -68,6 +68,7 @@ model SysDictData {
   dictLabel   String?      @default("") @db.VarChar(100)
   dictValue   String?      @default("") @db.VarChar(100)
   dictType    String?      @default("") @db.VarChar(100)
+  i18nKey     String?      @db.VarChar(100)
   cssClass    String?      @db.VarChar(100)
   listClass   String?      @db.VarChar(100)
   isDefault   String?      @default("N") @db.Char(1)

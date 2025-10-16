@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Menu } from 'antd';
 import { createStyles } from 'antd-style';
+import { FormattedMessage } from 'react-intl';
 import BaseSettings from './BaseSettings';
 import SafeSettings from './SafeSettings';
 import ThemeSettings from './ThemeSettings';
@@ -36,9 +37,33 @@ const Settings = () => {
   const [selectedKeys, setSelectedKeys] = useState(['profile']);
 
   const nav = [
-    { key: 'profile', label: '基本设置', render: <BaseSettings /> },
-    { key: 'security', label: '安全设置', render: <SafeSettings /> },
-    { key: 'appearance', label: '主题外观', render: <ThemeSettings /> },
+    {
+      key: 'profile',
+      label: (
+        <FormattedMessage id="settings.menu.basic" defaultMessage="基本设置" />
+      ),
+      render: <BaseSettings />,
+    },
+    {
+      key: 'security',
+      label: (
+        <FormattedMessage
+          id="settings.menu.security"
+          defaultMessage="安全设置"
+        />
+      ),
+      render: <SafeSettings />,
+    },
+    {
+      key: 'appearance',
+      label: (
+        <FormattedMessage
+          id="settings.menu.appearance"
+          defaultMessage="主题外观"
+        />
+      ),
+      render: <ThemeSettings />,
+    },
   ];
 
   const contentRender = () => {

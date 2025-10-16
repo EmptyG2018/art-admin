@@ -18,7 +18,7 @@ const CreateDictForm: React.FC<CreateFormProps> = (
 
   return (
     <EditFormModal
-      title="新增岗位"
+      title="新增字典"
       values={values}
       trigger={trigger}
       formRender={formRender}

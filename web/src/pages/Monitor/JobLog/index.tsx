@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Button, Dropdown, Modal } from 'antd';
+import { Button, Dropdown, Modal, message } from 'antd';
 import {
   ExportOutlined,
   EllipsisOutlined,
@@ -105,11 +105,16 @@ export const Component: React.FC<unknown> = () => {
                   title: '删除记录',
                   content: '您确定要清空全部记录吗？',
                   onOk: async () => {
+                    const hide = message.loading('正在清空');
                     try {
                       await cleanJobLog();
+                      hide();
+                      message.success('清空成功');
                       actionRef.current?.reloadAndRest?.();
                       Promise.resolve();
                     } catch {
+                      hide();
+                      message.error('清空失败请重试!');
                       Promise.reject();
                     }
                   },

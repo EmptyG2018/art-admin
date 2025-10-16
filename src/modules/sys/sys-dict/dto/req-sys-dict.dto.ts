@@ -93,6 +93,13 @@ export class AddDictDataDto extends DataBaseDto {
   @IsOptional()
   @IsString()
   @Excel({
+    name: '国际化key',
+  })
+  i18nKey?: string;
+
+  @IsOptional()
+  @IsString()
+  @Excel({
     name: '样式类名（其他样式扩展）',
   })
   cssClass?: string;

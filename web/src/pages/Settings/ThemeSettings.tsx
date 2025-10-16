@@ -74,7 +74,7 @@ const ThemeSettings = () => {
     >
       <ProFormRadio.Group
         name="layout"
-        label="整体风格设置"
+        label="整体风格"
         initialValue={theme.layout}
         options={[
           {

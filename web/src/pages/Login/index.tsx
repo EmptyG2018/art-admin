@@ -115,7 +115,7 @@ const CaptchaImage: React.FC<{
   if (loading)
     return (
       <Button className={styles.captchaImage} size="large" loading>
-        <FormattedMessage id="pages.loading" defaultMessage="正在加载" />
+        <FormattedMessage id="layout.loading" defaultMessage="正在加载" />
       </Button>
     );
 
@@ -156,6 +156,7 @@ export const Component: React.FC = () => {
         navigate(urlParams.get('redirect') || '/');
         return;
       }
+
       // 如果失败去设置用户错误信息
       setUserLoginState(res.msg);
     } catch (error) {
@@ -220,15 +221,6 @@ export const Component: React.FC = () => {
               },
             ]}
           />
-
-          {status === 'error' && loginType === 'account' && (
-            <LoginMessage
-              content={intl.formatMessage({
-                id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误',
-              })}
-            />
-          )}
           {type === 'account' && (
             <>
               <ProFormText
@@ -301,10 +293,6 @@ export const Component: React.FC = () => {
                 <CaptchaImage onSuccess={(uuid) => setUUID(uuid)} />
               </Space>
             </>
-          )}
-
-          {status === 'error' && loginType === 'mobile' && (
-            <LoginMessage content="验证码错误" />
           )}
           {type === 'mobile' && (
             <>

@@ -15,6 +15,7 @@ import {
   Form,
   Input,
   message,
+  Modal,
 } from 'antd';
 import { DeleteOutlined, ClearOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
@@ -292,26 +293,31 @@ export const Component: React.FC = () => {
       header={{
         title: '缓存列表',
         extra: (
-          <Popconfirm
-            title="清空记录"
-            description="您确定要清空记录吗？"
-            onConfirm={async () => {
-              const hide = message.loading('正在清空');
-              try {
-                await cleanCache();
-                hide();
-                message.success('清空成功');
-                ref.current?.reload?.();
-                return true;
-              } catch {
-                hide();
-                message.error('清空失败请重试!');
-                return false;
-              }
+          <Button
+            icon={<ClearOutlined />}
+            onClick={() => {
+              Modal.confirm({
+                title: '删除记录',
+                content: '您确定要清空全部记录吗？',
+                onOk: async () => {
+                  const hide = message.loading('正在清空');
+                  try {
+                    await cleanCache();
+                    hide();
+                    message.success('清空成功');
+                    ref.current?.reload?.();
+                    Promise.resolve();
+                  } catch {
+                    hide();
+                    message.error('清空失败请重试!');
+                    Promise.reject();
+                  }
+                },
+              });
             }}
           >
-            <Button icon={<ClearOutlined />}>清空缓存</Button>
-          </Popconfirm>
+            清空缓存
+          </Button>
         ),
       }}
     >
