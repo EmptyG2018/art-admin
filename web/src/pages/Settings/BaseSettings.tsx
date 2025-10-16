@@ -1,11 +1,12 @@
 import { App, Button } from 'antd';
 import { ProForm, ProFormText, ProFormRadio } from '@ant-design/pro-components';
-import { FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { queryDictsByType } from '@/services/dict';
 import { getProfile, updateProfile } from '@/services/system';
 
 const BaseSettings = () => {
   const app = App.useApp();
+  const intl = useIntl();
 
   return (
     <ProForm
@@ -52,25 +53,87 @@ const BaseSettings = () => {
     >
       <ProFormText
         name="nickName"
-        label="昵称"
+        label={
+          <FormattedMessage
+            id="settings.basic.nickname"
+            defaultMessage="昵称"
+          />
+        }
         width="md"
-        rules={[{ required: true, message: '请输入昵称' }]}
+        rules={[
+          {
+            required: true,
+            message: intl.formatMessage(
+              {
+                id: 'component.form.placeholder',
+                defaultMessage: '请输入{label}',
+              },
+              {
+                label: intl.formatMessage({
+                  id: 'settings.basic.nickname',
+                  defaultMessage: '昵称',
+                }),
+              },
+            ),
+          },
+        ]}
       />
       <ProFormText
         name="phonenumber"
-        label="手机号码"
+        label={
+          <FormattedMessage
+            id="settings.basic.phone"
+            defaultMessage="手机号码"
+          />
+        }
         width="sm"
-        rules={[{ required: true, message: '请输入手机号码' }]}
+        rules={[
+          {
+            required: true,
+            message: intl.formatMessage(
+              {
+                id: 'component.form.placeholder',
+                defaultMessage: '请输入{label}',
+              },
+              {
+                label: intl.formatMessage({
+                  id: 'settings.basic.phone',
+                  defaultMessage: '手机号码',
+                }),
+              },
+            ),
+          },
+        ]}
       />
       <ProFormText
         name="email"
-        label="邮箱"
+        label={
+          <FormattedMessage id="settings.basic.email" defaultMessage="邮箱" />
+        }
         width="md"
-        rules={[{ required: true, message: '请输入邮箱' }]}
+        rules={[
+          {
+            required: true,
+            message: intl.formatMessage(
+              {
+                id: 'component.form.placeholder',
+                defaultMessage: '请输入{label}',
+              },
+              {
+                label: intl.formatMessage({
+                  id: 'settings.basic.email',
+                  defaultMessage: '邮箱',
+                }),
+              },
+            ),
+          },
+        ]}
       />
       <ProFormRadio.Group
         name="sex"
-        label="性别"
+        label={
+          <FormattedMessage id="settings.basic.sex" defaultMessage="性别" />
+        }
         request={async () => {
           const res = await queryDictsByType('sys_user_sex');
           return res.data.map((dict) => ({

@@ -3,9 +3,11 @@ import { App, Button, List, Modal, Flex, Form } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { ProForm, ProFormText } from '@ant-design/pro-components';
 import { updatePwd } from '@/services/system';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 const SafeSettings = () => {
   const app = App.useApp();
+  const intl = useIntl();
   const [form] = Form.useForm();
   const [editPwdModal, setEditPwdModal] = useState(false);
 
@@ -16,8 +18,14 @@ const SafeSettings = () => {
         dataSource={[
           {
             id: '1',
-            name: '账户密码',
-            desc: '保护个人账户安全，保障信息不泄露',
+            name: intl.formatMessage({
+              id: 'settings.security.password',
+              defaultMessage: '账户密码',
+            }),
+            desc: intl.formatMessage({
+              id: 'settings.security.password.description',
+              defaultMessage: '保护个人账户安全，保障信息不泄露',
+            }),
           },
         ]}
         renderItem={(item) => (
@@ -33,7 +41,11 @@ const SafeSettings = () => {
                   }
                 }}
               >
-                修改
+                <FormattedMessage
+                  id="component.form.update"
+                  defaultMessage="修改{title}"
+                  values={{ title: '' }}
+                />
               </Button>,
             ]}
           >
@@ -118,4 +130,3 @@ const SafeSettings = () => {
 };
 
 export default SafeSettings;
-

@@ -5,6 +5,7 @@ export default {
   'settings.basic.nickname': '昵称',
   'settings.basic.phone': '手机号码',
   'settings.basic.email': '邮箱',
+  'settings.basic.sex': '性别',
   'settings.security.password': '账户密码',
   'settings.security.password.description': '保护个人账户安全，保障信息不泄露',
   'settings.appearance.style': '整体风格',
