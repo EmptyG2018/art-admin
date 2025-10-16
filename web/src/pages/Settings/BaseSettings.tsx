@@ -38,15 +38,30 @@ const BaseSettings = () => {
       }}
       onFinish={async (formValues) => {
         const { deptStr, roleStr, ...data } = formValues;
-        const hide = app.message.loading('正在修改');
+        const hide = app.message.loading(
+          intl.formatMessage({
+            id: 'component.form.message.update.loading',
+            defaultMessage: '正在修改',
+          }),
+        );
         try {
           await updateProfile({ ...data });
           hide();
-          app.message.success('修改成功');
+          app.message.success(
+            intl.formatMessage({
+              id: 'component.form.message.update.success',
+              defaultMessage: '修改成功',
+            }),
+          );
           return true;
         } catch {
           hide();
-          app.message.error('修改失败请重试！');
+          app.message.error(
+            intl.formatMessage({
+              id: 'component.form.message.update.error',
+              defaultMessage: '修改失败请重试！',
+            }),
+          );
           return false;
         }
       }}

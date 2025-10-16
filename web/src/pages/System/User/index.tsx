@@ -42,6 +42,8 @@ import { queryAllPost } from '@/services/post';
 import { queryAllRole } from '@/services/role';
 import { queryDictsByType } from '@/services/dict';
 import { PermissionGuard } from '@/components/Layout';
+import { useIntl, FormattedMessage } from 'react-intl';
+import { intl as rawIntl } from '@/locales';
 import CreateUserForm from './components/CreateUserForm';
 import UpdateUserForm from './components/UpdateUserForm';
 
@@ -76,16 +78,31 @@ const DeptTree: React.FC<{ onSelect: (key: React.Key) => void }> = ({
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(
+    rawIntl.formatMessage({
+      id: 'component.form.message.delete.loading',
+      defaultMessage: '正在删除',
+    }),
+  );
   if (!selectedRows) return true;
   try {
     await deleteUser(selectedRows.map((row) => row.userId).join(','));
     hide();
-    message.success('删除成功');
+    message.success(
+      rawIntl.formatMessage({
+        id: 'component.form.message.delete.success',
+        defaultMessage: '删除成功',
+      }),
+    );
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.error(
+      rawIntl.formatMessage({
+        id: 'component.form.message.delete.error',
+        defaultMessage: '删除失败请重试!',
+      }),
+    );
     return false;
   }
 };
