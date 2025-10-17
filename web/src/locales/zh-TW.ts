@@ -1,22 +1,20 @@
-import component from './zh-CN/component';
-import globalHeader from './zh-CN/globalHeader';
-import menu from './zh-CN/menu';
-import pages from './zh-CN/pages';
-import settingDrawer from './zh-CN/settingDrawer';
-import settings from './zh-CN/settings';
+import layout from './zh-TW/layout';
+import component from './zh-TW/component';
+import menu from './zh-TW/menu';
+import pages from './zh-TW/pages';
+import settings from './zh-TW/settings';
+import dict from './zh-TW/dict';
 
 export default {
-  'navBar.lang': '語言',
-  'layout.user.link.help': '幫助',
-  'layout.user.link.privacy': '隱私',
-  'layout.user.link.terms': '條款',
-  'app.preview.down.block': '下載此頁面到本地項目',
-  'app.welcome.link.fetch-blocks': '獲取全部區塊',
-  'app.welcome.link.block-list': '基於 block 開發，快速構建標準頁面',
+  'app.tools.fullscreen.on': '進入全螢幕',
+  'app.tools.fullscreen.off': '退出全螢幕',
+  'app.tools.fullscreen.unsupport': '目前瀏覽器不支援全螢幕功能',
+  'app.tools.fullscreen.on.error': '進入全螢幕失敗：',
+  'app.tools.fullscreen.off.error': '退出全螢幕失敗：',
   ...pages,
-  ...globalHeader,
   ...menu,
-  ...settingDrawer,
   ...settings,
+  ...layout,
   ...component,
+  ...dict,
 };

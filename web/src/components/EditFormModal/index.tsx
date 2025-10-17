@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Flex, Button, FormInstance } from 'antd';
 import { ProForm } from '@ant-design/pro-components';
+import { T } from '@/locales';
 
 interface EditFormWrapperProps {
   values?: any;
@@ -41,22 +42,24 @@ const EditWrapperForm: React.FC<EditFormWrapperProps> = (props) => {
     <ProForm
       formRef={formRef}
       submitter={{
-        render: formProps?.readonly ? false : ({ form }) => {
-          return (
-            <Flex gap={8} justify="flex-end">
-              <Button key="cancel" onClick={() => onCancel?.()}>
-                取消
-              </Button>
-              <Button
-                type="primary"
-                key="submit"
-                onClick={() => form?.submit?.()}
-              >
-                提交
-              </Button>
-            </Flex>
-          );
-        },
+        render: formProps?.readonly
+          ? false
+          : ({ form }) => {
+              return (
+                <Flex gap={8} justify="flex-end">
+                  <Button key="cancel" onClick={() => onCancel?.()}>
+                    <T id="component.form.cancel" />
+                  </Button>
+                  <Button
+                    type="primary"
+                    key="submit"
+                    onClick={() => form?.submit?.()}
+                  >
+                    <T id="component.form.submit" />
+                  </Button>
+                </Flex>
+              );
+            },
       }}
       onFinish={onFinish}
       {...formProps}

@@ -1,4 +1,10 @@
-import { createIntl, createIntlCache, IntlShape } from 'react-intl';
+import {
+  createIntl,
+  createIntlCache,
+  IntlShape,
+  useIntl,
+  FormattedMessage,
+} from 'react-intl';
 import storage from 'store';
 
 type Locale = {
@@ -94,3 +100,14 @@ export const getIntl = (locale: string, messages: Record<string, string>) => {
 
   return intl;
 };
+
+export const rawT = (id?: string, values?: Record<string, string>) =>
+  intl.formatMessage({ id }, values);
+
+export const useT = () => {
+  const intl = useIntl();
+  return (id?: string, values?: Record<string, string>) =>
+    intl.formatMessage({ id }, values);
+};
+
+export const T = FormattedMessage;

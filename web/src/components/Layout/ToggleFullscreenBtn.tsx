@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button, Tooltip } from 'antd';
 import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { useT, T } from '@/locales';
 
 // 全屏兼容性工具函数
 const Fullscreen = {
@@ -75,7 +75,7 @@ const Fullscreen = {
 const ToggleFullscreenBtn = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSupported] = useState(Fullscreen.isEnabled());
-  const intl = useIntl();
+  const t = useT();
 
   useEffect(() => {
     const handleChange = () => {
@@ -97,34 +97,17 @@ const ToggleFullscreenBtn = () => {
 
   const toggle = () => {
     if (!isSupported) {
-      console.error(
-        intl.formatMessage({
-          id: 'app.tools.fullscreen.unsupport',
-          defaultMessage: '当前浏览器不支持全屏功能',
-        }),
-      );
+      console.error(t('app.tools.fullscreen.unsupport'));
       return;
     }
 
     if (!Fullscreen.getFullscreenElement()) {
       Fullscreen.request(document.documentElement).catch((err) => {
-        console.error(
-          intl.formatMessage({
-            id: 'app.tools.fullscreen.on.error',
-            defaultMessage: '进入全屏失败：',
-          }),
-          err,
-        );
+        console.error(t('app.tools.fullscreen.on.error'), err);
       });
     } else {
       Fullscreen.exit().catch((err) => {
-        console.error(
-          intl.formatMessage({
-            id: 'app.tools.fullscreen.off.error',
-            defaultMessage: '退出全屏失败：',
-          }),
-          err,
-        );
+        console.error(t('app.tools.fullscreen.off.error'), err);
       });
     }
   };
@@ -137,15 +120,9 @@ const ToggleFullscreenBtn = () => {
     <Tooltip
       title={
         isFullscreen ? (
-          <FormattedMessage
-            id="app.tools.fullscreen.off"
-            defaultMessage="退出全屏"
-          />
+          <T id="app.tools.fullscreen.off" />
         ) : (
-          <FormattedMessage
-            id="app.tools.fullscreen.on"
-            defaultMessage="进入全屏"
-          />
+          <T id="app.tools.fullscreen.on" />
         )
       }
     >

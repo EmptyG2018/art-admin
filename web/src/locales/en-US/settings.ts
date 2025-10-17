@@ -1,6 +1,6 @@
 export default {
   'settings.menu.basic': 'Basic Settings',
-  'settings.menu.security': 'Security',
+  'settings.menu.security': 'Security Settings',
   'settings.menu.appearance': 'Appearance',
   'settings.basic.nickname': 'Nickname',
   'settings.basic.phone': 'Phone Number',
@@ -9,6 +9,7 @@ export default {
   'settings.security.password': 'Account Password',
   'settings.security.password.description':
     'Protect your account security and prevent information leakage',
+  'settings.security.password.update': 'Edit',
   'settings.security.form.title': 'Change Password',
   'settings.security.form.oldpassword': 'Old Password',
   'settings.security.form.newpassword': 'New Password',

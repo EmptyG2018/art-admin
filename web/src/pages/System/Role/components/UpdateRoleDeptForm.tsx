@@ -1,6 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
+import { useT } from '@/locales';
 import { getRoleDept } from '@/services/dept';
 import { updateDataScope, getRole } from '@/services/role';
 
@@ -12,6 +13,7 @@ interface UpdateRoleFormProps {
 }
 
 const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
+  const t = useT();
   const { message } = App.useApp();
   const { values, trigger, formRender, onFinish } = props;
 
@@ -30,7 +32,9 @@ const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
       formRender={formRender}
       onFinish={async (formValues) => {
         const { dataScope, deptIds } = formValues;
-        const hide = message.loading('正在修改');
+        const hide = message.loading(
+          t('component.form.message.update.loading'),
+        );
         try {
           await updateDataScope({
             ...values,
@@ -39,11 +43,11 @@ const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
           });
           onFinish?.();
           hide();
-          message.success('修改成功');
+          message.success(t('component.form.message.update.success'));
           return true;
         } catch {
           hide();
-          message.error('修改失败请重试！');
+          message.success(t('component.form.message.update.error'));
           return false;
         }
       }}

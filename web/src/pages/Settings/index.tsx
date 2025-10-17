@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Menu } from 'antd';
 import { createStyles } from 'antd-style';
-import { FormattedMessage } from 'react-intl';
+import { T } from '@/locales';
 import BaseSettings from './BaseSettings';
 import SafeSettings from './SafeSettings';
 import ThemeSettings from './ThemeSettings';
@@ -39,29 +39,17 @@ const Settings = () => {
   const nav = [
     {
       key: 'profile',
-      label: (
-        <FormattedMessage id="settings.menu.basic" defaultMessage="基本设置" />
-      ),
+      label: <T id="settings.menu.basic" />,
       render: <BaseSettings />,
     },
     {
       key: 'security',
-      label: (
-        <FormattedMessage
-          id="settings.menu.security"
-          defaultMessage="安全设置"
-        />
-      ),
+      label: <T id="settings.menu.security" />,
       render: <SafeSettings />,
     },
     {
       key: 'appearance',
-      label: (
-        <FormattedMessage
-          id="settings.menu.appearance"
-          defaultMessage="主题外观"
-        />
-      ),
+      label: <T id="settings.menu.appearance" />,
       render: <ThemeSettings />,
     },
   ];

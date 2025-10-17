@@ -42,8 +42,7 @@ import { queryAllPost } from '@/services/post';
 import { queryAllRole } from '@/services/role';
 import { queryDictsByType } from '@/services/dict';
 import { PermissionGuard } from '@/components/Layout';
-import { useIntl, FormattedMessage } from 'react-intl';
-import { intl as rawIntl } from '@/locales';
+import { rawT, useT, T } from '@/locales';
 import CreateUserForm from './components/CreateUserForm';
 import UpdateUserForm from './components/UpdateUserForm';
 
@@ -78,31 +77,16 @@ const DeptTree: React.FC<{ onSelect: (key: React.Key) => void }> = ({
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading(
-    rawIntl.formatMessage({
-      id: 'component.form.message.delete.loading',
-      defaultMessage: '正在删除',
-    }),
-  );
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deleteUser(selectedRows.map((row) => row.userId).join(','));
     hide();
-    message.success(
-      rawIntl.formatMessage({
-        id: 'component.form.message.delete.success',
-        defaultMessage: '删除成功',
-      }),
-    );
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error(
-      rawIntl.formatMessage({
-        id: 'component.form.message.delete.error',
-        defaultMessage: '删除失败请重试!',
-      }),
-    );
+    message.error(rawT('component.form.message.delete.error'));
     return false;
   }
 };
@@ -112,16 +96,17 @@ export const Component: React.FC<unknown> = () => {
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
   const [deptId, setDeptId] = useState<React.Key>();
   const responsive = useResponsive();
+  const t = useT();
 
   const columns: ProColumns[] = [
     {
-      title: '用户编号',
+      title: <T id="page.user.field.id" />,
       dataIndex: 'userId',
       width: 120,
       hideInSearch: true,
     },
     {
-      title: '用户昵称',
+      title: <T id="page.user.field.nickName" />,
       dataIndex: 'nickName',
       valueType: 'text',
       width: 220,
@@ -136,7 +121,7 @@ export const Component: React.FC<unknown> = () => {
       hideInSearch: true,
     },
     {
-      title: '所属部门',
+      title: <T id="page.user.field.dept" />,
       dataIndex: 'deptId',
       valueType: 'treeSelect',
       width: 160,
@@ -150,13 +135,13 @@ export const Component: React.FC<unknown> = () => {
       hideInSearch: true,
     },
     {
-      title: '用户名称',
+      title: <T id="page.user.field.userName" />,
       dataIndex: 'userName',
       valueType: 'text',
       width: 220,
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
@@ -169,13 +154,13 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       dataIndex: 'option',
       valueType: 'option',
       width: 140,
@@ -189,7 +174,7 @@ export const Component: React.FC<unknown> = () => {
                 formRender={formRender('edit')}
                 values={record}
                 trigger={
-                  <Tooltip title="修改">
+                  <Tooltip title={<T id="component.tooltip.update" />}>
                     <Button type="link" size="small" icon={<EditOutlined />} />
                   </Tooltip>
                 }
@@ -199,10 +184,10 @@ export const Component: React.FC<unknown> = () => {
               />
             </PermissionGuard>
             <PermissionGuard requireds={['system:user:remove']}>
-              <Tooltip title="删除">
+              <Tooltip title={<T id="component.tooltip.delete" />}>
                 <Popconfirm
-                  title="删除记录"
-                  description="您确定要删除此记录吗？"
+                  title={<T id="component.confirm.delete" />}
+                  description={<T id="component.confirm.delete.desc" />}
                   onConfirm={async () => {
                     await handleRemove([record]);
                     actionRef.current?.reloadAndRest?.();
@@ -214,10 +199,10 @@ export const Component: React.FC<unknown> = () => {
             </PermissionGuard>
             <PermissionGuard requireds={['system:user:resetPwd']}>
               <ModalForm
-                title="重置密码"
+                title={<T id="page.user.restPswd" />}
                 width={400}
                 trigger={
-                  <Tooltip title="重置密码">
+                  <Tooltip title={<T id="page.user.restPswd" />}>
                     <Button type="link" size="small" icon={<KeyOutlined />} />
                   </Tooltip>
                 }
@@ -225,31 +210,38 @@ export const Component: React.FC<unknown> = () => {
                   destroyOnHidden: true,
                 }}
                 onFinish={async (formValues) => {
-                  const hide = message.loading('正在重置');
+                  const hide = message.loading(t('page.user.restPswd.loading'));
                   try {
                     await resetUserPwd({
                       ...formValues,
                       userId: record.userId,
                     });
                     hide();
-                    message.success('重置成功');
+                    message.success(t('page.user.restPswd.success'));
                     return true;
                   } catch {
                     hide();
-                    message.error('重置失败请重试！');
+                    message.error(t('page.user.restPswd.error'));
                     return false;
                   }
                 }}
               >
                 <ProFormText.Password
                   name="password"
-                  label="新密码"
-                  placeholder="请输入新密码"
+                  label={<T id="page.user.field.newPswd" />}
+                  placeholder={t('component.form.placeholder', {
+                    label: t('page.user.field.newPswd'),
+                  })}
                   rules={[
-                    { required: true, message: '请输入密码' },
+                    {
+                      required: true,
+                      message: t('component.form.placeholder', {
+                        label: t('page.user.field.newPswd'),
+                      }),
+                    },
                     {
                       pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/,
-                      message: '密码至少包含字母和数字，且长度在6-20位之间',
+                      message: t('page.user.field.newPswd.rule'),
                     },
                   ]}
                   colProps={{ span: 24 }}
@@ -264,47 +256,83 @@ export const Component: React.FC<unknown> = () => {
 
   const formRender = (souce: '' | 'edit' | 'add' = '') => (
     <>
-      <ProForm.Group title="基本信息">
+      <ProForm.Group title={<T id="page.user.group.base" />}>
         {souce === 'add' && (
           <ProFormText
             name="userName"
-            label="用户名"
-            placeholder="请输入用户名"
+            label={<T id="page.user.field.user" />}
+            placeholder={t('component.form.placeholder', {
+              label: t('page.user.field.user'),
+            })}
             rules={[
-              { required: true, message: '请输入用户名' },
-              { min: 2, message: '用户名不能小于2位' },
+              {
+                required: true,
+                message: t('component.form.placeholder', {
+                  label: t('page.user.field.user'),
+                }),
+              },
+              {
+                min: 2,
+                message: t('page.user.field.user.rule'),
+              },
             ]}
             width="md"
           />
         )}
         <ProFormText
           name="nickName"
-          label="昵称"
-          placeholder="请输入昵称"
+          label={<T id="page.user.field.nickName" />}
+          placeholder={t('component.form.placeholder', {
+            label: t('page.user.field.nickName'),
+          })}
           rules={[
-            { required: true, message: '请输入昵称' },
-            { min: 2, message: '昵称不能小于2位' },
+            {
+              required: true,
+              message: t('component.form.placeholder', {
+                label: t('page.user.field.nickName'),
+              }),
+            },
+            {
+              min: 2,
+              message: t('page.user.field.nickName.rule'),
+            },
           ]}
           width="md"
         />
         <ProFormText
           name="phonenumber"
-          label="手机号码"
-          placeholder="请输入手机号码"
-          rules={[{ pattern: /^1[3-9]\d{9}$/, message: '手机号码格式不正确' }]}
+          label={<T id="page.user.field.phone" />}
+          placeholder={t('component.form.placeholder', {
+            label: t('page.user.field.phone'),
+          })}
+          rules={[
+            {
+              pattern: /^1[3-9]\d{9}$/,
+              message: t('page.user.field.phone.rule'),
+            },
+          ]}
           width="md"
         />
         <ProFormText
           name="email"
-          label="邮箱"
-          placeholder="请输入邮箱"
-          rules={[{ type: 'email', message: '邮箱格式不正确' }]}
+          label={<T id="page.user.field.email" />}
+          placeholder={t('component.form.placeholder', {
+            label: t('page.user.field.email'),
+          })}
+          rules={[
+            {
+              type: 'email',
+              message: t('page.user.field.email.rule'),
+            },
+          ]}
           width="md"
         />
         <ProFormSelect
           name="sex"
-          label="性别"
-          placeholder="请选择性别"
+          label={<T id="page.user.field.sex" />}
+          placeholder={t('component.form.placeholder.sel', {
+            label: t('page.user.field.sex'),
+          })}
           request={async () => {
             const res = await queryDictsByType('sys_user_sex');
             return res.data.map((dict) => ({
@@ -316,12 +344,21 @@ export const Component: React.FC<unknown> = () => {
         />
       </ProForm.Group>
 
-      <ProForm.Group title="组织与权限信息">
+      <ProForm.Group title={<T id="page.user.group.auth" />}>
         <ProFormTreeSelect
           name="deptId"
-          label="所属部门"
-          placeholder="请选择所属部门"
-          rules={[{ required: true, message: '请选择所属部门' }]}
+          label={<T id="page.user.field.dept" />}
+          placeholder={t('component.form.placeholder.sel', {
+            label: t('page.user.field.dept'),
+          })}
+          rules={[
+            {
+              required: true,
+              message: t('component.form.placeholder.sel', {
+                label: t('page.user.field.dept'),
+              }),
+            },
+          ]}
           fieldProps={{
             fieldNames: { label: 'label', value: 'id', children: 'children' },
           }}
@@ -333,8 +370,10 @@ export const Component: React.FC<unknown> = () => {
         />
         <ProFormSelect
           name="postIds"
-          label="岗位"
-          placeholder="请选择岗位"
+          label={<T id="page.user.field.post" />}
+          placeholder={t('component.form.placeholder', {
+            label: t('page.user.field.post'),
+          })}
           initialValue={[]}
           mode="multiple"
           request={async () => {
@@ -348,8 +387,10 @@ export const Component: React.FC<unknown> = () => {
         />
         <ProFormSelect
           name="roleIds"
-          label="角色"
-          placeholder="请选择角色"
+          label={<T id="page.user.field.role" />}
+          placeholder={t('component.form.placeholder', {
+            label: t('page.user.field.role'),
+          })}
           initialValue={[]}
           mode="multiple"
           request={async () => {
@@ -365,13 +406,20 @@ export const Component: React.FC<unknown> = () => {
       {souce === 'add' && (
         <ProFormText.Password
           name="password"
-          label="密码"
-          placeholder="请输入密码"
+          label={<T id="page.user.field.pswd" />}
+          placeholder={t('component.form.placeholder', {
+            label: t('page.user.field.pswd'),
+          })}
           rules={[
-            { required: true, message: '请输入密码' },
+            {
+              required: true,
+              message: t('component.form.placeholder', {
+                label: t('page.user.field.pswd'),
+              }),
+            },
             {
               pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/,
-              message: '密码至少包含字母和数字，且长度在6-20位之间',
+              message: t('page.user.field.pswd.rule'),
             },
           ]}
           width="xl"
@@ -379,8 +427,8 @@ export const Component: React.FC<unknown> = () => {
       )}
       <ProFormRadio.Group
         name="status"
-        label="状态"
-        placeholder="请选择状态"
+        label={<T id="component.field.status" />}
+        placeholder={t('component.field.status.placeholder')}
         initialValue="0"
         request={async () => {
           const res = await queryDictsByType('sys_normal_disable');
@@ -391,7 +439,11 @@ export const Component: React.FC<unknown> = () => {
         }}
         colProps={{ span: 12 }}
       />
-      <ProFormTextArea name="remark" label="备注" placeholder="请输入备注" />
+      <ProFormTextArea
+        name="remark"
+        label={<T id="component.field.remark" />}
+        placeholder={t('component.field.remark.placeholder')}
+      />
     </>
   );
 
@@ -407,7 +459,7 @@ export const Component: React.FC<unknown> = () => {
         </Col>
         <Col flex="auto">
           <ProTable
-            headerTitle="查询表格"
+            headerTitle={<T id="component.table.title" />}
             actionRef={actionRef}
             rowKey="userId"
             toolBarRender={() => [
@@ -416,7 +468,7 @@ export const Component: React.FC<unknown> = () => {
                   formRender={formRender('add')}
                   trigger={
                     <Button type="primary" icon={<PlusOutlined />} key="add">
-                      新增
+                      <T id="component.table.tool.add" />
                     </Button>
                   }
                   onFinish={() => {
@@ -428,12 +480,12 @@ export const Component: React.FC<unknown> = () => {
                 menu={{
                   items: [
                     {
-                      label: '导入',
+                      label: <T id="component.table.tool.import" />,
                       icon: <ImportOutlined />,
                       key: 'import',
                     },
                     {
-                      label: '导出',
+                      label: <T id="component.table.tool.export" />,
                       icon: <ExportOutlined />,
                       key: 'export',
                     },
@@ -474,9 +526,16 @@ export const Component: React.FC<unknown> = () => {
             <FooterToolbar
               extra={
                 <div>
-                  已选择{' '}
-                  <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-                  项&nbsp;&nbsp;
+                  <T
+                    id="component.table.selection"
+                    values={{
+                      num: (
+                        <a style={{ fontWeight: 600 }}>
+                          {selectedRowsState.length}
+                        </a>
+                      ),
+                    }}
+                  />
                 </div>
               }
             >
@@ -484,8 +543,8 @@ export const Component: React.FC<unknown> = () => {
                 <Button
                   onClick={async () => {
                     Modal.confirm({
-                      title: '删除记录',
-                      content: '您确定要删除选中的记录吗？',
+                      title: <T id="component.confirm.delete" />,
+                      content: <T id="component.confirm.delete.select.desc" />,
                       onOk: async () => {
                         const ok = await handleRemove(selectedRowsState);
                         if (ok) {
@@ -499,7 +558,7 @@ export const Component: React.FC<unknown> = () => {
                     });
                   }}
                 >
-                  批量删除
+                  <T id="component.table.tool.batchdelete" />
                 </Button>
               </PermissionGuard>
             </FooterToolbar>

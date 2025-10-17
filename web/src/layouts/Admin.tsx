@@ -11,7 +11,7 @@ import { ProLayout } from '@ant-design/pro-components';
 import { Logo, SelectLang, ToggleFullscreenBtn } from '@/components/Layout';
 import { useProfileStore, useSystemStore } from '@/stores';
 import icons from '@/constants/icons';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { useT, T } from '@/locales';
 
 const themeLayout: any = {
   light: theme.defaultAlgorithm,
@@ -40,7 +40,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
   const { menus, theme } = useSystemStore();
   const location = useLocation();
   const navigate = useNavigate();
-  const intl = useIntl();
+  const t = useT();
 
   const routes = useMemo(() => {
     return generateDeepRoutes(menus);
@@ -94,12 +94,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
                       {
                         key: 'settings',
                         icon: <SettingOutlined />,
-                        label: (
-                          <FormattedMessage
-                            id="layout.header.profile.setting"
-                            defaultMessage="设置"
-                          />
-                        ),
+                        label: <T id="layout.header.profile.setting" />,
                         onClick: async () => {
                           navigate('/settings');
                         },
@@ -107,12 +102,7 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
                       {
                         key: 'logout',
                         icon: <LogoutOutlined />,
-                        label: (
-                          <FormattedMessage
-                            id="layout.header.profile.logout"
-                            defaultMessage="退出登录"
-                          />
-                        ),
+                        label: <T id="layout.header.profile.logout" />,
                         onClick: async () => {
                           await logoutAccount();
                           navigate('/login', { replace: true });

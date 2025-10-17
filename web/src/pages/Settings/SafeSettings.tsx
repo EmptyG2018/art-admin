@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { App, Button, List, Modal, Flex, Form } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { ProForm, ProFormText } from '@ant-design/pro-components';
+import { useT, T } from '@/locales';
 import { updatePwd } from '@/services/system';
-import { useIntl, FormattedMessage } from 'react-intl';
 
 const SafeSettings = () => {
   const app = App.useApp();
-  const intl = useIntl();
+  const t = useT();
   const [form] = Form.useForm();
   const [editPwdModal, setEditPwdModal] = useState(false);
 
@@ -18,14 +18,8 @@ const SafeSettings = () => {
         dataSource={[
           {
             id: '1',
-            name: intl.formatMessage({
-              id: 'settings.security.password',
-              defaultMessage: '账户密码',
-            }),
-            desc: intl.formatMessage({
-              id: 'settings.security.password.description',
-              defaultMessage: '保护个人账户安全，保障信息不泄露',
-            }),
+            name: t('settings.security.password'),
+            desc: t('settings.security.password.description'),
           },
         ]}
         renderItem={(item) => (
@@ -41,11 +35,7 @@ const SafeSettings = () => {
                   }
                 }}
               >
-                <FormattedMessage
-                  id="component.form.update"
-                  defaultMessage="修改{title}"
-                  values={{ title: '' }}
-                />
+                <T id="settings.security.password.update" />
               </Button>,
             ]}
           >
@@ -55,12 +45,7 @@ const SafeSettings = () => {
       />
       <Modal
         open={editPwdModal}
-        title={
-          <FormattedMessage
-            id="settings.security.form.title"
-            defaultMessage="修改密码"
-          />
-        }
+        title={<T id="settings.security.form.title" />}
         footer={null}
         destroyOnHidden
         onCancel={() => setEditPwdModal(false)}
@@ -72,20 +57,14 @@ const SafeSettings = () => {
               return (
                 <Flex gap={8} justify="flex-end">
                   <Button key="cancel" onClick={() => setEditPwdModal(false)}>
-                    <FormattedMessage
-                      id="component.form.cancel"
-                      defaultMessage="取消"
-                    />
+                    <T id="component.form.cancel" />
                   </Button>
                   <Button
                     type="primary"
                     key="submit"
                     onClick={() => form?.submit?.()}
                   >
-                    <FormattedMessage
-                      id="component.form.submit"
-                      defaultMessage="提交"
-                    />
+                    <T id="component.form.submit" />
                   </Button>
                 </Flex>
               );
@@ -94,113 +73,63 @@ const SafeSettings = () => {
           onFinish={async (formValues) => {
             const { newPassword2, ...data } = formValues;
             const hide = app.message.loading(
-              intl.formatMessage({
-                id: 'component.form.message.update.loading',
-                defaultMessage: '正在修改',
-              }),
+              t('component.form.message.update.loading'),
             );
             try {
               await updatePwd({ ...data });
               hide();
-              app.message.success(
-                intl.formatMessage({
-                  id: 'component.form.message.update.success',
-                  defaultMessage: '修改成功',
-                }),
-              );
+              app.message.success(t('component.form.message.update.success'));
               return true;
             } catch {
               hide();
-              app.message.error(
-                intl.formatMessage({
-                  id: 'component.form.message.update.error',
-                  defaultMessage: '修改失败请重试！',
-                }),
-              );
+              app.message.error(t('component.form.message.update.error'));
               return false;
             }
           }}
         >
           <ProFormText.Password
             name="oldPassword"
-            label={
-              <FormattedMessage
-                id="settings.security.form.oldpassword"
-                defaultMessage="旧密码"
-              />
-            }
+            label={<T id="settings.security.form.oldpassword" />}
             width="md"
             rules={[
               {
                 required: true,
-                message: intl.formatMessage(
-                  {
-                    id: 'component.form.placeholder',
-                    defaultMessage: '请输入{label}',
-                  },
-                  {
-                    label: intl.formatMessage({
-                      id: 'settings.security.form.oldpassword',
-                      defaultMessage: '旧密码',
-                    }),
-                  },
-                ),
+                message: t('component.form.placeholder', {
+                  label: t('settings.security.form.oldpassword'),
+                }),
               },
             ]}
           />
           <ProFormText.Password
             name="newPassword"
-            label={
-              <FormattedMessage
-                id="settings.security.form.newpassword"
-                defaultMessage="新密码"
-              />
-            }
+            label={<T id="settings.security.form.newpassword" />}
             width="md"
             rules={[
               {
                 required: true,
-                message: intl.formatMessage(
-                  {
-                    id: 'component.form.placeholder',
-                    defaultMessage: '请输入{label}',
-                  },
-                  {
-                    label: intl.formatMessage({
-                      id: 'settings.security.form.newpassword',
-                      defaultMessage: '新密码',
-                    }),
-                  },
-                ),
+                message: t('component.form.placeholder', {
+                  label: t('settings.security.form.newpassword'),
+                }),
               },
             ]}
           />
           <ProFormText.Password
             name="newPassword2"
-            label={
-              <FormattedMessage
-                id="settings.security.form.confirmpassword"
-                defaultMessage="确认密码"
-              />
-            }
+            label={<T id="settings.security.form.confirmpassword" />}
             width="md"
             rules={[
               {
                 required: true,
-                message: intl.formatMessage({
-                  id: 'settings.security.form.confirmpassword.placeholder',
-                  defaultMessage: '请再次输入密码',
-                }),
+                message: t(
+                  'settings.security.form.confirmpassword.placeholder',
+                ),
               },
               {
                 validator: (_, value) => {
                   if (value && value !== form.getFieldValue('newPassword'))
                     return Promise.reject(
                       new Error(
-                        intl.formatMessage({
-                          id: 'settings.security.form.confirmpassword.rule',
-                          defaultMessage: '两次输入的密码不一致！',
-                        }),
+                        t('settings.security.form.confirmpassword.rule'),
                       ),
                     );
 

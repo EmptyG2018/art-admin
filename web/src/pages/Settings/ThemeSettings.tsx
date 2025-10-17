@@ -2,7 +2,7 @@ import { App, Button } from 'antd';
 import { MoonFilled, SunOutlined } from '@ant-design/icons';
 import { createStyles } from 'antd-style';
 import { ProForm, ProFormRadio } from '@ant-design/pro-components';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { useT, T } from '@/locales';
 import { useSystemStore } from '@/stores';
 import { updateSystemConfig } from '@/services/system';
 
@@ -29,7 +29,7 @@ const useStyles = createStyles(({ css }) => ({
 
 const ThemeSettings = () => {
   const app = App.useApp();
-  const intl = useIntl();
+  const t = useT();
   const { styles } = useStyles();
   const { theme, setTheme } = useSystemStore();
 
@@ -50,20 +50,14 @@ const ThemeSettings = () => {
               key="submit"
               onClick={() => form?.submit?.()}
             >
-              <FormattedMessage
-                id="settings.form.updateSubmit"
-                defaultMessage="更新资料"
-              />
+              <T id="settings.form.updateSubmit" />
             </Button>,
           ];
         },
       }}
       onFinish={async (formValues) => {
         const hide = app.message.loading(
-          intl.formatMessage({
-            id: 'component.form.message.update.loading',
-            defaultMessage: '正在修改',
-          }),
+          t('component.form.message.update.loading'),
         );
         try {
           updateSystemConfig({
@@ -73,43 +67,25 @@ const ThemeSettings = () => {
             }),
           });
           hide();
-          app.message.success(
-            intl.formatMessage({
-              id: 'component.form.message.update.success',
-              defaultMessage: '修改成功',
-            }),
-          );
+          app.message.success(t('component.form.message.update.success'));
           return true;
         } catch {
           hide();
-          app.message.error(
-            intl.formatMessage({
-              id: 'component.form.message.update.error',
-              defaultMessage: '修改失败请重试！',
-            }),
-          );
+          app.message.error(t('component.form.message.update.error'));
           return false;
         }
       }}
     >
       <ProFormRadio.Group
         name="layout"
-        label={
-          <FormattedMessage
-            id="settings.appearance.style"
-            defaultMessage="整体风格"
-          />
-        }
+        label={<T id="settings.appearance.style" />}
         initialValue={theme.layout}
         options={[
           {
             label: (
               <div className={styles.themeLayout}>
                 <SunOutlined style={{ fontSize: 28 }} />
-                <FormattedMessage
-                  id="settings.appearance.style.light"
-                  defaultMessage="明亮"
-                />
+                <T id="settings.appearance.style.light" />
               </div>
             ),
             value: 'light',
@@ -118,10 +94,7 @@ const ThemeSettings = () => {
             label: (
               <div className={styles.themeLayout}>
                 <MoonFilled style={{ fontSize: 28 }} />
-                <FormattedMessage
-                  id="settings.appearance.style.dark"
-                  defaultMessage="暗黑"
-                />
+                <T id="settings.appearance.style.dark" />
               </div>
             ),
             value: 'dark',
@@ -131,12 +104,7 @@ const ThemeSettings = () => {
 
       <ProFormRadio.Group
         name="colorPrimary"
-        label={
-          <FormattedMessage
-            id="settings.appearance.primary"
-            defaultMessage="主题色"
-          />
-        }
+        label={<T id="settings.appearance.primary" />}
         initialValue={theme.colorPrimary}
         options={PRIMARY_COLORS.map((v) => ({
           label: (

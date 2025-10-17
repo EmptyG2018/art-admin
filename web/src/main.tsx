@@ -1,11 +1,6 @@
 import React, { useState, StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import {
-  RawIntlProvider,
-  createIntl,
-  createIntlCache,
-  IntlShape,
-} from 'react-intl';
+import { RawIntlProvider, IntlShape } from 'react-intl';
 import {
   App as AntdContext,
   ConfigProvider as AntdProvier,

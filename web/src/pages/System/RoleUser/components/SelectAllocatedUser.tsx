@@ -1,37 +1,38 @@
 import React, { useState } from 'react';
 import { Modal } from 'antd';
 import { ProColumns, ProTable } from '@ant-design/pro-components';
+import { T } from '@/locales';
 import { queryDictsByType } from '@/services/dict';
 import { getUnAllocatedUserList } from '@/services/user';
 import { updateAuthUser } from '@/services/role';
 
 export const columns: ProColumns[] = [
   {
-    title: '用户名称',
+    title: <T id="page.role.field.userName" />,
     dataIndex: 'userName',
     valueType: 'text',
     width: 140,
   },
   {
-    title: '用户昵称',
+    title: <T id="page.role.field.nickName" />,
     dataIndex: 'nickName',
     valueType: 'text',
     width: 180,
     hideInSearch: true,
   },
   {
-    title: '邮箱',
+    title: <T id="page.role.field.email" />,
     dataIndex: 'email',
     valueType: 'text',
     hideInSearch: true,
   },
   {
-    title: '手机号码',
+    title: <T id="page.role.field.phone" />,
     dataIndex: 'phonenumber',
     width: 220,
   },
   {
-    title: '状态',
+    title: <T id="component.field.status" />,
     dataIndex: 'status',
     valueType: 'radio',
     hideInSearch: true,
@@ -46,7 +47,7 @@ export const columns: ProColumns[] = [
     },
   },
   {
-    title: '创建时间',
+    title: <T id="component.field.createTime" />,
     dataIndex: 'createTime',
     valueType: 'dateTime',
     width: 220,
@@ -61,7 +62,7 @@ const SelectAllocatedUserTable: React.FC<{
 }> = ({ roleId, onSelectionChange }) => {
   return (
     <ProTable
-      headerTitle="查询表格"
+      headerTitle={<T id="component.table.title" />}
       rowKey="userId"
       request={async (params, sorter, filter) => {
         const { code, rows, total } = await getUnAllocatedUserList({

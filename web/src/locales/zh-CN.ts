@@ -1,6 +1,5 @@
 import layout from './zh-CN/layout';
 import component from './zh-CN/component';
-import globalHeader from './zh-CN/globalHeader';
 import menu from './zh-CN/menu';
 import pages from './zh-CN/pages';
 import settings from './zh-CN/settings';
@@ -13,7 +12,6 @@ export default {
   'app.tools.fullscreen.on.error': '进入全屏失败：',
   'app.tools.fullscreen.off.error': '退出全屏失败：',
   ...pages,
-  ...globalHeader,
   ...menu,
   ...settings,
   ...layout,

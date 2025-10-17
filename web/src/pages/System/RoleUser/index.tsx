@@ -30,10 +30,12 @@ import {
   updateUnAuthUser,
   updateUnAuthBatchUser,
 } from '@/services/role';
+import { rawT, useT, T } from '@/locales';
 import { columns as userColumns } from './components/SelectAllocatedUser';
 import SelectAllocatedUser from './components/SelectAllocatedUser';
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const { roleId } = useParams();
   const navigate = useNavigate();
   const actionRef = useRef<ActionType>();
@@ -41,17 +43,17 @@ export const Component: React.FC<unknown> = () => {
 
   const descriptionsColumns: ProColumns[] = [
     {
-      title: '字典名称',
+      title: <T id="page.role.field.roleName" />,
       dataIndex: 'roleName',
       valueType: 'text',
     },
     {
-      title: '权限字符',
+      title: <T id="page.role.field.authKey" />,
       dataIndex: 'roleKey',
       valueType: 'text',
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'radio',
       request: async () => {
@@ -63,7 +65,7 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '备注',
+      title: <T id="component.field.remark" />,
       dataIndex: 'remark',
       valueType: 'textarea',
     },
@@ -72,31 +74,31 @@ export const Component: React.FC<unknown> = () => {
   const columns: ProColumns[] = [
     ...userColumns,
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 60,
       dataIndex: 'option',
       valueType: 'option',
       fixed: 'right',
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
-          <Tooltip title="取消授权">
+          <Tooltip title={<T id="page.role.cancelAuth" />}>
             <Popconfirm
-              title="取消授权"
-              description="您确定要取消该用户的授权吗？"
+              title={<T id="page.role.cancelAuth" />}
+              description={<T id="page.role.cancelAuth.desc" />}
               onConfirm={async () => {
-                const hide = message.loading('正在取消授权');
+                const hide = message.loading(t('page.role.cancelAuth.loading'));
                 try {
                   await updateUnAuthUser({
                     userId: record.userId,
                     roleId,
                   });
                   hide();
-                  message.success('取消授权成功');
+                  message.success(t('page.role.cancelAuth.success'));
                   actionRef.current?.reloadAndRest?.();
                   return true;
                 } catch {
                   hide();
-                  message.error('取消授权失败请重试!');
+                  message.error(t('page.role.cancelAuth.error'));
                   return false;
                 }
               }}
@@ -112,7 +114,7 @@ export const Component: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: '授权用户',
+        title: '用户授权',
       }}
       content={
         <ProDescriptions
@@ -127,7 +129,7 @@ export const Component: React.FC<unknown> = () => {
       onBack={() => navigate(-1)}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="userId"
         toolBarRender={() => [
@@ -135,7 +137,7 @@ export const Component: React.FC<unknown> = () => {
             roleId={roleId}
             trigger={
               <Button type="primary" icon={<PlusOutlined />} key="add">
-                新建
+                <T id="component.table.tool.add" />
               </Button>
             }
             onFinish={() => {
@@ -147,7 +149,7 @@ export const Component: React.FC<unknown> = () => {
             menu={{
               items: [
                 {
-                  label: '导出',
+                  label: <T id="component.table.tool.export" />,
                   icon: <ExportOutlined />,
                   key: 'export',
                 },
@@ -188,19 +190,28 @@ export const Component: React.FC<unknown> = () => {
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
+              <T
+                id="component.table.selection"
+                values={{
+                  num: (
+                    <a style={{ fontWeight: 600 }}>
+                      {selectedRowsState.length}
+                    </a>
+                  ),
+                }}
+              />
             </div>
           }
         >
           <Button
             onClick={async () => {
               Modal.confirm({
-                title: '删除记录',
-                content: '您确定要删除选中的记录吗？',
+                title: <T id="component.confirm.delete" />,
+                content: <T id="component.confirm.select.desc" />,
                 onOk: async () => {
-                  const hide = message.loading('正在取消授权');
+                  const hide = message.loading(
+                    t('page.role.cancelAuth.loading'),
+                  );
                   if (!selectedRowsState) return true;
                   try {
                     await updateUnAuthBatchUser({
@@ -210,19 +221,19 @@ export const Component: React.FC<unknown> = () => {
                       roleId,
                     });
                     hide();
-                    message.success('取消授权成功');
+                    message.success(t('page.role.cancelAuth.success'));
                     actionRef.current?.reloadAndRest?.();
                     Promise.resolve();
                   } catch {
                     hide();
-                    message.error('取消授权失败请重试!');
+                    message.error(t('page.role.cancelAuth.error'));
                     Promise.reject();
                   }
                 },
               });
             }}
           >
-            批量取消授权
+            <T id="page.role.batchCancelAuth" />
           </Button>
         </FooterToolbar>
       )}

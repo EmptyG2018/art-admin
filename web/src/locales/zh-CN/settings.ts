@@ -8,6 +8,7 @@ export default {
   'settings.basic.sex': '性别',
   'settings.security.password': '账户密码',
   'settings.security.password.description': '保护个人账户安全，保障信息不泄露',
+  'settings.security.password.update': '修改',
   'settings.security.form.title': '修改密码',
   'settings.security.form.oldpassword': '旧密码',
   'settings.security.form.newpassword': '新密码',

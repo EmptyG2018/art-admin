@@ -44,6 +44,7 @@ import { queryDictsByType } from '@/services/dict';
 import { queryMenuTree } from '@/services/menu';
 import { queryDeptTree } from '@/services/dept';
 import { deleteRole } from '@/services/role';
+import { rawT, useT, T } from '@/locales';
 import { useControllableValue } from 'ahooks';
 
 interface TreeNode {
@@ -102,16 +103,16 @@ function getLeafSelectedNodes(
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deleteRole(selectedRows.map((row) => row.roleId).join(','));
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.error(rawT('component.form.message.delete.error'));
     return false;
   }
 };
@@ -180,53 +181,54 @@ const NodeTree: React.FC<NodeTreeProps> = ({
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
 
   const columns: ProColumns[] = [
     {
-      title: '角色编号',
+      title: <T id="page.role.field.id" />,
       dataIndex: 'roleId',
       hideInSearch: true,
       width: 140,
     },
     {
-      title: '角色名称',
+      title: <T id="page.role.field.roleName" />,
       dataIndex: 'roleName',
       valueType: 'text',
       width: 140,
     },
     {
-      title: '权限字符',
+      title: <T id="page.role.field.authKey" />,
       dataIndex: 'roleKey',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '排序',
+      title: <T id="component.field.sort" />,
       dataIndex: 'roleSort',
       valueType: 'text',
       width: 120,
       hideInSearch: true,
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       valueEnum: {
-        0: { text: '正常', status: 'MALE' },
-        1: { text: '停用', status: 'FEMALE' },
+        0: { text: t('dict.status.normal'), status: 'MALE' },
+        1: { text: t('dict.status.disable'), status: 'FEMALE' },
       },
       width: 120,
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 180,
       dataIndex: 'option',
       valueType: 'option',
@@ -240,7 +242,7 @@ export const Component: React.FC<unknown> = () => {
                 values={record}
                 formRender={formRender}
                 trigger={
-                  <Tooltip title="修改">
+                  <Tooltip title={<T id="component.tooltip.update" />}>
                     <Button type="link" size="small" icon={<EditOutlined />} />
                   </Tooltip>
                 }
@@ -250,10 +252,10 @@ export const Component: React.FC<unknown> = () => {
               />
             </PermissionGuard>
             <PermissionGuard requireds={['system:role:remove']}>
-              <Tooltip title="删除">
+              <Tooltip title={<T id="component.tooltip.delete" />}>
                 <Popconfirm
-                  title="删除记录"
-                  description="您确定要删除此记录吗？"
+                  title={<T id="component.confirm.delete" />}
+                  description={<T id="component.confirm.delete.desc" />}
                   onConfirm={async () => {
                     await handleRemove([record]);
                     actionRef.current?.reloadAndRest?.();
@@ -268,7 +270,7 @@ export const Component: React.FC<unknown> = () => {
                 values={record}
                 formRender={formRoleDeptRender}
                 trigger={
-                  <Tooltip title="数据授权">
+                  <Tooltip title={<T id="page.role.authData" />}>
                     <Button
                       type="link"
                       size="small"
@@ -282,7 +284,7 @@ export const Component: React.FC<unknown> = () => {
               />
             </PermissionGuard>
             <PermissionGuard requireds={['system:role:edit']}>
-              <Tooltip title="授权用户">
+              <Tooltip title={<T id="page.role.authUser" />}>
                 <Link to={`../role/${record.roleId}`}>
                   <Button type="link" size="small" icon={<UserOutlined />} />
                 </Link>
@@ -298,19 +300,41 @@ export const Component: React.FC<unknown> = () => {
     <>
       <ProFormText
         name="roleName"
-        label="角色名称"
-        placeholder="请输入角色名称"
-        rules={[{ required: true, message: '请输入角色名称' }]}
+        label={<T id="page.role.field.roleName" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.role.field.roleName'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.role.field.roleName'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormText
         name="roleKey"
-        label="权限字符"
-        placeholder="请输入权限字符"
-        rules={[{ required: true, message: '请输入权限字符' }]}
+        label={<T id="page.role.field.authKey" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.role.field.authKey'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.role.field.authKey'),
+            }),
+          },
+        ]}
         width="md"
       />
-      <Form.Item name="menuIds" label="菜单权限" initialValue={[]}>
+      <Form.Item
+        name="menuIds"
+        label={<T id="page.role.field.authMenu" />}
+        initialValue={[]}
+      >
         <NodeTree
           request={async () => {
             const res = await queryMenuTree();
@@ -320,23 +344,37 @@ export const Component: React.FC<unknown> = () => {
       </Form.Item>
       <ProFormDigit
         name="roleSort"
-        label="排序"
-        placeholder="请输入排序"
+        label={<T id="component.field.sort" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('component.field.sort'),
+        })}
         min={1}
-        rules={[{ required: true, message: '请输入排序' }]}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('component.field.sort'),
+            }),
+          },
+        ]}
         width="xs"
         fieldProps={{ precision: 0 }}
       />
       <ProFormRadio.Group
         name="status"
-        label="状态"
-        placeholder="请选择状态"
+        label={<T id="component.field.status" />}
+        placeholder={t('component.form.placeholder.sel', {
+          label: t('component.field.status'),
+        })}
         initialValue="0"
-        options={[
-          { label: '是', value: '0' },
-          { label: '否', value: '1' },
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('component.field.status'),
+            }),
+          },
         ]}
-        rules={[{ required: true, message: '请选择状态' }]}
         request={async () => {
           const res = await queryDictsByType('sys_normal_disable');
           return res.data.map((dict) => ({
@@ -347,9 +385,11 @@ export const Component: React.FC<unknown> = () => {
       />
       <ProFormTextArea
         name="remark"
-        label="备注"
+        label={<T id="component.field.remark" />}
         width="lg"
-        placeholder="请输入备注"
+        placeholder={t('component.form.placeholder', {
+          label: t('component.field.remark'),
+        })}
       />
     </>
   );
@@ -358,31 +398,51 @@ export const Component: React.FC<unknown> = () => {
     <>
       <ProFormText
         name="roleName"
-        label="角色名称"
-        placeholder="请输入角色名称"
-        rules={[{ required: true, message: '请输入角色名称' }]}
+        label={<T id="page.role.field.roleName" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.role.field.roleName'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.role.field.roleName'),
+            }),
+          },
+        ]}
         width="md"
         disabled
       />
       <ProFormText
         name="roleKey"
-        label="权限字符"
-        placeholder="请输入权限字符"
-        rules={[{ required: true, message: '请输入权限字符' }]}
+        label={<T id="page.role.field.authKey" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.role.field.authKey'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.role.field.authKey'),
+            }),
+          },
+        ]}
         width="md"
         disabled
       />
       <ProFormSelect
         name="dataScope"
-        label="权限范围"
-        placeholder="请输入权限范围"
+        label={<T id="page.role.field.authScope" />}
+        placeholder={t('component.form.placeholder.sel', {
+          label: t('page.role.field.authScope'),
+        })}
         width="sm"
         options={[
-          { value: '1', label: '全部数据权限' },
-          { value: '2', label: '自定数据权限' },
-          { value: '3', label: '本部门数据权限' },
-          { value: '4', label: '本部门及以下数据权限' },
-          { value: '5', label: '仅本人数据权限' },
+          { value: '1', label: t('dict.option.authScope.all') },
+          { value: '2', label: t('dict.option.authScope.diy') },
+          { value: '3', label: t('dict.option.authScope.deptSelf') },
+          { value: '4', label: t('dict.option.authScope.deptBelow') },
+          { value: '5', label: t('dict.option.authScope.onlyMe') },
         ]}
       />
       <ProFormDependency name={['dataScope']}>
@@ -390,7 +450,11 @@ export const Component: React.FC<unknown> = () => {
           if (dataScope !== '2') return null;
 
           return (
-            <Form.Item name="deptIds" label="菜单权限" initialValue={[]}>
+            <Form.Item
+              name="deptIds"
+              label={<T id="page.role.field.authMenu" />}
+              initialValue={[]}
+            >
               <NodeTree
                 defaultExpandAll
                 request={async () => {
@@ -412,7 +476,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="roleId"
         toolBarRender={() => [
@@ -421,7 +485,7 @@ export const Component: React.FC<unknown> = () => {
               formRender={formRender}
               trigger={
                 <Button type="primary" icon={<PlusOutlined />}>
-                  新增
+                  <T id="component.table.tool.add" />
                 </Button>
               }
               onFinish={() => {
@@ -434,7 +498,7 @@ export const Component: React.FC<unknown> = () => {
             menu={{
               items: [
                 {
-                  label: '导出',
+                  label: <T id="component.table.tool.export" />,
                   icon: <ExportOutlined />,
                   key: 'export',
                 },
@@ -473,9 +537,16 @@ export const Component: React.FC<unknown> = () => {
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
+              <T
+                id="component.table.selection"
+                values={{
+                  num: (
+                    <a style={{ fontWeight: 600 }}>
+                      {selectedRowsState.length}
+                    </a>
+                  ),
+                }}
+              />
             </div>
           }
         >
@@ -483,8 +554,8 @@ export const Component: React.FC<unknown> = () => {
             <Button
               onClick={async () => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要删除选中的记录吗？',
+                  title: <T id="component.confirm.delete" />,
+                  content: <T id="component.confirm.delete.select.desc" />,
                   onOk: async () => {
                     const ok = await handleRemove(selectedRowsState);
                     if (ok) {
@@ -498,7 +569,7 @@ export const Component: React.FC<unknown> = () => {
                 });
               }}
             >
-              批量删除
+              <T id="component.table.tool.batchdelete" />
             </Button>
           </PermissionGuard>
         </FooterToolbar>

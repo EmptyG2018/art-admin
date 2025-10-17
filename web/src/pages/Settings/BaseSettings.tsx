@@ -1,12 +1,12 @@
 import { App, Button } from 'antd';
 import { ProForm, ProFormText, ProFormRadio } from '@ant-design/pro-components';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { useT, T } from '@/locales';
 import { queryDictsByType } from '@/services/dict';
 import { getProfile, updateProfile } from '@/services/system';
 
 const BaseSettings = () => {
   const app = App.useApp();
-  const intl = useIntl();
+  const t = useT();
 
   return (
     <ProForm
@@ -28,10 +28,7 @@ const BaseSettings = () => {
               key="submit"
               onClick={() => form?.submit?.()}
             >
-              <FormattedMessage
-                id="settings.form.updateSubmit"
-                defaultMessage="更新资料"
-              />
+              <T id="settings.form.updateSubmit" />
             </Button>,
           ];
         },
@@ -39,116 +36,62 @@ const BaseSettings = () => {
       onFinish={async (formValues) => {
         const { deptStr, roleStr, ...data } = formValues;
         const hide = app.message.loading(
-          intl.formatMessage({
-            id: 'component.form.message.update.loading',
-            defaultMessage: '正在修改',
-          }),
+          t('component.form.message.update.loading'),
         );
         try {
           await updateProfile({ ...data });
           hide();
-          app.message.success(
-            intl.formatMessage({
-              id: 'component.form.message.update.success',
-              defaultMessage: '修改成功',
-            }),
-          );
+          app.message.success(t('component.form.message.update.success'));
           return true;
         } catch {
           hide();
-          app.message.error(
-            intl.formatMessage({
-              id: 'component.form.message.update.error',
-              defaultMessage: '修改失败请重试！',
-            }),
-          );
+          app.message.error(t('component.form.message.update.error'));
           return false;
         }
       }}
     >
       <ProFormText
         name="nickName"
-        label={
-          <FormattedMessage
-            id="settings.basic.nickname"
-            defaultMessage="昵称"
-          />
-        }
+        label={<T id="settings.basic.nickname" />}
         width="md"
         rules={[
           {
             required: true,
-            message: intl.formatMessage(
-              {
-                id: 'component.form.placeholder',
-                defaultMessage: '请输入{label}',
-              },
-              {
-                label: intl.formatMessage({
-                  id: 'settings.basic.nickname',
-                  defaultMessage: '昵称',
-                }),
-              },
-            ),
+            message: t('component.form.placeholder', {
+              label: t('settings.basic.nickname'),
+            }),
           },
         ]}
       />
       <ProFormText
         name="phonenumber"
-        label={
-          <FormattedMessage
-            id="settings.basic.phone"
-            defaultMessage="手机号码"
-          />
-        }
+        label={<T id="settings.basic.phone" />}
         width="sm"
         rules={[
           {
             required: true,
-            message: intl.formatMessage(
-              {
-                id: 'component.form.placeholder',
-                defaultMessage: '请输入{label}',
-              },
-              {
-                label: intl.formatMessage({
-                  id: 'settings.basic.phone',
-                  defaultMessage: '手机号码',
-                }),
-              },
-            ),
+            message: t('component.form.placeholder', {
+              label: t('settings.basic.phone'),
+            }),
           },
         ]}
       />
       <ProFormText
         name="email"
-        label={
-          <FormattedMessage id="settings.basic.email" defaultMessage="邮箱" />
-        }
+        label={<T id="settings.basic.email" />}
         width="md"
         rules={[
           {
             required: true,
-            message: intl.formatMessage(
-              {
-                id: 'component.form.placeholder',
-                defaultMessage: '请输入{label}',
-              },
-              {
-                label: intl.formatMessage({
-                  id: 'settings.basic.email',
-                  defaultMessage: '邮箱',
-                }),
-              },
-            ),
+            message: t('component.form.placeholder', {
+              label: t('settings.basic.email'),
+            }),
           },
         ]}
       />
       <ProFormRadio.Group
         name="sex"
-        label={
-          <FormattedMessage id="settings.basic.sex" defaultMessage="性别" />
-        }
+        label={<T id="settings.basic.sex" />}
         request={async () => {
           const res = await queryDictsByType('sys_user_sex');
           return res.data.map((dict) => ({
