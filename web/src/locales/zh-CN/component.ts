@@ -1,9 +1,13 @@
 export default {
+  'component.wangEditor.placeholder': '请输入内容...',
+
   'component.field.sort': '排序',
+  'component.field.sort.placeholder': '请输入排序',
   'component.field.status': '状态',
   'component.field.status.placeholder': '请选择状态',
   'component.field.remark': '备注',
   'component.field.remark.placeholder': '请输入备注',
+  'component.field.createBy': '创建者',
   'component.field.createTime': '创建时间',
   'component.field.createTime.placeholder': '请输入创建时间',
   'component.field.updatetime': '修改时间',
@@ -39,9 +43,14 @@ export default {
   'component.table.tool.export': '导出',
   'component.table.selection': '已选择 {num} 项',
 
+  'component.tooltip.add': '新增',
+  'component.tooltip.detail': '查看详情',
   'component.tooltip.update': '修改',
   'component.tooltip.delete': '删除',
+  'component.confirm.title': '提示',
   'component.confirm.delete': '删除记录',
+  'component.confirm.clear': '清空记录',
+  'component.confirm.clear.desc': '您确定要清空全部记录吗？',
   'component.confirm.delete.desc': '您确定要删除此记录吗？',
   'component.confirm.delete.select.desc': '您确定要删除选中的记录吗？',
 };

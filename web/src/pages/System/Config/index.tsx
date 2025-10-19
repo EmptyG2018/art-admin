@@ -29,6 +29,7 @@ import {
 import { queryDictsByType } from '@/services/dict';
 import { queryConfigPage, deleteConfig } from '@/services/config';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import CreateConfigForm from './components/CreateConfigForm';
 import UpdateConfigForm from './components/UpdateConfigForm';
 
@@ -37,52 +38,53 @@ import UpdateConfigForm from './components/UpdateConfigForm';
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deleteConfig(selectedRows.map((row) => row.configId).join(','));
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.success(rawT('component.form.message.delete.error'));
     return false;
   }
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
 
   const columns: ProColumns[] = [
     {
-      title: '参数主键',
+      title: <T id="page.config.field.id" />,
       dataIndex: 'configId',
       hideInSearch: true,
       width: 140,
     },
     {
-      title: '参数名称',
+      title: <T id="page.config.field.configName" />,
       dataIndex: 'configName',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '参数键名',
+      title: <T id="page.config.field.configKey" />,
       dataIndex: 'configKey',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '参数键值',
+      title: <T id="page.config.field.configValue" />,
       dataIndex: 'configValue',
       valueType: 'text',
       width: 180,
       hideInSearch: true,
     },
     {
-      title: '系统内置',
+      title: <T id="page.config.field.isSys" />,
       dataIndex: 'configType',
       valueType: 'select',
       width: 120,
@@ -95,19 +97,19 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '备注',
+      title: <T id="component.field.remark" />,
       dataIndex: 'remark',
       valueType: 'textarea',
       hideInSearch: true,
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 100,
       dataIndex: 'option',
       valueType: 'option',
@@ -119,7 +121,7 @@ export const Component: React.FC<unknown> = () => {
               values={record}
               formRender={formRender}
               trigger={
-                <Tooltip title="修改">
+                <Tooltip title={<T id="component.tooltip.update" />}>
                   <Button type="link" size="small" icon={<EditOutlined />} />
                 </Tooltip>
               }
@@ -129,10 +131,10 @@ export const Component: React.FC<unknown> = () => {
             />
           </PermissionGuard>
           <PermissionGuard requireds={['system:config:remove']}>
-            <Tooltip title="删除">
+            <Tooltip title={<T id="component.tooltip.delete" />}>
               <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
+                title={<T id="component.confirm.delete" />}
+                description={<T id="component.confirm.delete.desc" />}
                 onConfirm={async () => {
                   await handleRemove([record]);
                   actionRef.current?.reloadAndRest?.();
@@ -151,29 +153,58 @@ export const Component: React.FC<unknown> = () => {
     <>
       <ProFormText
         name="configName"
-        label="参数名称"
-        placeholder="请输入参数名称"
-        rules={[{ required: true, message: '请输入参数名称' }]}
+        label={<T id="page.config.field.configName" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.config.field.configName'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.config.field.configName'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormText
         name="configKey"
-        label="参数键名"
-        placeholder="请输入参数键名"
-        rules={[{ required: true, message: '请输入参数键名' }]}
+        label={<T id="page.config.field.configKey" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.config.field.configKey'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.config.field.configKey'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormText
         name="configValue"
-        label="参数键值"
-        placeholder="请输入参数键值"
-        rules={[{ required: true, message: '请输入参数键值' }]}
+        label={<T id="page.config.field.configValue" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.config.field.configValue'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.config.field.configValue'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormRadio.Group
         name="configType"
-        label="系统内置"
-        placeholder="请选择系统内置"
+        label={<T id="page.config.field.isSys" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.config.field.isSys'),
+        })}
         initialValue="Y"
         request={async () => {
           const res = await queryDictsByType('sys_yes_no');
@@ -185,9 +216,9 @@ export const Component: React.FC<unknown> = () => {
       />
       <ProFormTextArea
         name="remark"
-        label="备注"
+        label={<T id="component.field.remark" />}
         width="lg"
-        placeholder="请输入备注"
+        placeholder={t('component.field.remark.placeholder')}
       />
     </>
   );
@@ -199,7 +230,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="configId"
         toolBarRender={() => [
@@ -208,7 +239,7 @@ export const Component: React.FC<unknown> = () => {
               formRender={formRender}
               trigger={
                 <Button type="primary" icon={<PlusOutlined />} key="add">
-                  新建
+                  <T id="component.table.tool.add" />
                 </Button>
               }
               onFinish={() => {
@@ -218,16 +249,16 @@ export const Component: React.FC<unknown> = () => {
           </PermissionGuard>,
           <Button
             icon={<ReloadOutlined />}
-            key="export"
+            key="refresh"
             onClick={() => handleModalVisible(true)}
           >
-            刷新缓存
+            <T id="page.config.refresh" />
           </Button>,
           <Dropdown
             menu={{
               items: [
                 {
-                  label: '导出',
+                  label: <T id="component.table.tool.export" />,
                   icon: <ExportOutlined />,
                   key: 'export',
                 },
@@ -267,9 +298,16 @@ export const Component: React.FC<unknown> = () => {
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
+              <T
+                id="component.table.selection"
+                values={{
+                  num: (
+                    <a style={{ fontWeight: 600 }}>
+                      {selectedRowsState.length}
+                    </a>
+                  ),
+                }}
+              />
             </div>
           }
         >
@@ -277,8 +315,8 @@ export const Component: React.FC<unknown> = () => {
             <Button
               onClick={async () => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要删除选中的记录吗？',
+                  title: t('component.confirm.delete'),
+                  content: t('component.confirm.delete.desc'),
                   onOk: async () => {
                     const ok = await handleRemove(selectedRowsState);
                     if (ok) {
@@ -292,7 +330,7 @@ export const Component: React.FC<unknown> = () => {
                 });
               }}
             >
-              批量删除
+              <T id="component.table.tool.batchdelete" />
             </Button>
           </PermissionGuard>
         </FooterToolbar>

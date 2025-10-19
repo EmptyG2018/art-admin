@@ -1,15 +1,13 @@
 import { Tooltip, Button, Statistic, Row, Col, Spin } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
-import {
-  PageContainer,
-  ProCard,
-  StatisticCard,
-} from '@ant-design/pro-components';
+import { PageContainer, ProCard } from '@ant-design/pro-components';
 import KeyspacePie from './components/KeyspacePie';
+import { rawT, useT, T } from '@/locales';
 import { useRequest, useResponsive } from 'ahooks';
 import { queryCacheInfo } from '@/services/monitor';
 
 export const Component = () => {
+  const t = useT();
   const responsive = useResponsive();
   const {
     data: info,
@@ -30,7 +28,7 @@ export const Component = () => {
       <ProCard
         title="缓存监控"
         extra={
-          <Tooltip title="刷新">
+          <Tooltip title={<T id="page.monitor.cache.refresh" />}>
             <Button
               type="link"
               icon={<ReloadOutlined />}
@@ -50,7 +48,7 @@ export const Component = () => {
         headerBordered
       >
         <ProCard split={responsive.lg ? 'vertical' : 'horizontal'}>
-          <ProCard title="Redis信息">
+          <ProCard title={<T id="page.monitor.cache.info" />}>
             <Row gutter={[12, 24]} wrap>
               <Col span={24}>
                 <Statistic.Timer
@@ -58,45 +56,57 @@ export const Component = () => {
                   value={
                     new Date().getTime() - info?.state?.uptime_in_seconds * 1000
                   }
-                  title="已运行时长"
-                  format="D 天 HH 时 mm 分 ss 秒"
+                  title={<T id="page.monitor.cache.runTime" />}
+                  format={t('page.monitor.cache.runTime.format')}
                 />
               </Col>
               <Col span={12}>
-                <Statistic title="版本" value={info?.state?.redis_version} />
-              </Col>
-              <Col span={12}>
-                <Statistic title="端口" value={info?.state?.tcp_port} />
+                <Statistic
+                  title={<T id="page.monitor.cache.version" />}
+                  value={info?.state?.redis_version}
+                />
               </Col>
               <Col span={12}>
                 <Statistic
-                  title="模型"
+                  title={<T id="page.monitor.cache.port" />}
+                  value={info?.state?.tcp_port}
+                />
+              </Col>
+              <Col span={12}>
+                <Statistic
+                  title={<T id="page.monitor.cache.model" />}
                   value={
-                    info?.state?.redis_mode == 'standalone' ? '单机' : '集群'
+                    info?.state?.redis_mode == 'standalone'
+                      ? t('page.monitor.cache.model.single')
+                      : t('page.monitor.cache.model.cluster')
                   }
                 />
               </Col>
               <Col span={12}>
                 <Statistic
-                  title="AOF是否启用"
-                  value={info?.state?.aof_enabled == '0' ? '否' : '是'}
+                  title={<T id="page.monitor.cache.aof" />}
+                  value={
+                    info?.state?.aof_enabled == '0'
+                      ? t('page.monitor.cache.aof.false')
+                      : t('page.monitor.cache.aof.true')
+                  }
                 />
               </Col>
               <Col span={12}>
                 <Statistic
-                  title="客户端连接数量"
+                  title={<T id="page.monitor.cache.client" />}
                   value={info?.state?.connected_clients}
                 />
               </Col>
               <Col span={12}>
                 <Statistic
-                  title="QPS"
+                  title={<T id="page.monitor.cache.qps" />}
                   value={info?.state?.instantaneous_ops_per_sec}
                 />
               </Col>
             </Row>
           </ProCard>
-          <ProCard title="缓存命中率">
+          <ProCard title={<T id="page.monitor.cache.keyspace" />}>
             <KeyspacePie
               data={{
                 hits: info?.state?.keyspace_hits,

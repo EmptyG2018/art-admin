@@ -133,7 +133,7 @@ const request = <T = any>(
           okText: '重新登录',
           onOk() {
             isRelogin.show = false;
-            cache.local.remove('token')
+            cache.local.remove('token');
             location.href = '/login';
           },
           onCancel() {

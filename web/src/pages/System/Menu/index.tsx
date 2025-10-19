@@ -18,6 +18,7 @@ import { queryDictsByType } from '@/services/dict';
 import { queryMenuList, queryMenuTree, deleteMenu } from '@/services/menu';
 import { arrayToTree } from '@/utils/data';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import CreateMenuForm from './components/CreateMenuForm';
 import UpdateMenuForm from './components/UpdateMenuForm';
 import icons from '@/constants/icons';
@@ -27,31 +28,32 @@ import icons from '@/constants/icons';
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deleteMenu(selectedRows.map((row) => row.menuId).join(','));
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.success(rawT('component.form.message.delete.error'));
     return false;
   }
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const actionRef = useRef<ActionType>();
 
   const columns: ProColumns[] = [
     {
-      title: '菜单名称',
+      title: <T id="page.menu.field.menuName" />,
       dataIndex: 'menuName',
       valueType: 'text',
     },
     {
-      title: '图标',
+      title: <T id="page.menu.field.menuIcon" />,
       dataIndex: 'icon',
       valueType: 'text',
       width: 140,
@@ -62,21 +64,21 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '权限标识',
+      title: <T id="page.menu.field.authKey" />,
       dataIndex: 'perms',
       valueType: 'text',
       width: 220,
       hideInSearch: true,
     },
     {
-      title: '显示顺序',
+      title: <T id="component.field.sort" />,
       dataIndex: 'orderNum',
       valueType: 'text',
       width: 120,
       hideInSearch: true,
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       valueEnum: {
@@ -86,14 +88,14 @@ export const Component: React.FC<unknown> = () => {
       width: 120,
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
       hideInSearch: true,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 140,
       dataIndex: 'option',
       valueType: 'option',
@@ -101,46 +103,46 @@ export const Component: React.FC<unknown> = () => {
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
           <PermissionGuard requireds={['system:menu:add']}>
-            <Tooltip title="新增">
-              <CreateMenuForm
-                values={{ parentId: record.menuId }}
-                formRender={formRender}
-                trigger={
+            <CreateMenuForm
+              values={{ parentId: record.menuId }}
+              formRender={formRender}
+              trigger={
+                <Tooltip title={<T id="component.tooltip.add" />}>
                   <Button type="link" size="small" icon={<PlusOutlined />} />
-                }
-                onFinish={() => {
-                  actionRef.current?.reload();
-                }}
-              />
-            </Tooltip>
+                </Tooltip>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
           </PermissionGuard>
           <PermissionGuard requireds={['system:menu:edit']}>
-            <Tooltip title="修改">
-              <UpdateMenuForm
-                values={record}
-                formRender={formRender}
-                trigger={
+            <UpdateMenuForm
+              values={record}
+              formRender={formRender}
+              trigger={
+                <Tooltip title={<T id="component.tooltip.update" />}>
                   <Button type="link" size="small" icon={<EditOutlined />} />
-                }
-                onFinish={() => {
-                  actionRef.current?.reload();
-                }}
-              />
-            </Tooltip>
+                </Tooltip>
+              }
+              onFinish={() => {
+                actionRef.current?.reload();
+              }}
+            />
           </PermissionGuard>
           <PermissionGuard requireds={['system:menu:remove']}>
-            <Tooltip title="删除">
-              <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
-                onConfirm={async () => {
-                  await handleRemove([record]);
-                  actionRef.current?.reloadAndRest?.();
-                }}
-              >
+            <Popconfirm
+              title={<T id="component.confirm.delete" />}
+              description={<T id="component.confirm.delete.desc" />}
+              onConfirm={async () => {
+                await handleRemove([record]);
+                actionRef.current?.reloadAndRest?.();
+              }}
+            >
+              <Tooltip title={<T id="component.tooltip.delete" />}>
                 <Button type="link" size="small" icon={<DeleteOutlined />} />
-              </Popconfirm>
-            </Tooltip>
+              </Tooltip>
+            </Popconfirm>
           </PermissionGuard>
         </Space>
       ),
@@ -151,9 +153,18 @@ export const Component: React.FC<unknown> = () => {
     <>
       <ProFormTreeSelect
         name="parentId"
-        label="上级菜单"
-        placeholder="请选择上级菜单"
-        rules={[{ required: true, message: '请选择上级菜单' }]}
+        label={<T id="page.menu.field.menuParent" />}
+        placeholder={t('component.form.placeholder.sel', {
+          label: t('page.menu.field.menuParent'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder.sel', {
+              label: t('page.menu.field.menuParent'),
+            }),
+          },
+        ]}
         width="md"
         initialValue={0}
         fieldProps={{
@@ -164,7 +175,7 @@ export const Component: React.FC<unknown> = () => {
           return [
             {
               id: 0,
-              label: '根菜单',
+              label: <T id="page.menu.root" />,
               children: arrayToTree(res.data, { keyField: 'id' }),
             },
           ];
@@ -172,16 +183,25 @@ export const Component: React.FC<unknown> = () => {
       />
       <ProFormRadio.Group
         name="menuType"
-        label="菜单类型"
-        placeholder="请选择状态"
+        label={<T id="page.menu.field.menuType" />}
+        placeholder={t('component.form.placeholder.sel', {
+          label: t('page.menu.field.menuType'),
+        })}
         initialValue="M"
         radioType="button"
         options={[
-          { label: '目录', value: 'M' },
-          { label: '菜单', value: 'C' },
-          { label: '按钮', value: 'F' },
+          { label: <T id="page.menu.type.option.m" />, value: 'M' },
+          { label: <T id="page.menu.type.option.c" />, value: 'C' },
+          { label: <T id="page.menu.type.option.f" />, value: 'F' },
         ]}
-        rules={[{ required: true, message: '请选择菜单类型' }]}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder.sel', {
+              label: t('page.menu.field.menuType'),
+            }),
+          },
+        ]}
       />
       <ProFormDependency name={['menuType']}>
         {({ menuType }) => (
@@ -189,16 +209,27 @@ export const Component: React.FC<unknown> = () => {
             <ProForm.Group>
               <ProFormText
                 name="menuName"
-                label="菜单名称"
-                placeholder="请输入菜单名称"
-                rules={[{ required: true, message: '请输入菜单名称' }]}
+                label={<T id="page.menu.field.menuName" />}
+                placeholder={t('component.form.placeholder', {
+                  label: t('page.menu.field.menuName'),
+                })}
+                rules={[
+                  {
+                    required: true,
+                    message: t('component.form.placeholder', {
+                      label: t('page.menu.field.menuName'),
+                    }),
+                  },
+                ]}
                 width="md"
               />
               {['M'].includes(menuType) && (
                 <ProFormSelect
                   name="icon"
-                  label="菜单图标"
-                  placeholder="请输入菜单图标"
+                  label={<T id="page.menu.field.menuIcon" />}
+                  placeholder={t('component.form.placeholder.sel', {
+                    label: t('page.menu.field.menuIcon'),
+                  })}
                   width="sm"
                   showSearch
                   fieldProps={{
@@ -221,8 +252,10 @@ export const Component: React.FC<unknown> = () => {
               {['M', 'C'].includes(menuType) && (
                 <ProFormText
                   name="i18nKey"
-                  label="国际化key"
-                  placeholder="请输入国际化key"
+                  label={<T id="page.menu.field.i18nKey" />}
+                  placeholder={t('component.form.placeholder', {
+                    label: t('page.menu.field.i18nKey'),
+                  })}
                   width="md"
                 />
               )}
@@ -230,14 +263,23 @@ export const Component: React.FC<unknown> = () => {
             {['C'].includes(menuType) && (
               <ProFormRadio.Group
                 name="isFrame"
-                label="是否外链"
-                placeholder="请选择是否外链"
+                label={<T id="page.menu.field.isLink" />}
+                placeholder={t('component.form.placeholder.sel', {
+                  label: t('page.menu.field.isLink'),
+                })}
                 initialValue="1"
                 options={[
-                  { label: '是', value: '0' },
-                  { label: '否', value: '1' },
+                  { label: <T id="dict.status.true" />, value: '0' },
+                  { label: <T id="dict.status.false" />, value: '1' },
                 ]}
-                rules={[{ required: true, message: '请选择是否外链' }]}
+                rules={[
+                  {
+                    required: true,
+                    message: t('component.form.placeholder.sel', {
+                      label: t('page.menu.field.isLink'),
+                    }),
+                  },
+                ]}
               />
             )}
 
@@ -245,25 +287,38 @@ export const Component: React.FC<unknown> = () => {
               {['M', 'C'].includes(menuType) && (
                 <ProFormText
                   name="path"
-                  label="路由地址"
-                  placeholder="请输入路由地址"
-                  rules={[{ required: true, message: '请输入路由地址' }]}
+                  label={<T id="page.menu.field.route" />}
+                  placeholder={t('component.form.placeholder', {
+                    label: t('page.menu.field.route'),
+                  })}
+                  rules={[
+                    {
+                      required: true,
+                      message: t('component.form.placeholder', {
+                        label: t('page.menu.field.route'),
+                      }),
+                    },
+                  ]}
                   width="md"
                 />
               )}
               {['C'].includes(menuType) && (
                 <ProFormText
                   name="query"
-                  label="路由参数"
-                  placeholder="请输入路由参数"
+                  label={<T id="page.menu.field.params" />}
+                  placeholder={t('component.form.placeholder', {
+                    label: t('page.menu.field.params'),
+                  })}
                   width="md"
                 />
               )}
               {['C'].includes(menuType) && (
                 <ProFormText
                   name="component"
-                  label="组件路径"
-                  placeholder="请输入组件路径"
+                  label={<T id="page.menu.field.component" />}
+                  placeholder={t('component.form.placeholder', {
+                    label: t('page.menu.field.component'),
+                  })}
                   width="md"
                 />
               )}
@@ -271,15 +326,17 @@ export const Component: React.FC<unknown> = () => {
             {['C', 'F'].includes(menuType) && (
               <ProFormText
                 name="perms"
-                label="权限字符"
-                placeholder="请输入组件权限字符"
+                label={<T id="page.menu.field.authKey" />}
+                placeholder={t('component.form.placeholder', {
+                  label: t('page.menu.field.authKey'),
+                })}
                 width="md"
               />
             )}
             <ProFormDigit
               name="orderNum"
-              label="排序"
-              placeholder="请输入排序"
+              label={<T id="component.field.sort" />}
+              placeholder={t('component.field.sort.placeholder')}
               min={1}
               rules={[{ required: true, message: '请输入排序' }]}
               width="xs"
@@ -288,12 +345,14 @@ export const Component: React.FC<unknown> = () => {
             {['C'].includes(menuType) && (
               <ProFormRadio.Group
                 name="isCache"
-                label="是否缓存"
-                placeholder="请选择是否缓存"
+                label={<T id="page.menu.field.isCache" />}
+                placeholder={t('component.form.placeholder.sel', {
+                  label: t('page.menu.field.isCache'),
+                })}
                 initialValue="0"
                 options={[
-                  { label: '是', value: '0' },
-                  { label: '否', value: '1' },
+                  { label: <T id="dict.status.true" />, value: '0' },
+                  { label: <T id="dict.status.false" />, value: '1' },
                 ]}
               />
             )}
@@ -301,12 +360,14 @@ export const Component: React.FC<unknown> = () => {
               {['M', 'C'].includes(menuType) && (
                 <ProFormRadio.Group
                   name="visible"
-                  label="显示状态"
-                  placeholder="请选择显示状态"
+                  label={<T id="page.menu.field.status.visible" />}
+                  placeholder={t('component.form.placeholder.sel', {
+                    label: t('page.menu.field.status.visible'),
+                  })}
                   initialValue="0"
                   options={[
-                    { label: '是', value: '0' },
-                    { label: '否', value: '1' },
+                    { label: <T id="dict.status.true" />, value: '0' },
+                    { label: <T id="dict.status.false" />, value: '1' },
                   ]}
                   request={async () => {
                     const res = await queryDictsByType('sys_show_hide');
@@ -319,8 +380,10 @@ export const Component: React.FC<unknown> = () => {
               )}
               <ProFormRadio.Group
                 name="status"
-                label="菜单状态"
-                placeholder="请选择菜单状态"
+                label={<T id="page.menu.field.status.menu" />}
+                placeholder={t('component.form.placeholder.sel', {
+                  label: t('page.menu.field.status.menu'),
+                })}
                 initialValue="0"
                 request={async () => {
                   const res = await queryDictsByType('sys_normal_disable');
@@ -344,7 +407,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="menuId"
         toolBarRender={() => [
@@ -353,7 +416,7 @@ export const Component: React.FC<unknown> = () => {
               formRender={formRender}
               trigger={
                 <Button type="primary" icon={<PlusOutlined />} key="add">
-                  新建
+                  <T id="component.table.tool.add" />
                 </Button>
               }
             />

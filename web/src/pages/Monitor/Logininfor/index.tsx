@@ -13,6 +13,7 @@ import {
   ProColumns,
 } from '@ant-design/pro-components';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import { queryDictsByType } from '@/services/dict';
 import {
   queryLogininforPage,
@@ -25,65 +26,67 @@ import {
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deleteLogininfor(selectedRows.map((row) => row.infoId).join(','));
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.success(rawT('component.form.message.delete.error'));
     return false;
   }
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
+
   const columns: ProColumns[] = [
     {
-      title: '访问编号',
+      title: <T id="page.logininfor.field.id" />,
       dataIndex: 'infoId',
       width: 140,
       hideInSearch: true,
     },
     {
-      title: '用户名称',
+      title: <T id="page.logininfor.field.userName" />,
       dataIndex: 'userName',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '登录IP',
+      title: <T id="page.logininfor.field.ip" />,
       dataIndex: 'ipaddr',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '登录地址',
+      title: <T id="page.logininfor.field.location" />,
       dataIndex: 'loginLocation',
       valueType: 'text',
       width: 180,
       hideInSearch: true,
     },
     {
-      title: '操作系统',
+      title: <T id="page.logininfor.field.os" />,
       dataIndex: 'os',
       valueType: 'text',
       width: 180,
       hideInSearch: true,
     },
     {
-      title: '浏览器',
+      title: <T id="page.logininfor.field.brower" />,
       dataIndex: 'browser',
       valueType: 'text',
       width: 180,
       hideInSearch: true,
     },
     {
-      title: '执行状态',
+      title: <T id="page.logininfor.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
@@ -96,7 +99,7 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '登录时间',
+      title: <T id="page.logininfor.field.loginTime" />,
       dataIndex: 'loginTime',
       valueType: 'dateTime',
       width: 220,
@@ -110,7 +113,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="infoId"
         toolBarRender={() => [
@@ -120,33 +123,37 @@ export const Component: React.FC<unknown> = () => {
               key="clear"
               onClick={() => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要清空全部记录吗？',
+                  title: t('component.confirm.clear'),
+                  content: t('component.confirm.clear.desc'),
                   onOk: async () => {
-                    const hide = message.loading('正在清空');
+                    const hide = message.loading(
+                      t('component.form.message.delete.loading'),
+                    );
                     try {
                       await cleanLogininfor();
                       hide();
-                      message.success('清空成功');
+                      message.success(
+                        t('component.form.message.delete.success'),
+                      );
                       actionRef.current?.reloadAndRest?.();
                       Promise.resolve();
                     } catch {
                       hide();
-                      message.error('清空失败请重试!');
+                      message.error(t('component.form.message.delete.loading'));
                       Promise.reject();
                     }
                   },
                 });
               }}
             >
-              清空日志
+              <T id="page.logininfor.clear" />
             </Button>
           </PermissionGuard>,
           <Dropdown
             menu={{
               items: [
                 {
-                  label: '导出',
+                  label: <T id="component.table.tool.export" />,
                   icon: <ExportOutlined />,
                   key: 'export',
                 },
@@ -186,9 +193,16 @@ export const Component: React.FC<unknown> = () => {
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
+              <T
+                id="component.table.selection"
+                values={{
+                  num: (
+                    <a style={{ fontWeight: 600 }}>
+                      {selectedRowsState.length}
+                    </a>
+                  ),
+                }}
+              />
             </div>
           }
         >
@@ -196,8 +210,8 @@ export const Component: React.FC<unknown> = () => {
             <Button
               onClick={async () => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要删除选中的记录吗？',
+                  title: t('component.confirm.delete'),
+                  content: t('component.confirm.delete.desc'),
                   onOk: async () => {
                     const ok = await handleRemove(selectedRowsState);
                     if (ok) {
@@ -211,7 +225,7 @@ export const Component: React.FC<unknown> = () => {
                 });
               }}
             >
-              批量删除
+              <T id="component.table.tool.batchdelete" />
             </Button>
           </PermissionGuard>
         </FooterToolbar>

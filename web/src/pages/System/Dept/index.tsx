@@ -14,6 +14,7 @@ import React, { useRef } from 'react';
 import { queryDeptList, deleteDept } from '@/services/dept';
 import { queryDictsByType } from '@/services/dict';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import CreateDeptForm from './components/CreateDeptForm';
 import UpdateDeptForm from './components/UpdateDeptForm';
 import { arrayToTree } from '@/utils/data';
@@ -23,25 +24,26 @@ import { arrayToTree } from '@/utils/data';
  * @param selectedRows
  */
 const handleRemove = async (record) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   try {
     await deleteDept(record.deptId);
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.success(rawT('component.form.message.delete.error'));
     return false;
   }
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const actionRef = useRef<ActionType>();
 
   const columns: ProColumns[] = [
     {
-      title: '上级部门',
+      title: <T id="page.dept.field.deptParent" />,
       dataIndex: 'parentId',
       valueType: 'treeSelect',
       hideInSearch: true,
@@ -59,19 +61,19 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '部门名称',
+      title: <T id="page.dept.field.deptName" />,
       dataIndex: 'deptName',
       valueType: 'text',
     },
     {
-      title: '排序',
+      title: <T id="component.field.sort" />,
       dataIndex: 'orderNum',
       valueType: 'digit',
       width: 120,
       hideInSearch: true,
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
@@ -84,14 +86,14 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
       hideInSearch: true,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 140,
       dataIndex: 'option',
       valueType: 'option',
@@ -102,7 +104,7 @@ export const Component: React.FC<unknown> = () => {
               values={record}
               formRender={formRender('edit')}
               trigger={
-                <Tooltip title="修改">
+                <Tooltip title={<T id="component.tooltip.update" />}>
                   <Button type="link" size="small" icon={<EditOutlined />} />
                 </Tooltip>
               }
@@ -116,7 +118,7 @@ export const Component: React.FC<unknown> = () => {
               values={{ parentId: record.deptId }}
               formRender={formRender('add')}
               trigger={
-                <Tooltip title="新增子部门">
+                <Tooltip title={<T id="page.dept.addChild" />}>
                   <Button type="link" size="small" icon={<PlusOutlined />} />
                 </Tooltip>
               }
@@ -126,10 +128,10 @@ export const Component: React.FC<unknown> = () => {
             />
           </PermissionGuard>
           <PermissionGuard requireds={['system:dept:remove']}>
-            <Tooltip title="删除">
+            <Tooltip title={<T id="component.tooltip.delete" />}>
               <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
+                title={<T id="component.confirm.delete" />}
+                description={<T id="component.confirm.delete.desc" />}
                 onConfirm={async () => {
                   await handleRemove(record);
                   actionRef.current?.reloadAndRest?.();
@@ -149,8 +151,10 @@ export const Component: React.FC<unknown> = () => {
       {source === 'add' && (
         <ProFormTreeSelect
           name="parentId"
-          label="上级部门"
-          placeholder="请选择上级部门"
+          label={<T id="page.dept.field.deptParent" />}
+          placeholder={t('component.form.placeholder.sel', {
+            label: t('page.dept.field.deptParent'),
+          })}
           fieldProps={{
             fieldNames: {
               label: 'deptName',
@@ -162,48 +166,72 @@ export const Component: React.FC<unknown> = () => {
             const res = await queryDeptList();
             return arrayToTree(res.data, { keyField: 'deptId' });
           }}
-          rules={[{ required: true, message: '请选择上级部门' }]}
+          rules={[
+            {
+              required: true,
+              message: t('component.form.placeholder.sel', {
+                label: t('page.dept.field.deptParent'),
+              }),
+            },
+          ]}
           width="md"
         />
       )}
       <ProFormText
         name="deptName"
-        label="部门名称"
-        placeholder="请输入部门名称"
-        rules={[{ required: true, message: '请输入部门名称' }]}
+        label={<T id="page.dept.field.deptName" />}
+        placeholder={t('component.form.placeholder.sel', {
+          label: t('page.dept.field.deptName'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.dept.field.deptName'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormText
         name="leader"
-        label="负责人"
-        placeholder="请输入负责人"
+        label={<T id="page.dept.field.leader" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.dept.field.leader'),
+        })}
         width="md"
       />
       <ProFormText
         name="phone"
-        label="联系电话"
-        placeholder="请输入联系电话"
+        label={<T id="page.dept.field.phone" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.dept.field.phone'),
+        })}
         width="md"
       />
       <ProFormText
         name="email"
-        label="邮箱"
-        placeholder="请输入邮箱"
+        label={<T id="page.dept.field.email" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.dept.field.email'),
+        })}
         width="md"
       />
       <ProFormDigit
         name="orderNum"
-        label="排序"
-        placeholder="请输入排序"
+        label={<T id="component.field.sort" />}
+        placeholder={t('component.field.sort.placeholder')}
         min={0}
         fieldProps={{ precision: 0 }}
-        rules={[{ required: true, message: '请输入排序' }]}
+        rules={[
+          { required: true, message: t('component.field.sort.placeholder') },
+        ]}
         width="xs"
       />
       <ProFormRadio.Group
         name="status"
-        label="状态"
-        placeholder="请选择状态"
+        label={<T id="component.field.status" />}
+        placeholder={t('component.field.status.placeholder')}
         initialValue="0"
         request={async () => {
           const res = await queryDictsByType('sys_normal_disable');
@@ -223,7 +251,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="deptId"
         toolBarRender={() => [
@@ -232,7 +260,7 @@ export const Component: React.FC<unknown> = () => {
               formRender={formRender('add')}
               trigger={
                 <Button type="primary" icon={<PlusOutlined />} key="add">
-                  新建
+                  <T id="component.table.tool.add" />
                 </Button>
               }
               onFinish={() => {

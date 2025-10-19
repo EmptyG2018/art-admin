@@ -38,6 +38,7 @@ import {
   deleteDict,
 } from '@/services/dict';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import CreateDictDataForm from './components/CreateDictDataForm';
 import UpdateDictDataForm from './components/UpdateDictDataForm';
 
@@ -46,16 +47,16 @@ import UpdateDictDataForm from './components/UpdateDictDataForm';
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deleteDict(selectedRows.map((row) => row.dictCode).join(','));
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.success(rawT('component.form.message.delete.error'));
     return false;
   }
 };
@@ -65,32 +66,33 @@ interface TableListProps {
 }
 
 const TableList: React.FC<TableListProps> = (props) => {
+  const t = useT();
   const { dictType } = props;
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
 
   const columns: ProColumns[] = [
     {
-      title: '字典编号',
+      title: <T id="page.dict.field.id" />,
       dataIndex: 'dictCode',
       width: 140,
       hideInSearch: true,
     },
     {
-      title: '字典标签',
+      title: <T id="page.dict.field.dictLabel" />,
       dataIndex: 'dictLabel',
       valueType: 'text',
       width: 140,
     },
     {
-      title: '字典键值',
+      title: <T id="page.dict.field.dictValue" />,
       dataIndex: 'dictValue',
       valueType: 'text',
       width: 180,
       hideInSearch: true,
     },
     {
-      title: '排序',
+      title: <T id="component.field.sort" />,
       dataIndex: 'dictSort',
       valueType: 'digit',
       width: 120,
@@ -98,7 +100,7 @@ const TableList: React.FC<TableListProps> = (props) => {
       hideInSearch: true,
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
@@ -111,20 +113,20 @@ const TableList: React.FC<TableListProps> = (props) => {
       },
     },
     {
-      title: '备注',
+      title: <T id="component.field.remark" />,
       dataIndex: 'remark',
       valueType: 'textarea',
       hideInSearch: true,
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
       hideInSearch: true,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 100,
       dataIndex: 'option',
       valueType: 'option',
@@ -136,7 +138,7 @@ const TableList: React.FC<TableListProps> = (props) => {
               values={record}
               formRender={formRender}
               trigger={
-                <Tooltip title="修改">
+                <Tooltip title={<T id="component.tooltip.update" />}>
                   <Button type="link" size="small" icon={<EditOutlined />} />
                 </Tooltip>
               }
@@ -146,10 +148,10 @@ const TableList: React.FC<TableListProps> = (props) => {
             />
           </PermissionGuard>
           <PermissionGuard requireds={['system:dict:remove']}>
-            <Tooltip title="删除">
+            <Tooltip title={<T id="component.tooltip.delete" />}>
               <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
+                title={<T id="component.confirm.delete" />}
+                description={<T id="component.confirm.delete.desc" />}
                 onConfirm={async () => {
                   await handleRemove([record]);
                   actionRef.current?.reloadAndRest?.();
@@ -168,41 +170,80 @@ const TableList: React.FC<TableListProps> = (props) => {
     <>
       <ProFormText
         name="dictLabel"
-        label="字典标签"
-        placeholder="请输入字典标签"
-        rules={[{ required: true, message: '请输入字典标签' }]}
+        label={<T id="page.dict.field.dictLabel" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.dict.field.dictLabel'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.dict.field.dictLabel'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormText
         name="dictValue"
-        label="字典键值"
-        placeholder="请输入字典键值"
-        rules={[{ required: true, message: '请输入字典键值' }]}
+        label={<T id="page.dict.field.dictValue" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.dict.field.dictValue'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.dict.field.dictValue'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormText
         name="i18nKey"
-        label="国际化key"
-        placeholder="请输入国际化key"
-        tooltip="用于多语言显示的唯一标识。系统会根据此 Key 自动匹配当前语言的翻译文本。"
+        label={<T id="page.dict.field.i18nKey" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.dict.field.i18nKey'),
+        })}
+        tooltip={<T id="page.dict.field.i18nKey.tooltip" />}
         width="md"
       />
       <ProFormText
         name="cssClass"
-        label="样式类名"
-        placeholder="请输入回显类名"
+        label={<T id="page.dict.field.class" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.dict.field.class'),
+        })}
         width="md"
       />
       <ProFormSelect
         name="listClass"
-        label="回显样式"
-        placeholder="请输入回显样式"
+        label={<T id="page.dict.field.style" />}
+        placeholder={t('component.form.placeholder.sel', {
+          label: t('page.dict.field.style'),
+        })}
         valueEnum={{
-          Default: { text: '默认(Default)', status: 'Default' },
-          Processing: { text: '主要(Processing)', status: 'Processing' },
-          Success: { text: '成功(Success)', status: 'Success' },
-          Warning: { text: '警告(Warning)', status: 'Warning' },
-          Error: { text: '错误(Error)', status: 'Error' },
+          Default: {
+            text: <T id="page.dict.style.option.default" />,
+            status: 'Default',
+          },
+          Processing: {
+            text: <T id="page.dict.style.option.processing" />,
+            status: 'Processing',
+          },
+          Success: {
+            text: <T id="page.dict.style.option.success" />,
+            status: 'Success',
+          },
+          Warning: {
+            text: <T id="page.dict.style.option.warning" />,
+            status: 'Warning',
+          },
+          Error: {
+            text: <T id="page.dict.style.option.error" />,
+            status: 'Error',
+          },
         }}
         fieldProps={{
           optionRender: (option) => {
@@ -227,17 +268,19 @@ const TableList: React.FC<TableListProps> = (props) => {
       />
       <ProFormDigit
         name="dictSort"
-        label="排序"
-        placeholder="请输入排序"
+        label={<T id="component.field.sort" />}
+        placeholder={t('component.field.sort.placeholder')}
         min={0}
         fieldProps={{ precision: 0 }}
-        rules={[{ required: true, message: '请输入排序' }]}
+        rules={[
+          { required: true, message: t('component.field.sort.placeholder') },
+        ]}
         width="xs"
       />
       <ProFormRadio.Group
         name="status"
-        label="状态"
-        placeholder="请选择状态"
+        label={<T id="component.field.status" />}
+        placeholder={t('component.field.status.placeholder')}
         initialValue="0"
         request={async () => {
           const res = await queryDictsByType('sys_normal_disable');
@@ -249,9 +292,9 @@ const TableList: React.FC<TableListProps> = (props) => {
       />
       <ProFormTextArea
         name="remark"
-        label="备注"
+        label={<T id="component.field.remark" />}
         width="lg"
-        placeholder="请输入备注"
+        placeholder={t('component.field.remark.placeholder')}
       />
     </>
   );
@@ -259,7 +302,7 @@ const TableList: React.FC<TableListProps> = (props) => {
   return (
     <>
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="dictCode"
         toolBarRender={() => [
@@ -269,7 +312,7 @@ const TableList: React.FC<TableListProps> = (props) => {
               formRender={formRender}
               trigger={
                 <Button type="primary" icon={<PlusOutlined />} key="add">
-                  新建
+                  <T id="component.table.tool.add" />
                 </Button>
               }
               onFinish={() => {
@@ -281,7 +324,7 @@ const TableList: React.FC<TableListProps> = (props) => {
             menu={{
               items: [
                 {
-                  label: '导出',
+                  label: <T id="component.table.tool.export" />,
                   icon: <ExportOutlined />,
                   key: 'export',
                 },
@@ -322,9 +365,16 @@ const TableList: React.FC<TableListProps> = (props) => {
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
+              <T
+                id="component.table.selection"
+                values={{
+                  num: (
+                    <a style={{ fontWeight: 600 }}>
+                      {selectedRowsState.length}
+                    </a>
+                  ),
+                }}
+              />
             </div>
           }
         >
@@ -332,8 +382,8 @@ const TableList: React.FC<TableListProps> = (props) => {
             <Button
               onClick={async () => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要删除选中的记录吗？',
+                  title: t('component.confirm.delete'),
+                  content: t('component.confirm.delete.desc'),
                   onOk: async () => {
                     const ok = await handleRemove(selectedRowsState);
                     if (ok) {
@@ -347,7 +397,7 @@ const TableList: React.FC<TableListProps> = (props) => {
                 });
               }}
             >
-              批量删除
+              <T id="component.table.tool.batchdelete" />
             </Button>
           </PermissionGuard>
         </FooterToolbar>
@@ -371,21 +421,21 @@ export const Component: React.FC<unknown> = () => {
 
   const columns: ProColumns[] = [
     {
-      title: '字典编号',
+      title: <T id="page.dict.field.id" />,
       dataIndex: 'dictId',
     },
     {
-      title: '字典名称',
+      title: <T id="page.dict.field.dictName" />,
       dataIndex: 'dictName',
       valueType: 'text',
     },
     {
-      title: '字典类型',
+      title: <T id="page.dict.field.dictType" />,
       dataIndex: 'dictType',
       valueType: 'text',
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'radio',
       request: async () => {
@@ -397,12 +447,12 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '备注',
+      title: <T id="component.field.remark" />,
       dataIndex: 'remark',
       valueType: 'textarea',
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
     },

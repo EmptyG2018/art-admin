@@ -554,8 +554,8 @@ export const Component: React.FC<unknown> = () => {
             <Button
               onClick={async () => {
                 Modal.confirm({
-                  title: <T id="component.confirm.delete" />,
-                  content: <T id="component.confirm.delete.select.desc" />,
+                  title: t('component.confirm.delete'),
+                  content: t('component.confirm.delete.select.desc'),
                   onOk: async () => {
                     const ok = await handleRemove(selectedRowsState);
                     if (ok) {

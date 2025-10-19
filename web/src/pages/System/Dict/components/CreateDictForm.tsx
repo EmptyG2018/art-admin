@@ -1,6 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
-import {EditFormModal} from '@/components';
+import { EditFormModal } from '@/components';
+import { useT } from '@/locales';
 import { addDictType } from '@/services/dict';
 
 interface CreateFormProps {
@@ -10,9 +11,8 @@ interface CreateFormProps {
   onFinish?: () => void;
 }
 
-const CreateDictForm: React.FC<CreateFormProps> = (
-  props,
-) => {
+const CreateDictForm: React.FC<CreateFormProps> = (props) => {
+  const t = useT();
   const { message } = App.useApp();
   const { trigger, values, formRender, onFinish } = props;
 
@@ -23,16 +23,16 @@ const CreateDictForm: React.FC<CreateFormProps> = (
       trigger={trigger}
       formRender={formRender}
       onFinish={async (formValues) => {
-        const hide = message.loading('正在添加');
+        const hide = message.loading(t('component.form.message.add.loading'));
         try {
           await addDictType(formValues);
           onFinish?.();
           hide();
-          message.success('添加成功');
+          message.success(t('component.form.message.add.success'));
           return true;
         } catch {
           hide();
-          message.error('添加失败请重试！');
+          message.success(t('component.form.message.add.error'));
           return false;
         }
       }}
@@ -41,4 +41,3 @@ const CreateDictForm: React.FC<CreateFormProps> = (
 };
 
 export default CreateDictForm;
-

@@ -29,6 +29,7 @@ import {
 } from '@ant-design/pro-components';
 import { useResponsive } from 'ahooks';
 import { createStyles } from 'antd-style';
+import { rawT, useT, T } from '@/locales';
 import {
   queryCacheList,
   queryCacheKeyList,
@@ -55,6 +56,7 @@ type CacheKeyListProps = {
 };
 
 const CacheKeyList: React.FC<CacheKeyListProps> = ({ cacheName }) => {
+  const t = useT();
   const actionRef = useRef<ActionType>();
   const { styles } = useStyles();
   const [selectedRowKey, setSelectedRowKey] = useState<string>('');
@@ -66,12 +68,12 @@ const CacheKeyList: React.FC<CacheKeyListProps> = ({ cacheName }) => {
 
   const columns: ProColumns<CacheKey>[] = [
     {
-      title: '缓存键名',
+      title: <T id="page.cache.field.cacheKey" />,
       dataIndex: 'cacheKey',
       valueType: 'text',
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       key: 'option',
       width: 60,
       valueType: 'option',
@@ -79,23 +81,25 @@ const CacheKeyList: React.FC<CacheKeyListProps> = ({ cacheName }) => {
       render: (_, record) => {
         return (
           <Space direction="horizontal" size={16}>
-            <Tooltip title="删除">
+            <Tooltip title={<T id="component.tooltip.delete" />}>
               <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
+                title={<T id="component.confirm.delete" />}
+                description={<T id="component.confirm.delete.desc" />}
                 onPopupClick={(e) => e.stopPropagation()}
                 onConfirm={async () => {
-                  const hide = message.loading('正在删除');
+                  const hide = message.loading(
+                    t('component.form.message.delete.loading'),
+                  );
                   try {
                     await deleteCacheKey(record.cacheKey);
                     hide();
-                    message.success('删除成功');
+                    message.success(t('component.form.message.delete.success'));
                     setSelectedRowKey('');
                     actionRef.current?.reloadAndRest?.();
                     return true;
                   } catch {
                     hide();
-                    message.error('删除失败请重试!');
+                    message.error(t('component.form.message.delete.error'));
                     return false;
                   }
                 }}
@@ -150,7 +154,7 @@ const CacheKeyList: React.FC<CacheKeyListProps> = ({ cacheName }) => {
       />
       <DrawerForm
         open={drawerVisible}
-        title="缓存详情"
+        title={<T id="page.cache.detail" />}
         width={378}
         readonly
         request={async () => {
@@ -164,9 +168,18 @@ const CacheKeyList: React.FC<CacheKeyListProps> = ({ cacheName }) => {
         }}
         submitter={false}
       >
-        <ProFormText name="cacheName" label="缓存名称" />
-        <ProFormText name="cacheKey" label="缓存键名" />
-        <Form.Item name="cacheValue" label="缓存键值">
+        <ProFormText
+          name="cacheName"
+          label={<T id="page.cache.field.cacheName" />}
+        />
+        <ProFormText
+          name="cacheKey"
+          label={<T id="page.cache.field.cacheKey" />}
+        />
+        <Form.Item
+          name="cacheValue"
+          label={<T id="page.cache.field.cacheValue" />}
+        >
           <Input.TextArea rows={20} readOnly />
         </Form.Item>
       </DrawerForm>
@@ -186,6 +199,7 @@ type CacheListProps = {
 
 const CacheList: React.FC<CacheListProps> = forwardRef(
   ({ cacheName, onChange }, ref) => {
+    const t = useT();
     const actionRef = useRef<ActionType>();
     const { styles } = useStyles();
 
@@ -203,18 +217,18 @@ const CacheList: React.FC<CacheListProps> = forwardRef(
 
     const columns: ProColumns<Cache>[] = [
       {
-        title: '缓存名称',
+        title: <T id="page.cache.field.cacheName" />,
         dataIndex: 'cacheName',
         valueType: 'text',
         width: 220,
       },
       {
-        title: '备注',
+        title: <T id="component.field.remark" />,
         dataIndex: 'remark',
         valueType: 'text',
       },
       {
-        title: '操作',
+        title: <T id="component.field.remark" />,
         key: 'option',
         width: 60,
         valueType: 'option',
@@ -222,22 +236,26 @@ const CacheList: React.FC<CacheListProps> = forwardRef(
         render: (_, record) => {
           return (
             <Space direction="horizontal" size={16}>
-              <Tooltip title="删除">
+              <Tooltip title={<T id="component.tooltip.delete" />}>
                 <Popconfirm
-                  title="删除记录"
-                  description="您确定要删除此记录吗？"
+                  title={<T id="component.confirm.delete" />}
+                  description={<T id="component.confirm.delete.desc" />}
                   onConfirm={async () => {
-                    const hide = message.loading('正在删除');
+                    const hide = message.loading(
+                      t('component.form.message.delete.loading'),
+                    );
                     try {
                       await deleteCacheName(record.cacheName);
                       hide();
-                      message.success('删除成功');
+                      message.success(
+                        t('component.form.message.delete.success'),
+                      );
                       onChange('');
                       actionRef.current?.reloadAndRest?.();
                       return true;
                     } catch {
                       hide();
-                      message.error('删除失败请重试!');
+                      message.error(t('component.form.message.delete.error'));
                       return false;
                     }
                   }}
@@ -285,6 +303,7 @@ const CacheList: React.FC<CacheListProps> = forwardRef(
 );
 
 export const Component: React.FC = () => {
+  const t = useT();
   const ref = useRef<ActionType>();
   const responsive = useResponsive();
   const [cacheName, setCacheName] = useState<string>('');
@@ -297,26 +316,28 @@ export const Component: React.FC = () => {
             icon={<ClearOutlined />}
             onClick={() => {
               Modal.confirm({
-                title: '删除记录',
-                content: '您确定要清空全部记录吗？',
+                title: t('component.confirm.clear'),
+                content: t('component.confirm.clear.desc'),
                 onOk: async () => {
-                  const hide = message.loading('正在清空');
+                  const hide = message.loading(
+                    t('component.form.message.delete.loading'),
+                  );
                   try {
                     await cleanCache();
                     hide();
-                    message.success('清空成功');
+                    message.success(t('component.form.message.delete.success'));
                     ref.current?.reload?.();
                     Promise.resolve();
                   } catch {
                     hide();
-                    message.error('清空失败请重试!');
+                    message.error(t('component.form.message.delete.error'));
                     Promise.reject();
                   }
                 },
               });
             }}
           >
-            清空缓存
+            <T id="page.cache.clear" />
           </Button>
         ),
       }}

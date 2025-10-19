@@ -8,6 +8,7 @@ import {
   ProColumns,
 } from '@ant-design/pro-components';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import { queryOnlinePage, deleteOnline } from '@/services/monitor';
 
 /**
@@ -15,16 +16,16 @@ import { queryOnlinePage, deleteOnline } from '@/services/monitor';
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在操作');
+  const hide = message.loading(rawT('page.online.message.logout.loading'));
   if (!selectedRows) return true;
   try {
     await deleteOnline(selectedRows.map((row) => row.tokenId).join(','));
     hide();
-    message.success('操作成功');
+    message.success(rawT('page.online.message.logout.success'));
     return true;
   } catch {
     hide();
-    message.error('操作失败请重试!');
+    message.success(rawT('page.online.message.logout.error'));
     return false;
   }
 };
@@ -33,59 +34,59 @@ export const Component: React.FC<unknown> = () => {
   const actionRef = useRef<ActionType>();
   const columns: ProColumns[] = [
     {
-      title: '访问编号',
+      title: <T id="page.online.field.id" />,
       dataIndex: 'tokenId',
       width: 220,
       hideInSearch: true,
     },
     {
-      title: '用户名',
+      title: <T id="page.online.field.user" />,
       dataIndex: 'userName',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '所属部门',
+      title: <T id="page.online.field.deptName" />,
       dataIndex: 'deptName',
       valueType: 'text',
       width: 180,
       hideInSearch: true,
     },
     {
-      title: 'IP地址',
+      title: <T id="page.online.field.ip" />,
       dataIndex: 'ipaddr',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '登录地址',
+      title: <T id="page.online.field.location" />,
       dataIndex: 'loginLocation',
       valueType: 'text',
       width: 180,
       hideInSearch: true,
     },
     {
-      title: '操作系统',
+      title: <T id="page.online.field.os" />,
       dataIndex: 'os',
       valueType: 'text',
       width: 180,
       hideInSearch: true,
     },
     {
-      title: '浏览器',
+      title: <T id="page.online.field.brower" />,
       dataIndex: 'browser',
       valueType: 'text',
       width: 180,
       hideInSearch: true,
     },
     {
-      title: '登录时间',
+      title: <T id="page.online.field.loginTime" />,
       dataIndex: 'loginTime',
       valueType: 'dateTime',
       width: 220,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 60,
       dataIndex: 'option',
       valueType: 'option',
@@ -93,10 +94,10 @@ export const Component: React.FC<unknown> = () => {
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
           <PermissionGuard requireds={['monitor:online:forceLogout']}>
-            <Tooltip title="踢出">
+            <Tooltip title={<T id="page.online.logout" />}>
               <Popconfirm
-                title="提示"
-                description="确定要踢出此用户的登录吗？"
+                title={<T id="page.online.logout" />}
+                description={<T id="page.online.logout.confirmMessage" />}
                 onConfirm={async () => {
                   await handleRemove([record]);
                   actionRef.current?.reloadAndRest?.();
@@ -118,7 +119,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="infoId"
         request={async (params, sorter, filter) => {

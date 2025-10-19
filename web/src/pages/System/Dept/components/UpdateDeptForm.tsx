@@ -1,6 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
+import { useT } from '@/locales';
 import { updateDept, getDept } from '@/services/dept';
 
 interface UpdateDeptFormProps {
@@ -11,6 +12,7 @@ interface UpdateDeptFormProps {
 }
 
 const UpdateDeptForm: React.FC<UpdateDeptFormProps> = (props) => {
+  const t = useT();
   const { message } = App.useApp();
   const { trigger, values, formRender, onFinish } = props;
 
@@ -24,16 +26,18 @@ const UpdateDeptForm: React.FC<UpdateDeptFormProps> = (props) => {
       trigger={trigger}
       formRender={formRender}
       onFinish={async (formValues) => {
-        const hide = message.loading('正在修改');
+        const hide = message.loading(
+          t('component.form.message.update.loading'),
+        );
         try {
           await updateDept({ ...values, ...formValues });
           onFinish?.();
           hide();
-          message.success('修改成功');
+          message.success(t('component.form.message.update.success'));
           return true;
         } catch {
           hide();
-          message.error('修改失败请重试！');
+          message.success(t('component.form.message.update.error'));
           return false;
         }
       }}

@@ -12,31 +12,33 @@ import {
   ProTable,
   ProColumns,
 } from '@ant-design/pro-components';
+import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import { queryDictsByType } from '@/services/dict';
 import { queryJobLogPage, cleanJobLog } from '@/services/monitor';
-import { PermissionGuard } from '@/components/Layout';
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const actionRef = useRef<ActionType>();
 
   const columns: ProColumns[] = [
     {
-      title: '日志编号',
+      title: <T id="page.job.field.logId" />,
       dataIndex: 'jobLogId',
       width: 140,
       hideInSearch: true,
     },
     {
-      title: '任务名称',
+      title: <T id="page.job.field.jobName" />,
       dataIndex: 'jobName',
       valueType: 'text',
       width: 180,
       initialValue: searchParams.get('jobName'),
     },
     {
-      title: '任务组名',
+      title: <T id="page.job.field.jobGroup" />,
       dataIndex: 'jobGroup',
       valueType: 'select',
       width: 180,
@@ -50,21 +52,14 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '调用函数',
+      title: <T id="page.job.field.jobFun" />,
       dataIndex: 'invokeTarget',
       valueType: 'text',
       width: 320,
       hideInSearch: true,
     },
     {
-      title: '日志信息',
-      dataIndex: 'jobMessage',
-      valueType: 'text',
-      hideInSearch: true,
-      hideInTable: true,
-    },
-    {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
@@ -77,7 +72,15 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '执行时间',
+      title: <T id="page.job.field.log" />,
+      dataIndex: 'jobMessage',
+      valueType: 'text',
+      width: 240,
+      hideInSearch: true,
+    },
+
+    {
+      title: <T id="page.job.field.operTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
@@ -92,7 +95,7 @@ export const Component: React.FC<unknown> = () => {
       onBack={() => navigate(-1)}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="jobLogId"
         toolBarRender={() => [
@@ -102,33 +105,37 @@ export const Component: React.FC<unknown> = () => {
               key="clear"
               onClick={() => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要清空全部记录吗？',
+                  title: t('component.confirm.clear'),
+                  content: t('component.confirm.clear.desc'),
                   onOk: async () => {
-                    const hide = message.loading('正在清空');
+                    const hide = message.loading(
+                      t('component.form.message.delete.loading'),
+                    );
                     try {
                       await cleanJobLog();
                       hide();
-                      message.success('清空成功');
+                      message.success(
+                        t('component.form.message.delete.success'),
+                      );
                       actionRef.current?.reloadAndRest?.();
                       Promise.resolve();
                     } catch {
                       hide();
-                      message.error('清空失败请重试!');
+                      message.error(t('component.form.message.delete.error'));
                       Promise.reject();
                     }
                   },
                 });
               }}
             >
-              清空日志
+              <T id="page.job.log.clear" />
             </Button>
           </PermissionGuard>,
           <Dropdown
             menu={{
               items: [
                 {
-                  label: '导出',
+                  label: <T id="component.table.tool.export" />,
                   icon: <ExportOutlined />,
                   key: 'export',
                 },

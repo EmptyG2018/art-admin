@@ -29,6 +29,7 @@ import React, { useRef, useState } from 'react';
 import { queryPostPage, deletePost } from '@/services/post';
 import { queryDictsByType } from '@/services/dict';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import CreatePostForm from './components/CreatePostForm';
 import UpdatePostForm from './components/UpdatePostForm';
 
@@ -37,45 +38,46 @@ import UpdatePostForm from './components/UpdatePostForm';
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deletePost(selectedRows.map((row) => row.postId).join(','));
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.success(rawT('component.form.message.delete.error'));
     return false;
   }
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
 
   const columns: ProColumns[] = [
     {
-      title: '岗位编号',
+      title: <T id="page.post.field.id" />,
       dataIndex: 'postId',
       hideInSearch: true,
       hideInForm: true,
     },
     {
-      title: '岗位编码',
+      title: <T id="page.post.field.postKey" />,
       dataIndex: 'postCode',
       valueType: 'text',
       width: 160,
     },
     {
-      title: '岗位名称',
+      title: <T id="page.post.field.postName" />,
       dataIndex: 'postName',
       valueType: 'text',
       width: 160,
     },
     {
-      title: '排序',
+      title: <T id="component.field.sort" />,
       dataIndex: 'postSort',
       valueType: 'digit',
       width: 120,
@@ -83,7 +85,7 @@ export const Component: React.FC<unknown> = () => {
       hideInSearch: true,
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
@@ -96,20 +98,20 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 100,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
           <PermissionGuard requireds={['system:post:edit']}>
-            <Tooltip title="修改">
+            <Tooltip title={<T id="component.tooltip.update" />}>
               <UpdatePostForm
                 values={record}
                 formRender={formRender}
@@ -123,10 +125,10 @@ export const Component: React.FC<unknown> = () => {
             </Tooltip>
           </PermissionGuard>
           <PermissionGuard requireds={['system:post:remove']}>
-            <Tooltip title="删除">
+            <Tooltip title={<T id="component.tooltip.delete" />}>
               <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
+                title={<T id="component.confirm.delete" />}
+                description={<T id="component.confirm.delete.desc" />}
                 onConfirm={async () => {
                   await handleRemove([record]);
                   actionRef.current?.reloadAndRest?.();
@@ -145,31 +147,51 @@ export const Component: React.FC<unknown> = () => {
     <>
       <ProFormText
         name="postName"
-        label="岗位名称"
-        placeholder="请输入岗位名称"
-        rules={[{ required: true, message: '请输入岗位名称' }]}
+        label={<T id="page.post.field.postName" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.post.field.postName'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.post.field.postName'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormText
         name="postCode"
-        label="岗位编码"
-        placeholder="请输入岗位编码"
-        rules={[{ required: true, message: '请输入岗位编码' }]}
+        label={<T id="page.post.field.postKey" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.post.field.postKey'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.post.field.postKey'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormDigit
         name="postSort"
-        label="排序"
-        placeholder="请输入排序"
+        label={<T id="component.field.sort" />}
+        placeholder={t('component.field.sort.placeholder')}
         min={0}
         fieldProps={{ precision: 0 }}
-        rules={[{ required: true, message: '请输入排序' }]}
+        rules={[
+          { required: true, message: t('component.field.sort.placeholder') },
+        ]}
         width="xs"
       />
       <ProFormRadio.Group
         name="status"
-        label="状态"
-        placeholder="请选择状态"
+        label={<T id="component.field.status" />}
+        placeholder={t('component.field.status.placeholder')}
         initialValue="0"
         request={async () => {
           const res = await queryDictsByType('sys_normal_disable');
@@ -181,9 +203,9 @@ export const Component: React.FC<unknown> = () => {
       />
       <ProFormTextArea
         name="remark"
-        label="备注"
+        label={<T id="component.field.remark" />}
         width="lg"
-        placeholder="请输入备注"
+        placeholder={t('component.field.remark.placeholder')}
       />
     </>
   );
@@ -195,7 +217,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="postId"
         toolBarRender={() => [
@@ -204,7 +226,7 @@ export const Component: React.FC<unknown> = () => {
               formRedner={formRender}
               trigger={
                 <Button type="primary" icon={<PlusOutlined />} key="add">
-                  新建
+                  <T id="component.table.tool.add" />
                 </Button>
               }
               onFinish={() => {
@@ -216,7 +238,7 @@ export const Component: React.FC<unknown> = () => {
             menu={{
               items: [
                 {
-                  label: '导出',
+                  label: <T id="component.table.tool.export" />,
                   icon: <ExportOutlined />,
                   key: 'export',
                 },
@@ -255,9 +277,16 @@ export const Component: React.FC<unknown> = () => {
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
+              <T
+                id="component.table.selection"
+                values={{
+                  num: (
+                    <a style={{ fontWeight: 600 }}>
+                      {selectedRowsState.length}
+                    </a>
+                  ),
+                }}
+              />
             </div>
           }
         >
@@ -265,8 +294,8 @@ export const Component: React.FC<unknown> = () => {
             <Button
               onClick={async () => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要删除选中的记录吗？',
+                  title: t('component.confirm.delete'),
+                  content: t('component.confirm.delete.select.desc'),
                   onOk: async () => {
                     const ok = await handleRemove(selectedRowsState);
                     if (ok) {
@@ -280,7 +309,7 @@ export const Component: React.FC<unknown> = () => {
                 });
               }}
             >
-              批量删除
+              <T id="component.table.tool.batchdelete" />
             </Button>
           </PermissionGuard>
         </FooterToolbar>

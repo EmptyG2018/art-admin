@@ -206,8 +206,8 @@ export const Component: React.FC<unknown> = () => {
           <Button
             onClick={async () => {
               Modal.confirm({
-                title: <T id="component.confirm.delete" />,
-                content: <T id="component.confirm.select.desc" />,
+                title: t('component.confirm.delete'),
+                content: t('component.confirm.delete.desc'),
                 onOk: async () => {
                   const hide = message.loading(
                     t('page.role.cancelAuth.loading'),

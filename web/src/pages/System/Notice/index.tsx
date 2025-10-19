@@ -14,6 +14,7 @@ import {
 import { queryDictsByType } from '@/services/dict';
 import { queryNoticePage, deleteNotice } from '@/services/notice';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import { WangEdtior } from '@/components';
 import CreateNoticeForm from './components/CreateNoticeForm';
 import UpdateNoticeForm from './components/UpdateNoticeForm';
@@ -23,38 +24,39 @@ import UpdateNoticeForm from './components/UpdateNoticeForm';
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deleteNotice(selectedRows.map((row) => row.noticeId).join(','));
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.success(rawT('component.form.message.delete.error'));
     return false;
   }
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
 
   const columns: ProColumns[] = [
     {
-      title: '序号',
+      title: <T id="page.notice.field.order" />,
       dataIndex: 'noticeId',
       hideInSearch: true,
       width: 80,
     },
     {
-      title: '公告标题',
+      title: <T id="page.notice.field.title" />,
       dataIndex: 'noticeTitle',
       valueType: 'text',
     },
     {
-      title: '公告类型',
+      title: <T id="page.notice.field.type" />,
       dataIndex: 'noticeType',
       valueType: 'select',
       width: 120,
@@ -67,7 +69,7 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
@@ -81,13 +83,13 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '创建者',
+      title: <T id="component.field.createBy" />,
       dataIndex: 'createBy',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
@@ -95,7 +97,7 @@ export const Component: React.FC<unknown> = () => {
       hideInForm: true,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 100,
       dataIndex: 'option',
       valueType: 'option',
@@ -107,7 +109,7 @@ export const Component: React.FC<unknown> = () => {
               values={record}
               formRender={formRender}
               trigger={
-                <Tooltip title="修改">
+                <Tooltip title={<T id="component.tooltip.update" />}>
                   <Button type="link" size="small" icon={<EditOutlined />} />
                 </Tooltip>
               }
@@ -117,10 +119,10 @@ export const Component: React.FC<unknown> = () => {
             />
           </PermissionGuard>
           <PermissionGuard requireds={['system:notice:remove']}>
-            <Tooltip title="删除">
+            <Tooltip title={<T id="component.tooltip.delete" />}>
               <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
+                title={<T id="component.confirm.delete" />}
+                description={<T id="component.confirm.delete.desc" />}
                 onConfirm={async () => {
                   await handleRemove([record]);
                   actionRef.current?.reloadAndRest?.();
@@ -139,15 +141,26 @@ export const Component: React.FC<unknown> = () => {
     <>
       <ProFormText
         name="noticeTitle"
-        label="公告标题"
-        placeholder="请输入公告标题"
-        rules={[{ required: true, message: '请输入公告标题' }]}
+        label={<T id="page.notice.field.title" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.notice.field.title'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.notice.field.title'),
+            }),
+          },
+        ]}
         width="xl"
       />
       <ProFormSelect
         name="noticeType"
-        label="公告类型"
-        placeholder="请选择公告类型"
+        label={<T id="page.notice.field.type" />}
+        placeholder={t('component.form.placeholder.sel', {
+          label: t('page.notice.field.type'),
+        })}
         request={async () => {
           const res = await queryDictsByType('sys_notice_type');
           return res.data.map((dict) => ({
@@ -155,16 +168,26 @@ export const Component: React.FC<unknown> = () => {
             value: dict.dictValue,
           }));
         }}
-        rules={[{ required: true, message: '请选择公告类型' }]}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder.sel', {
+              label: t('page.notice.field.type'),
+            }),
+          },
+        ]}
         width="sm"
       />
-      <Form.Item name="noticeContent" label="内容">
+      <Form.Item
+        name="noticeContent"
+        label={<T id="page.notice.field.content" />}
+      >
         <WangEdtior />
       </Form.Item>
       <ProFormRadio.Group
         name="status"
-        label="状态"
-        placeholder="请选择状态"
+        label={<T id="component.field.status" />}
+        placeholder={t('component.field.status.placeholder')}
         initialValue="0"
         request={async () => {
           const res = await queryDictsByType('sys_notice_status');
@@ -184,7 +207,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="noticeId"
         toolBarRender={() => [
@@ -193,7 +216,7 @@ export const Component: React.FC<unknown> = () => {
               formRender={formRender}
               trigger={
                 <Button type="primary" icon={<PlusOutlined />} key="add">
-                  新建
+                  <T id="component.table.tool.add" />
                 </Button>
               }
               onFinish={() => {
@@ -229,9 +252,16 @@ export const Component: React.FC<unknown> = () => {
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
+              <T
+                id="component.table.selection"
+                values={{
+                  num: (
+                    <a style={{ fontWeight: 600 }}>
+                      {selectedRowsState.length}
+                    </a>
+                  ),
+                }}
+              />
             </div>
           }
         >
@@ -239,8 +269,8 @@ export const Component: React.FC<unknown> = () => {
             <Button
               onClick={async () => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要删除选中的记录吗？',
+                  title: t('component.confirm.delete'),
+                  content: t('component.confirm.delete.desc'),
                   onOk: async () => {
                     const ok = await handleRemove(selectedRowsState);
                     if (ok) {
@@ -254,7 +284,7 @@ export const Component: React.FC<unknown> = () => {
                 });
               }}
             >
-              批量删除
+              <T id="component.table.tool.batchdelete" />
             </Button>
           </PermissionGuard>
         </FooterToolbar>

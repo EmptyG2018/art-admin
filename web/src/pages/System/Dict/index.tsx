@@ -34,6 +34,7 @@ import {
   deleteDictType,
 } from '@/services/dict';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import CreateDictForm from './components/CreateDictForm';
 import UpdateDictForm from './components/UpdateDictForm';
 
@@ -42,45 +43,46 @@ import UpdateDictForm from './components/UpdateDictForm';
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deleteDictType(selectedRows.map((row) => row.dictId).join(','));
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.success(rawT('component.form.message.delete.error'));
     return false;
   }
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
   const columns: ProColumns[] = [
     {
-      title: '字典编号',
+      title: <T id="page.dict.field.id" />,
       dataIndex: 'dictId',
       hideInSearch: true,
       hideInForm: true,
       width: 140,
     },
     {
-      title: '字典名称',
+      title: <T id="page.dict.field.dictName" />,
       dataIndex: 'dictName',
       valueType: 'text',
       width: 140,
     },
     {
-      title: '字典类型',
+      title: <T id="page.dict.field.dictType" />,
       dataIndex: 'dictType',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
@@ -93,19 +95,19 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '备注',
+      title: <T id="component.field.remark" />,
       dataIndex: 'remark',
       valueType: 'textarea',
       hideInSearch: true,
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       width: 220,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 140,
       dataIndex: 'option',
       valueType: 'option',
@@ -113,7 +115,7 @@ export const Component: React.FC<unknown> = () => {
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
           <PermissionGuard requireds={['system:dictData:list']}>
-            <Tooltip title="字典数据">
+            <Tooltip title={<T id="page.dict.data" />}>
               <Link to={`../dict/${record.dictId}`}>
                 <Button type="link" size="small" icon={<HddOutlined />} />
               </Link>
@@ -124,7 +126,7 @@ export const Component: React.FC<unknown> = () => {
               values={record}
               formRender={formRender}
               trigger={
-                <Tooltip title="修改">
+                <Tooltip title={<T id="component.tooltip.update" />}>
                   <Button type="link" size="small" icon={<EditOutlined />} />
                 </Tooltip>
               }
@@ -134,10 +136,10 @@ export const Component: React.FC<unknown> = () => {
             />
           </PermissionGuard>
           <PermissionGuard requireds={['system:dict:remove']}>
-            <Tooltip title="删除">
+            <Tooltip title={<T id="component.tooltip.delete" />}>
               <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
+                title={<T id="component.confirm.delete" />}
+                description={<T id="component.confirm.delete.desc" />}
                 onConfirm={async () => {
                   await handleRemove([record]);
                   actionRef.current?.reloadAndRest?.();
@@ -156,22 +158,40 @@ export const Component: React.FC<unknown> = () => {
     <>
       <ProFormText
         name="dictName"
-        label="字典名称"
-        placeholder="请输入字典名称"
-        rules={[{ required: true, message: '请输入字典名称' }]}
+        label={<T id="page.dict.field.dictName" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.dict.field.dictName'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.dict.field.dictName'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormText
         name="dictType"
-        label="字典类型"
-        placeholder="请输入字典类型"
-        rules={[{ required: true, message: '请输入字典类型' }]}
+        label={<T id="page.dict.field.dictType" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.dict.field.dictType'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.dict.field.dictType'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormRadio.Group
         name="status"
-        label="状态"
-        placeholder="请选择状态"
+        label={<T id="component.field.status" />}
+        placeholder={t('component.field.status.placeholder')}
         initialValue="0"
         request={async () => {
           const res = await queryDictsByType('sys_normal_disable');
@@ -183,9 +203,9 @@ export const Component: React.FC<unknown> = () => {
       />
       <ProFormTextArea
         name="remark"
-        label="备注"
+        label={<T id="component.field.remark" />}
         width="lg"
-        placeholder="请输入备注"
+        placeholder={t('component.field.remark.placeholder')}
       />
     </>
   );
@@ -197,7 +217,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="dictId"
         toolBarRender={() => [
@@ -206,7 +226,7 @@ export const Component: React.FC<unknown> = () => {
               formRender={formRender}
               trigger={
                 <Button type="primary" icon={<PlusOutlined />} key="add">
-                  新建
+                  <T id="component.table.tool.add" />
                 </Button>
               }
               onFinish={() => {
@@ -219,13 +239,13 @@ export const Component: React.FC<unknown> = () => {
             key="export"
             onClick={() => handleModalVisible(true)}
           >
-            刷新缓存
+            <T id="page.dict.refresh" />
           </Button>,
           <Dropdown
             menu={{
               items: [
                 {
-                  label: '导出',
+                  label: <T id="component.table.tool.export" />,
                   icon: <ExportOutlined />,
                   key: 'export',
                 },
@@ -265,9 +285,16 @@ export const Component: React.FC<unknown> = () => {
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
+              <T
+                id="component.table.selection"
+                values={{
+                  num: (
+                    <a style={{ fontWeight: 600 }}>
+                      {selectedRowsState.length}
+                    </a>
+                  ),
+                }}
+              />
             </div>
           }
         >
@@ -275,8 +302,8 @@ export const Component: React.FC<unknown> = () => {
             <Button
               onClick={async () => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要删除选中的记录吗？',
+                  title: t('component.confirm.delete'),
+                  content: t('component.confirm.delete.select.desc'),
                   onOk: async () => {
                     const ok = await handleRemove(selectedRowsState);
                     if (ok) {
@@ -290,7 +317,7 @@ export const Component: React.FC<unknown> = () => {
                 });
               }}
             >
-              批量删除
+              <T id="component.table.tool.batchdelete" />
             </Button>
           </PermissionGuard>
         </FooterToolbar>

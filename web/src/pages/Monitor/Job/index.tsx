@@ -33,6 +33,7 @@ import {
 import { queryDictsByType } from '@/services/dict';
 import { queryJobPage, deleteJob, runJob } from '@/services/monitor';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import { CronSelect } from '@/components';
 import CreateJobForm from './components/CreateJobForm';
 import UpdateJobForm from './components/UpdateJobForm';
@@ -42,41 +43,42 @@ import UpdateJobForm from './components/UpdateJobForm';
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deleteJob(selectedRows.map((row) => row.jobId).join(','));
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.success(rawT('component.form.message.delete.error'));
     return false;
   }
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const { message } = App.useApp();
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
 
   const columns: ProColumns[] = [
     {
-      title: '任务编号',
+      title: <T id="page.job.field.id" />,
       dataIndex: 'jobId',
       hideInSearch: true,
       hideInForm: true,
       width: 140,
     },
     {
-      title: '任务名称',
+      title: <T id="page.job.field.jobName" />,
       dataIndex: 'jobName',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '任务组名',
+      title: <T id="page.job.field.jobGroup" />,
       dataIndex: 'jobGroup',
       valueType: 'select',
       width: 180,
@@ -89,21 +91,21 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '调用函数',
+      title: <T id="page.job.field.jobFun" />,
       dataIndex: 'invokeTarget',
       valueType: 'text',
       width: 320,
       hideInSearch: true,
     },
     {
-      title: 'cron表达式',
+      title: <T id="page.job.field.cron" />,
       dataIndex: 'cronExpression',
       valueType: 'text',
       width: 180,
       hideInSearch: true,
     },
     {
-      title: '状态',
+      title: <T id="component.field.status" />,
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
@@ -116,14 +118,14 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '创建时间',
+      title: <T id="component.field.createTime" />,
       dataIndex: 'createTime',
       valueType: 'dateTime',
       hideInSearch: true,
       width: 220,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 180,
       dataIndex: 'option',
       valueType: 'option',
@@ -131,23 +133,25 @@ export const Component: React.FC<unknown> = () => {
       render: (_, record) => (
         <Space direction="horizontal" size={16}>
           <PermissionGuard requireds={['monitor:job:edit']}>
-            <Tooltip title="执行一次">
+            <Tooltip title={<T id="page.job.run.one" />}>
               <Popconfirm
-                title="提示"
-                description="您确定要执行一次此任务吗？"
+                title={<T id="component.confirm.title" />}
+                description={<T id="page.job.run.one.confirmMessage" />}
                 onConfirm={async () => {
-                  const hide = message.loading('正在执行');
+                  const hide = message.loading(
+                    t('page.job.message.run.loading'),
+                  );
                   try {
                     await runJob({
                       jobId: record.jobId,
                       jobGroup: record.jobGroup,
                     });
                     hide();
-                    message.success('执行成功');
+                    message.success(t('page.job.message.run.success'));
                     return true;
                   } catch {
                     hide();
-                    message.error('执行失败请重试!');
+                    message.error(t('page.job.message.run.error'));
                     return false;
                   }
                 }}
@@ -165,7 +169,7 @@ export const Component: React.FC<unknown> = () => {
               values={record}
               formRender={formRender}
               trigger={
-                <Tooltip title="修改">
+                <Tooltip title={<T id="component.tooltip.update" />}>
                   <Button type="link" size="small" icon={<EditOutlined />} />
                 </Tooltip>
               }
@@ -174,7 +178,7 @@ export const Component: React.FC<unknown> = () => {
               }}
             />
           </PermissionGuard>
-          <Tooltip title="调度日志">
+          <Tooltip title={<T id="page.job.log" />}>
             <Link
               to={`../job/log?jobName=${record.jobName}&jobGroup=${record.jobGroup}`}
             >
@@ -182,10 +186,10 @@ export const Component: React.FC<unknown> = () => {
             </Link>
           </Tooltip>
           <PermissionGuard requireds={['monitor:job:remove']}>
-            <Tooltip title="删除">
+            <Tooltip title={<T id="component.tooltip.delete" />}>
               <Popconfirm
-                title="删除记录"
-                description="您确定要删除此记录吗？"
+                title={<T id="component.confirm.delete" />}
+                description={<T id="component.confirm.delete.desc" />}
                 onConfirm={async () => {
                   await handleRemove([record]);
                   actionRef.current?.reloadAndRest?.();
@@ -204,15 +208,26 @@ export const Component: React.FC<unknown> = () => {
     <>
       <ProFormText
         name="jobName"
-        label="任务名称"
-        placeholder="请输入任务名称"
-        rules={[{ required: true, message: '请输入任务名称' }]}
+        label={<T id="page.job.field.jobName" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.job.field.jobName'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.job.field.jobName'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormSelect
         name="jobGroup"
-        label="任务组名"
-        placeholder="请选择任务组名"
+        label={<T id="page.job.field.jobGroup" />}
+        placeholder={t('component.form.placeholder.sel', {
+          label: t('page.job.field.jobGroup'),
+        })}
         request={async () => {
           const res = await queryDictsByType('sys_job_group');
           return res.data.map((dict) => ({
@@ -220,50 +235,77 @@ export const Component: React.FC<unknown> = () => {
             value: dict.dictValue,
           }));
         }}
-        rules={[{ required: true, message: '请选择任务组名' }]}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.job.field.jobGroup'),
+            }),
+          },
+        ]}
         width="md"
       />
       <ProFormText
         name="invokeTarget"
-        label="调用函数"
-        placeholder="请输入调用函数"
-        rules={[{ required: true, message: '请输入调用函数' }]}
+        label={<T id="page.job.field.jobFun" />}
+        placeholder={t('component.form.placeholder', {
+          label: t('page.job.field.jobFun'),
+        })}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.job.field.jobFun'),
+            }),
+          },
+        ]}
         width="md"
       />
       <Form.Item
         name="cronExpression"
-        label="cron表达式"
+        label={<T id="page.job.field.cron" />}
         initialValue="* * * * *"
-        rules={[{ required: true, message: '请输入cron表达式' }]}
+        rules={[
+          {
+            required: true,
+            message: t('component.form.placeholder', {
+              label: t('page.job.field.cron'),
+            }),
+          },
+        ]}
       >
         <CronSelect />
       </Form.Item>
       <ProFormRadio.Group
         radioType="button"
         name="misfirePolicy"
-        label="执行策略"
-        placeholder="请选择执行策略"
+        label={<T id="page.job.field.run" />}
+        placeholder={t('component.form.placeholder.sel', {
+          label: t('page.job.field.run'),
+        })}
         initialValue="1"
         valueEnum={{
-          '1': { text: '立即执行' },
-          '2': { text: '执行一次' },
-          '3': { text: '放弃执行' },
+          '1': { text: <T id="page.job.run.immediate" /> },
+          '2': { text: <T id="page.job.run.one" /> },
+          '3': { text: <T id="page.job.run.quit" /> },
         }}
       />
       <ProFormRadio.Group
         name="concurrent"
-        label="是否并发"
-        placeholder="请选择是否并发"
+        label={<T id="page.job.field.isConcurrent" />}
+        placeholder={t('component.form.placeholder.sel', {
+          label: t('page.job.field.isConcurrent'),
+        })}
         initialValue="1"
         valueEnum={{
-          '0': { text: '允许' },
-          '1': { text: '禁止' },
+          '0': { text: <T id="page.job.concurrent.true" /> },
+          '1': { text: <T id="page.job.concurrent.false" /> },
         }}
       />
       <ProFormRadio.Group
         name="status"
-        label="状态"
-        placeholder="请选择状态"
+        label={<T id="component.field.status" />}
+        placeholder={t('component.field.status.placeholder')}
         initialValue="0"
         request={async () => {
           const res = await queryDictsByType('sys_job_status');
@@ -283,7 +325,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="jobId"
         toolBarRender={() => [
@@ -292,7 +334,7 @@ export const Component: React.FC<unknown> = () => {
               formRender={formRender}
               trigger={
                 <Button type="primary" icon={<PlusOutlined />} key="add">
-                  新建
+                  <T id="component.table.tool.add" />
                 </Button>
               }
               onFinish={() => {
@@ -302,7 +344,7 @@ export const Component: React.FC<unknown> = () => {
           </PermissionGuard>,
           <Link to="../job/log">
             <Button icon={<ClockCircleOutlined />} key="log">
-              调度日志
+              <T id="page.job.log" />
             </Button>
           </Link>,
 
@@ -310,7 +352,7 @@ export const Component: React.FC<unknown> = () => {
             menu={{
               items: [
                 {
-                  label: '导出',
+                  label: <T id="component.table.tool.export" />,
                   icon: <ExportOutlined />,
                   key: 'export',
                 },
@@ -350,9 +392,16 @@ export const Component: React.FC<unknown> = () => {
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
+              <T
+                id="component.table.selection"
+                values={{
+                  num: (
+                    <a style={{ fontWeight: 600 }}>
+                      {selectedRowsState.length}
+                    </a>
+                  ),
+                }}
+              />
             </div>
           }
         >
@@ -360,8 +409,8 @@ export const Component: React.FC<unknown> = () => {
             <Button
               onClick={async () => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要删除选中的记录吗？',
+                  title: t('component.confirm.delete'),
+                  content: t('component.confirm.delete.desc'),
                   onOk: async () => {
                     const ok = await handleRemove(selectedRowsState);
                     if (ok) {
@@ -375,7 +424,7 @@ export const Component: React.FC<unknown> = () => {
                 });
               }}
             >
-              批量删除
+              <T id="component.table.tool.batchdelete" />
             </Button>
           </PermissionGuard>
         </FooterToolbar>

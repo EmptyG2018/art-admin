@@ -5,6 +5,7 @@ import {
   ProCard,
   StatisticCard,
 } from '@ant-design/pro-components';
+import { rawT, useT, T } from '@/locales';
 import { useRequest, useResponsive } from 'ahooks';
 import { queryServerInfo } from '@/services/monitor';
 
@@ -31,7 +32,10 @@ const DiskList: React.FC<{ list: any }> = ({ list }) => {
               size={{ height: 20 }}
             />
             <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 4 }}>
-              已使用 {disk.used} GB ，共 {disk.total} GB
+              <T
+                id="page.monitor.server.disk.useTips"
+                values={{ used: disk.used, total: disk.total }}
+              />
             </div>
           </div>
         </div>
@@ -41,6 +45,7 @@ const DiskList: React.FC<{ list: any }> = ({ list }) => {
 };
 
 export const Component = () => {
+  const t = useT();
   const responsive = useResponsive();
   const {
     data: info,
@@ -67,7 +72,7 @@ export const Component = () => {
       <ProCard
         title="服务监控"
         extra={
-          <Tooltip title="刷新">
+          <Tooltip title={<T id="page.monitor.server.refresh" />}>
             <Button
               type="link"
               icon={<ReloadOutlined />}
@@ -87,52 +92,61 @@ export const Component = () => {
         headerBordered
       >
         <ProCard split={responsive.lg ? 'vertical' : 'horizontal'}>
-          <ProCard title="服务器信息">
+          <ProCard title={<T id="page.monitor.server.info" />}>
             <Row gutter={[12, 24]} wrap>
               <Col span={24}>
                 <Statistic.Timer
                   type="countup"
                   value={new Date().getTime() - info?.node?.uptime * 1000}
-                  title="已运行时长"
-                  format="D 天 HH 时 mm 分 ss 秒"
+                  title={<T id="page.monitor.server.runTime" />}
+                  format={t('page.monitor.server.runTime.format')}
                 />
               </Col>
               <Col span={12}>
                 <Statistic
-                  title="服务器IP"
+                  title={<T id="page.monitor.server.ip" />}
                   value={`${info?.sys?.computerIp}`}
                 />
               </Col>
               <Col span={12}>
-                <Statistic title="操作系统" value={`${info?.sys?.osName}`} />
-              </Col>
-              <Col span={12}>
-                <Statistic title="服务平台" value={`${info?.node?.title}`} />
+                <Statistic
+                  title={<T id="page.monitor.server.os" />}
+                  value={`${info?.sys?.osName}`}
+                />
               </Col>
               <Col span={12}>
                 <Statistic
-                  title="服务平台版本"
+                  title={<T id="page.monitor.server.platform" />}
+                  value={`${info?.node?.title}`}
+                />
+              </Col>
+              <Col span={12}>
+                <Statistic
+                  title={<T id="page.monitor.server.version" />}
                   value={`${info?.node?.version}`}
                 />
               </Col>
             </Row>
           </ProCard>
-          <ProCard title="资源消耗" split="horizontal">
+          <ProCard
+            title={<T id="page.monitor.server.resource" />}
+            split="horizontal"
+          >
             <StatisticCard
               statistic={{
-                title: 'CPU占用比率',
+                title: <T id="page.monitor.server.cpu" />,
                 value: cpuUsage,
                 suffix: '%',
                 description: (
                   <>
                     <StatisticCard.Statistic
                       layout="inline"
-                      title="用户占用比率"
+                      title={<T id="page.monitor.server.cpu.user" />}
                       value={`${cpuUsed}%`}
                     />
                     <StatisticCard.Statistic
                       layout="inline"
-                      title="系统占用比率"
+                      title={<T id="page.monitor.server.cpu.sys" />}
                       value={`${cpuSys}%`}
                     />
                   </>
@@ -149,18 +163,18 @@ export const Component = () => {
             />
             <StatisticCard
               statistic={{
-                title: '内存占用比率',
+                title: <T id="page.monitor.server.mem" />,
                 value: info?.mem?.usage,
                 suffix: '%',
                 description: (
                   <>
                     <StatisticCard.Statistic
-                      title="总内存"
+                      title={<T id="page.monitor.server.mem.total" />}
                       value={`${info?.mem?.total}GB`}
                     />
                     <StatisticCard.Statistic
                       layout="horizontal"
-                      title="已占用"
+                      title={<T id="page.monitor.server.mem.used" />}
                       value={`${info?.mem?.used}GB`}
                     />
                   </>
@@ -177,7 +191,7 @@ export const Component = () => {
             />
           </ProCard>
         </ProCard>
-        <ProCard title="磁盘状态">
+        <ProCard title={<T id="page.monitor.server.disk" />}>
           <DiskList list={info?.sysFiles} />
         </ProCard>
       </ProCard>

@@ -1,11 +1,13 @@
 import * as echarts from 'echarts';
 import React, { useEffect, useRef } from 'react';
+import { rawT, useT, T } from '@/locales';
 
 interface KeyspacePieProps {
   data: { hits: number; misses: number };
 }
 
 const KeyspacePie: React.FC<KeyspacePieProps> = ({ data }) => {
+  const t = useT();
   const ref = useRef(null);
   const chart = useRef<echarts.ECharts>();
 
@@ -16,7 +18,7 @@ const KeyspacePie: React.FC<KeyspacePieProps> = ({ data }) => {
     chart.current = echarts.init(ref.current);
     chart.current.setOption({
       title: {
-        text: '缓存命中率',
+        text: t('page.monitor.cache.keyspace'),
       },
       tooltip: {
         trigger: 'item',
@@ -29,8 +31,8 @@ const KeyspacePie: React.FC<KeyspacePieProps> = ({ data }) => {
           type: 'pie',
           radius: '50%',
           data: [
-            { value: hits, name: '缓存命中成功' },
-            { value: misses, name: '缓存命中失败' },
+            { value: hits, name: t('page.monitor.cache.keyspace.success') },
+            { value: misses, name: t('page.monitor.cache.keyspace.error') },
           ],
         },
       ],
@@ -39,7 +41,7 @@ const KeyspacePie: React.FC<KeyspacePieProps> = ({ data }) => {
     return () => {
       chart.current?.dispose();
     };
-  }, [data]);
+  }, [data, t]);
 
   return <div ref={ref} style={{ height: 320 }}></div>;
 };

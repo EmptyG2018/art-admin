@@ -16,6 +16,7 @@ import {
 import { queryDictsByType } from '@/services/dict';
 import { queryOperlogPage, deleteOperlog, cleanOperlog } from '@/services/log';
 import { PermissionGuard } from '@/components/Layout';
+import { rawT, useT, T } from '@/locales';
 import ViewOperlog from './components/ViewOperlog';
 
 /**
@@ -23,39 +24,40 @@ import ViewOperlog from './components/ViewOperlog';
  * @param selectedRows
  */
 const handleRemove = async (selectedRows: API.UserInfo[]) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading(rawT('component.form.message.delete.loading'));
   if (!selectedRows) return true;
   try {
     await deleteOperlog(selectedRows.map((row) => row.operId).join(','));
     hide();
-    message.success('删除成功');
+    message.success(rawT('component.form.message.delete.success'));
     return true;
   } catch {
     hide();
-    message.error('删除失败请重试!');
+    message.success(rawT('component.form.message.delete.error'));
     return false;
   }
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<API.UserInfo[]>([]);
 
   const columns: ProColumns[] = [
     {
-      title: '日志编号',
+      title: <T id="page.operlog.field.id" />,
       dataIndex: 'operId',
       hideInSearch: true,
       width: 140,
     },
     {
-      title: '系统模块',
+      title: <T id="page.operlog.field.module" />,
       dataIndex: 'title',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '请求动作',
+      title: <T id="page.operlog.field.method" />,
       dataIndex: 'businessType',
       valueType: 'select',
       width: 180,
@@ -68,19 +70,19 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '操作人员',
+      title: <T id="page.operlog.field.operBy" />,
       dataIndex: 'operName',
       valueType: 'text',
       width: 180,
     },
     {
-      title: 'IP地址',
+      title: <T id="page.operlog.field.ip" />,
       dataIndex: 'operIp',
       valueType: 'text',
       width: 180,
     },
     {
-      title: '执行状态',
+      title: <T id="page.operlog.field.operStatus" />,
       dataIndex: 'status',
       valueType: 'select',
       width: 120,
@@ -93,20 +95,20 @@ export const Component: React.FC<unknown> = () => {
       },
     },
     {
-      title: '耗时(ms)',
+      title: <T id="page.operlog.field.timer" />,
       dataIndex: 'costTime',
       valueType: 'text',
       hideInSearch: true,
       width: 120,
     },
     {
-      title: '操作时间',
+      title: <T id="page.operlog.field.operTime" />,
       dataIndex: 'operTime',
       valueType: 'dateTime',
       width: 220,
     },
     {
-      title: '操作',
+      title: <T id="component.table.action" />,
       width: 60,
       dataIndex: 'option',
       valueType: 'option',
@@ -116,7 +118,7 @@ export const Component: React.FC<unknown> = () => {
           <ViewOperlog
             values={record}
             trigger={
-              <Tooltip title="查看">
+              <Tooltip title={<T id="component.tooltip.detail" />}>
                 <Button type="link" size="small" icon={<EyeOutlined />} />
               </Tooltip>
             }
@@ -133,7 +135,7 @@ export const Component: React.FC<unknown> = () => {
       }}
     >
       <ProTable
-        headerTitle="查询表格"
+        headerTitle={<T id="component.table.title" />}
         actionRef={actionRef}
         rowKey="operId"
         toolBarRender={() => [
@@ -143,33 +145,37 @@ export const Component: React.FC<unknown> = () => {
               key="clear"
               onClick={() => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要清空全部记录吗？',
+                  title: t('component.confirm.delete'),
+                  content: t('component.confirm.delete.desc'),
                   onOk: async () => {
-                    const hide = message.loading('正在清空');
+                    const hide = message.loading(
+                      t('component.form.message.delete.loading'),
+                    );
                     try {
                       await cleanOperlog();
                       hide();
-                      message.success('清空成功');
+                      message.success(
+                        t('component.form.message.delete.success'),
+                      );
                       actionRef.current?.reloadAndRest?.();
                       Promise.resolve();
                     } catch {
                       hide();
-                      message.error('清空失败请重试!');
+                      message.error(t('component.form.message.delete.loading'));
                       Promise.reject();
                     }
                   },
                 });
               }}
             >
-              清空日志
+              <T id="page.operlog.clear" />
             </Button>
           </PermissionGuard>,
           <Dropdown
             menu={{
               items: [
                 {
-                  label: '导出',
+                  label: <T id="component.table.tool.export" />,
                   icon: <ExportOutlined />,
                   key: 'export',
                 },
@@ -209,9 +215,16 @@ export const Component: React.FC<unknown> = () => {
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
-              <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a>{' '}
-              项&nbsp;&nbsp;
+              <T
+                id="component.table.selection"
+                values={{
+                  num: (
+                    <a style={{ fontWeight: 600 }}>
+                      {selectedRowsState.length}
+                    </a>
+                  ),
+                }}
+              />
             </div>
           }
         >
@@ -219,8 +232,8 @@ export const Component: React.FC<unknown> = () => {
             <Button
               onClick={async () => {
                 Modal.confirm({
-                  title: '删除记录',
-                  content: '您确定要删除选中的记录吗？',
+                  title: t('component.confirm.delete'),
+                  content: t('component.confirm.delete.desc'),
                   onOk: async () => {
                     const ok = await handleRemove(selectedRowsState);
                     if (ok) {
@@ -234,7 +247,7 @@ export const Component: React.FC<unknown> = () => {
                 });
               }}
             >
-              批量删除
+              <T id="component.table.tool.batchdelete" />
             </Button>
           </PermissionGuard>
         </FooterToolbar>
