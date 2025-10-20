@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { addPost } from '@/services/post';
 
 interface CreateFormProps {
@@ -18,7 +18,12 @@ const CreatePostForm: React.FC<CreateFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="新增岗位"
+      title={
+        <T
+          id="component.form.add"
+          values={{ title: <T id="page.post.title" /> }}
+        />
+      }
       values={values}
       trigger={trigger}
       formRender={formRedner}

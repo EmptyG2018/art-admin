@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { addMenu } from '@/services/menu';
 
 interface CreateMenuFormProps {
@@ -18,7 +18,12 @@ const CreateMenuForm: React.FC<CreateMenuFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="新建菜单"
+      title={
+        <T
+          id="component.form.add"
+          values={{ title: <T id="page.menu.title" /> }}
+        />
+      }
       values={values}
       trigger={trigger}
       formRender={formRender}

@@ -310,7 +310,7 @@ export const Component: React.FC = () => {
   return (
     <PageContainer
       header={{
-        title: '缓存列表',
+        title: <T id="menu.monitor.cacheList" />,
         extra: (
           <Button
             icon={<ClearOutlined />}

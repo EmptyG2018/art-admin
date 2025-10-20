@@ -15,7 +15,7 @@ interface EditFormWrapperProps {
 interface EditFormMoalProps extends EditFormWrapperProps {
   modalProps?: any;
   trigger: JSX.Element;
-  title: string;
+  title: React.ReactNode;
 }
 
 const EditWrapperForm: React.FC<EditFormWrapperProps> = (props) => {

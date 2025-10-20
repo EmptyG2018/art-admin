@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { addDept } from '@/services/dept';
 
 interface CreateDeptFormProps {
@@ -18,7 +18,12 @@ const CreateDeptForm: React.FC<CreateDeptFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="新增部门"
+      title={
+        <T
+          id="component.form.add"
+          values={{ title: <T id="page.dept.title" /> }}
+        />
+      }
       values={values}
       trigger={trigger}
       formRender={formRender}

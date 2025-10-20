@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { addConfig } from '@/services/config';
 
 interface CreateConfigFormProps {
@@ -18,7 +18,12 @@ const CreateConfigForm: React.FC<CreateConfigFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="新增参数"
+      title={
+        <T
+          id="component.form.add"
+          values={{ title: <T id="page.config.title" /> }}
+        />
+      }
       values={values}
       trigger={trigger}
       formRender={formRender}

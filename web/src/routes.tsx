@@ -11,6 +11,7 @@ import { Result, Button, Typography, Skeleton } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Loading, NoFound } from './components/Layout';
 import { Admin } from '@/layouts';
+import { T } from '@/locales';
 import { useProfileStore, useSystemStore } from '@/stores';
 import { Component as Login } from './pages/Login';
 import Settings from './pages/Settings';
@@ -42,8 +43,8 @@ const loadLazyPage = (page: string) => {
   return (
     <Result
       status="error"
-      title="页面组件未找到"
-      subTitle="路由配置中指定的组件路径未匹配到本地文件"
+      title={<T id="layout.route.404" />}
+      subTitle={<T id="layout.route.404.subTitle" />}
     >
       <div className="desc">
         <Typography.Paragraph>
@@ -53,17 +54,21 @@ const loadLazyPage = (page: string) => {
               fontSize: 16,
             }}
           >
-            请检查以下内容：
+            <T id="layout.route.404.help" />
           </Typography.Text>
         </Typography.Paragraph>
         <Typography.Paragraph>
           <QuestionCircleOutlined className="site-result-demo-error-icon" />{' '}
-          是否在 <Typography.Text code>src/pages{page}.tsx</Typography.Text>
-          下创建了对应文件？
+          <T
+            id="layout.route.404.message1"
+            values={{
+              path: <Typography.Text code>src/pages{page}.tsx</Typography.Text>,
+            }}
+          />
         </Typography.Paragraph>
         <Typography.Paragraph>
           <QuestionCircleOutlined className="site-result-demo-error-icon" />{' '}
-          配置组件路径是否区分大小写？
+          <T id="layout.route.404.message2" />
         </Typography.Paragraph>
       </div>
     </Result>
@@ -137,7 +142,7 @@ const Permission = () => {
     return (
       <Result
         status="error"
-        title="获取配置异常"
+        title={<T id="layout.config.error" />}
         subTitle={error}
         extra={[
           <Button
@@ -145,7 +150,7 @@ const Permission = () => {
             key="refresh"
             onClick={() => location.reload()}
           >
-            刷新重试
+            <T id="layout.config.refresh" />
           </Button>,
         ]}
       ></Result>

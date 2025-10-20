@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { updateDict, getDict } from '@/services/dict';
 
 interface UpdateDictDataFormProps {
@@ -18,7 +18,12 @@ const UpdateDictDataForm: React.FC<UpdateDictDataFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="修改岗位"
+      title={
+        <T
+          id="component.form.add"
+          values={{ title: <T id="page.dict.title" /> }}
+        />
+      }
       request={async () => {
         const res = await getDict(values.dictCode);
         return res.data;

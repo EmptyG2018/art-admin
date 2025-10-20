@@ -70,7 +70,7 @@ export const Component = () => {
   return (
     <PageContainer header={{ title: false }}>
       <ProCard
-        title="服务监控"
+        title={<T id="menu.monitor.server" />}
         extra={
           <Tooltip title={<T id="page.monitor.server.refresh" />}>
             <Button

@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { addDictType } from '@/services/dict';
 
 interface CreateFormProps {
@@ -18,7 +18,12 @@ const CreateDictForm: React.FC<CreateFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="新增字典"
+      title={
+        <T
+          id="component.form.add"
+          values={{ title: <T id="page.dict.title" /> }}
+        />
+      }
       values={values}
       trigger={trigger}
       formRender={formRender}

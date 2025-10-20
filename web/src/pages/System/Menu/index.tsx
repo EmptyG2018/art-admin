@@ -82,8 +82,8 @@ export const Component: React.FC<unknown> = () => {
       dataIndex: 'status',
       valueType: 'select',
       valueEnum: {
-        0: { text: '正常', status: 'MALE' },
-        1: { text: '停用', status: 'FEMALE' },
+        0: { text: <T id="dict.status.normal" />, status: 'MALE' },
+        1: { text: <T id="dict.status.disable" />, status: 'FEMALE' },
       },
       width: 120,
     },
@@ -338,7 +338,12 @@ export const Component: React.FC<unknown> = () => {
               label={<T id="component.field.sort" />}
               placeholder={t('component.field.sort.placeholder')}
               min={1}
-              rules={[{ required: true, message: '请输入排序' }]}
+              rules={[
+                {
+                  required: true,
+                  message: t('component.field.sort.placeholder'),
+                },
+              ]}
               width="xs"
               fieldProps={{ precision: 0 }}
             />
@@ -372,7 +377,7 @@ export const Component: React.FC<unknown> = () => {
                   request={async () => {
                     const res = await queryDictsByType('sys_show_hide');
                     return res.data.map((dict) => ({
-                      label: dict.dictLabel,
+                      label: dict.i18nKey ? t(dict.i18nKey) : dict.dictLabel,
                       value: dict.dictValue,
                     }));
                   }}
@@ -403,7 +408,7 @@ export const Component: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: '菜单管理',
+        title: <T id="menu.system.menu" />,
       }}
     >
       <ProTable

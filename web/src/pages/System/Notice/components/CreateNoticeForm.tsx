@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { addNotice } from '@/services/notice';
 
 interface CreateNoticeFormProps {
@@ -18,7 +18,12 @@ const CreateNoticeForm: React.FC<CreateNoticeFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="新增公告"
+      title={
+        <T
+          id="component.form.add"
+          values={{ title: <T id="page.notice.title" /> }}
+        />
+      }
       values={values}
       trigger={trigger}
       formRender={formRender}

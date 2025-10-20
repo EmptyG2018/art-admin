@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { addRole } from '@/services/role';
 
 interface CreateRoleFormProps {
@@ -18,7 +18,12 @@ const CreateRoleForm: React.FC<CreateRoleFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="新建角色"
+      title={
+        <T
+          id="component.form.add"
+          values={{ title: <T id="page.role.title" /> }}
+        />
+      }
       values={values}
       trigger={trigger}
       formRender={formRender}

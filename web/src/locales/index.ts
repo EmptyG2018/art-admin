@@ -102,12 +102,12 @@ export const getIntl = (locale: string, messages: Record<string, string>) => {
 };
 
 export const rawT = (id?: string, values?: Record<string, string>) =>
-  intl.formatMessage({ id }, values);
+  intl?.formatMessage({ id }, values);
 
 export const useT = () => {
   const intl = useIntl();
   return (id?: string, values?: Record<string, string>) =>
-    intl.formatMessage({ id }, values);
+    intl?.formatMessage({ id }, values);
 };
 
 export const T = FormattedMessage;

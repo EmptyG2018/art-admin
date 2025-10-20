@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { getUser, updateUser } from '@/services/user';
 
 interface UpdateUserFormProps {
@@ -19,7 +19,19 @@ const UpdateUserForm: React.FC<UpdateUserFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title={formReaonly ? '查看用户' : '修改用户'}
+      title={
+        formReaonly ? (
+          <T
+            id="component.form.view"
+            values={{ title: <T id="page.user.title" /> }}
+          />
+        ) : (
+          <T
+            id="component.form.update"
+            values={{ title: <T id="page.user.title" /> }}
+          />
+        )
+      }
       request={async () => {
         const res = await getUser(values.userId);
         return res.data;

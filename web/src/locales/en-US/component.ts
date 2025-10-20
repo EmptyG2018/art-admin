@@ -1,9 +1,13 @@
 export default {
+  'component.wangEditor.placeholder': 'Please enter content...',
+
   'component.field.sort': 'Sort',
+  'component.field.sort.placeholder': 'Please enter sort order',
   'component.field.status': 'Status',
   'component.field.status.placeholder': 'Please select status',
   'component.field.remark': 'Remark',
   'component.field.remark.placeholder': 'Please enter remark',
+  'component.field.createBy': 'Created By',
   'component.field.createTime': 'Create Time',
   'component.field.createTime.placeholder': 'Please enter create time',
   'component.field.updatetime': 'Update Time',
@@ -12,7 +16,7 @@ export default {
   'component.form.add': 'Add {title}',
   'component.form.update': 'Edit {title}',
   'component.form.delete': 'Delete {title}',
-  'component.form.detail': 'View {title}',
+  'component.form.view': 'View {title}',
   'component.form.placeholder': 'Please enter {label}',
   'component.form.placeholder.sel': 'Please select {label}',
   'component.form.cancel': 'Cancel',
@@ -39,9 +43,14 @@ export default {
   'component.table.tool.export': 'Export',
   'component.table.selection': 'Selected {num} items',
 
+  'component.tooltip.add': 'Add',
+  'component.tooltip.detail': 'View Details',
   'component.tooltip.update': 'Edit',
   'component.tooltip.delete': 'Delete',
+  'component.confirm.title': 'Confirmation',
   'component.confirm.delete': 'Delete Record',
+  'component.confirm.clear': 'Clear Records',
+  'component.confirm.clear.desc': 'Are you sure you want to clear all records?',
   'component.confirm.delete.desc':
     'Are you sure you want to delete this record?',
   'component.confirm.delete.select.desc':

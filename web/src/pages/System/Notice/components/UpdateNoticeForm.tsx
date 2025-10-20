@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { updateNotice, getNotice } from '@/services/notice';
 
 interface UpdateNoticeFormProps {
@@ -18,7 +18,12 @@ const UpdateNoticeForm: React.FC<UpdateNoticeFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="修改公告"
+      title={
+        <T
+          id="component.form.update"
+          values={{ title: <T id="page.notice.title" /> }}
+        />
+      }
       request={async () => {
         const res = await getNotice(values.noticeId);
         return res.data;

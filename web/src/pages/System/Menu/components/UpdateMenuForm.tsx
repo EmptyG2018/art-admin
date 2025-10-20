@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { updateMenu, getMenu } from '@/services/menu';
 
 interface UpdateMenuFormProps {
@@ -18,7 +18,12 @@ const UpdateMenuForm: React.FC<UpdateMenuFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="修改菜单"
+      title={
+        <T
+          id="component.form.update"
+          values={{ title: <T id="page.menu.title" /> }}
+        />
+      }
       request={async () => {
         const res = await getMenu(values.menuId);
         return res.data;

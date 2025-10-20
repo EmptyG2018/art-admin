@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { updateConfig, getConfig } from '@/services/config';
 
 interface UpdateConfigFormProps {
@@ -18,7 +18,12 @@ const UpdateConfigForm: React.FC<UpdateConfigFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="修改参数"
+      title={
+        <T
+          id="component.form.update"
+          values={{ title: <T id="page.config.title" /> }}
+        />
+      }
       request={async () => {
         const res = await getConfig(values.configId);
         return res.data;

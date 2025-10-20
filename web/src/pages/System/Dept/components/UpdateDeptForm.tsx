@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { updateDept, getDept } from '@/services/dept';
 
 interface UpdateDeptFormProps {
@@ -18,7 +18,12 @@ const UpdateDeptForm: React.FC<UpdateDeptFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="修改部门"
+      title={
+        <T
+          id="component.form.update"
+          values={{ title: <T id="page.dept.title" /> }}
+        />
+      }
       request={async () => {
         const res = await getDept(values.deptId);
         return res.data;

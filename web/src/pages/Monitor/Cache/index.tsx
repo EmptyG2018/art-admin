@@ -26,7 +26,7 @@ export const Component = () => {
   return (
     <PageContainer header={{ title: false }}>
       <ProCard
-        title="缓存监控"
+        title={<T id="menu.monitor.cache" />}
         extra={
           <Tooltip title={<T id="page.monitor.cache.refresh" />}>
             <Button

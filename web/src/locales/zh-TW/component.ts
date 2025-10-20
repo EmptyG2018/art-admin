@@ -1,9 +1,13 @@
 export default {
+  'component.wangEditor.placeholder': '請輸入內容...',
+
   'component.field.sort': '排序',
+  'component.field.sort.placeholder': '請輸入排序',
   'component.field.status': '狀態',
   'component.field.status.placeholder': '請選擇狀態',
   'component.field.remark': '備註',
   'component.field.remark.placeholder': '請輸入備註',
+  'component.field.createBy': '建立者',
   'component.field.createTime': '建立時間',
   'component.field.createTime.placeholder': '請輸入建立時間',
   'component.field.updatetime': '修改時間',
@@ -12,7 +16,7 @@ export default {
   'component.form.add': '新增{title}',
   'component.form.update': '修改{title}',
   'component.form.delete': '刪除{title}',
-  'component.form.detail': '查看{title}',
+  'component.form.view': '查看{title}',
   'component.form.placeholder': '請輸入{label}',
   'component.form.placeholder.sel': '請選擇{label}',
   'component.form.cancel': '取消',
@@ -39,9 +43,14 @@ export default {
   'component.table.tool.export': '匯出',
   'component.table.selection': '已選擇 {num} 項',
 
+  'component.tooltip.add': '新增',
+  'component.tooltip.detail': '查看詳情',
   'component.tooltip.update': '修改',
   'component.tooltip.delete': '刪除',
+  'component.confirm.title': '提示',
   'component.confirm.delete': '刪除記錄',
+  'component.confirm.clear': '清空記錄',
+  'component.confirm.clear.desc': '您確定要清空全部記錄嗎？',
   'component.confirm.delete.desc': '您確定要刪除此記錄嗎？',
   'component.confirm.delete.select.desc': '您確定要刪除所選的記錄嗎？',
 };

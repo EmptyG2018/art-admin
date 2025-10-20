@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { updatePost, getPost } from '@/services/post';
 
 interface UpdatePostFormProps {
@@ -18,7 +18,12 @@ const UpdatePostForm: React.FC<UpdatePostFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="修改岗位"
+      title={
+        <T
+          id="component.form.update"
+          values={{ title: <T id="page.post.title" /> }}
+        />
+      }
       request={async () => {
         const res = await getPost(values.postId);
         return res.data;

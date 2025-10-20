@@ -107,7 +107,7 @@ const TableList: React.FC<TableListProps> = (props) => {
       request: async () => {
         const res = await queryDictsByType('sys_normal_disable');
         return res.data.map((dict) => ({
-          label: dict.dictLabel,
+          label: dict.i18nKey ? t(dict.i18nKey) : dict.dictLabel,
           value: dict.dictValue,
         }));
       },
@@ -285,7 +285,7 @@ const TableList: React.FC<TableListProps> = (props) => {
         request={async () => {
           const res = await queryDictsByType('sys_normal_disable');
           return res.data.map((dict) => ({
-            label: dict.dictLabel,
+            label: dict.i18nKey ? t(dict.i18nKey) : dict.dictLabel,
             value: dict.dictValue,
           }));
         }}
@@ -407,6 +407,7 @@ const TableList: React.FC<TableListProps> = (props) => {
 };
 
 export const Component: React.FC<unknown> = () => {
+  const t = useT();
   const params = useParams();
   const navigate = useNavigate();
   const { loading, data } = useRequest(
@@ -441,7 +442,7 @@ export const Component: React.FC<unknown> = () => {
       request: async () => {
         const res = await queryDictsByType('sys_normal_disable');
         return res.data.map((dict) => ({
-          label: dict.dictLabel,
+          label: dict.i18nKey ? t(dict.i18nKey) : dict.dictLabel,
           value: dict.dictValue,
         }));
       },
@@ -461,7 +462,7 @@ export const Component: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: '字典数据',
+        title: <T id="menu.system.dictData" />,
       }}
       content={
         <ProDescriptions

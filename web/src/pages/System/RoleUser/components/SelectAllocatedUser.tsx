@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal } from 'antd';
 import { ProColumns, ProTable } from '@ant-design/pro-components';
-import { T } from '@/locales';
+import { rawT, T } from '@/locales';
 import { queryDictsByType } from '@/services/dict';
 import { getUnAllocatedUserList } from '@/services/user';
 import { updateAuthUser } from '@/services/role';
@@ -41,7 +41,7 @@ export const columns: ProColumns[] = [
     request: async () => {
       const res = await queryDictsByType('sys_normal_disable');
       return res.data.map((dict) => ({
-        label: dict.dictLabel,
+        label: dict.i18nKey ? rawT(dict.i18nKey) : dict.dictLabel,
         value: dict.dictValue,
       }));
     },
@@ -103,7 +103,7 @@ const SelectAllocatedUser = (props) => {
       })}
       <Modal
         open={visible}
-        title="选择用户"
+        title={<T id="page.role.selectUser" />}
         width={1000}
         destroyOnHidden
         okButtonProps={{

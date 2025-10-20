@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { addJob } from '@/services/monitor';
 
 interface CreateJobFormProps {
@@ -18,7 +18,12 @@ const CreateJobForm: React.FC<CreateJobFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="新增定时任务 "
+      title={
+        <T
+          id="component.form.add"
+          values={{ title: <T id="page.job.title" /> }}
+        />
+      }
       values={values}
       formRender={formRender}
       trigger={trigger}

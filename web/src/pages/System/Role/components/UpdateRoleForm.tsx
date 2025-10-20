@@ -1,7 +1,7 @@
 import React from 'react';
 import { App } from 'antd';
 import { EditFormModal } from '@/components';
-import { useT } from '@/locales';
+import { useT, T } from '@/locales';
 import { getRoleMenu } from '@/services/menu';
 import { updateRole, getRole } from '@/services/role';
 
@@ -19,7 +19,12 @@ const UpdateRoleForm: React.FC<UpdateRoleFormProps> = (props) => {
 
   return (
     <EditFormModal
-      title="修改角色"
+      title={
+        <T
+          id="component.form.update"
+          values={{ title: <T id="page.role.title" /> }}
+        />
+      }
       request={async () => {
         const res = await getRole(values.roleId);
         const res2 = await getRoleMenu(values.roleId);

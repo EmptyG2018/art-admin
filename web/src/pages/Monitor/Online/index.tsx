@@ -115,7 +115,7 @@ export const Component: React.FC<unknown> = () => {
   return (
     <PageContainer
       header={{
-        title: '在线用户',
+        title: <T id='menu.monitor.online' />,
       }}
     >
       <ProTable

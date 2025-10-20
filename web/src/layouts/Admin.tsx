@@ -11,7 +11,7 @@ import { ProLayout } from '@ant-design/pro-components';
 import { Logo, SelectLang, ToggleFullscreenBtn } from '@/components/Layout';
 import { useProfileStore, useSystemStore } from '@/stores';
 import icons from '@/constants/icons';
-import { useT, T } from '@/locales';
+import { rawT, T } from '@/locales';
 
 const themeLayout: any = {
   light: theme.defaultAlgorithm,
@@ -28,7 +28,7 @@ const generateDeepRoutes = (routes: any) => {
       const Icon = icons[route.icon];
       return {
         path: route.path,
-        name: route.title,
+        name: route.i18nKey ? rawT(route.i18nKey) : route.title,
         icon: Icon ? <Icon /> : null,
         routes: generateDeepRoutes(route?.children),
       };
@@ -40,7 +40,6 @@ const Admin: React.FC<{ element: React.ReactNode }> = ({ element }) => {
   const { menus, theme } = useSystemStore();
   const location = useLocation();
   const navigate = useNavigate();
-  const t = useT();
 
   const routes = useMemo(() => {
     return generateDeepRoutes(menus);

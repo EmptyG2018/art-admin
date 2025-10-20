@@ -1,4 +1,17 @@
 export default {
+  'page.login.captcha.getCaptchaText': '重新获取',
+  'page.login.success': '登录成功！',
+  'page.login.error': '登录失败，请重试！',
+  'page.login.subTitle': 'ART Admin 是开箱即用的中后台解决方案',
+  'page.login.tab.accountLogin': '账户密码登录',
+  'page.login.tab.phoneLogin': '手机号登录（待开发）',
+  'page.login.field.user': '用户名',
+  'page.login.field.pswd': '密码',
+  'page.login.field.captcha': '验证码',
+  'page.login.field.captcha.rule': '验证码是必填项！',
+  'page.login.rememberMe': '自动登录',
+  'page.login.forgotPswd': '忘记密码',
+
   'page.user.group.base': '基本信息',
   'page.user.group.auth': '组织与权限信息',
   'page.user.field.id': '用户编号',
@@ -24,6 +37,7 @@ export default {
   'page.user.restPswd.update.loading': '正在重置',
   'page.user.restPswd.update.success': '重置成功',
   'page.user.restPswd.update.error': '重置失败请重试！',
+  'page.user.title': '用户',
 
   'page.role.field.id': '角色编号',
   'page.role.field.roleName': '角色名称',
@@ -43,6 +57,9 @@ export default {
   'page.role.cancelAuth.loading': '正在取消授权',
   'page.role.cancelAuth.success': '取消授权成功',
   'page.role.cancelAuth.error': '取消授权失败请重试',
+  'page.role.title': '角色',
+  'page.role.permissionData': '分配数据权限',
+  'page.role.selectUser': '选择用户',
 
   'page.menu.field.menuName': '菜单名称',
   'page.menu.field.menuIcon': '菜单图标',
@@ -61,6 +78,7 @@ export default {
   'page.menu.type.option.m': '目录',
   'page.menu.type.option.c': '菜单',
   'page.menu.type.option.f': '按钮',
+  'page.menu.title': '菜单',
 
   'page.dept.field.deptName': '部门名称',
   'page.dept.field.deptParent': '上级部门',
@@ -68,10 +86,12 @@ export default {
   'page.dept.field.phone': '联系电话',
   'page.dept.field.email': '邮箱',
   'page.dept.addChild': '新增子部门',
+  'page.dept.title': '部门',
 
   'page.post.field.id': '岗位编号',
   'page.post.field.postName': '岗位名称',
   'page.post.field.postKey': '岗位编码',
+  'page.post.title': '岗位',
 
   'page.dict.field.id': '字典编号',
   'page.dict.field.dictName': '字典名称',
@@ -90,6 +110,7 @@ export default {
   'page.dict.style.option.success': '成功(Success)',
   'page.dict.style.option.warning': '警告(Warning)',
   'page.dict.style.option.error': '错误(Error)',
+  'page.dict.title': '字典',
 
   'page.config.field.id': '参数主键',
   'page.config.field.configName': '参数名称',
@@ -97,11 +118,13 @@ export default {
   'page.config.field.configValue': '参数键值',
   'page.config.field.isSys': '系统内置',
   'page.config.refresh': '刷新缓存',
+  'page.config.title': '参数',
 
   'page.notice.field.order': '序号',
   'page.notice.field.title': '公告标题',
   'page.notice.field.type': '公告类型',
   'page.notice.field.content': '内容',
+  'page.notice.title': '通知公告',
 
   'page.operlog.field.id': '日志编号',
   'page.operlog.field.module': '系统模块',
@@ -119,6 +142,7 @@ export default {
   'page.operlog.field.req': '请求参数',
   'page.operlog.field.res': '响应结果',
   'page.operlog.clear': '清空日志',
+  'page.operlog.title': '操作日志',
 
   'page.logininfor.field.id': '访问编号',
   'page.logininfor.field.userName': '用户名称',
@@ -165,6 +189,7 @@ export default {
   'page.job.message.run.loading': '正在执行',
   'page.job.message.run.success': '执行成功',
   'page.job.message.run.error': '执行失败请重试！',
+  'page.job.title': '定时任务',
 
   'page.monitor.server.info': '服务器信息',
   'page.monitor.server.runTime': '已运行时长',

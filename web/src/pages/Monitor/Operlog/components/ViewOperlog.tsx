@@ -4,15 +4,16 @@ import { ProDescriptions } from '@ant-design/pro-components';
 import { rawT, useT, T } from '@/locales';
 import { queryDictsByType } from '@/services/dict';
 
-interface EditOperlogWrapperForm {
+interface ViewOperlogWrapperForm {
   values?: any;
 }
 
-interface EditOperlogForm extends EditOperlogWrapperForm {
+interface ViewOperlogForm extends ViewOperlogWrapperForm {
   trigger: JSX.Element;
 }
 
-const EditOperlogWrapperForm: React.FC<EditOperlogWrapperForm> = (props) => {
+const ViewOperlogWrapperForm: React.FC<ViewOperlogWrapperForm> = (props) => {
+  const t = useT();
   const { values } = props;
 
   return (
@@ -55,7 +56,7 @@ const EditOperlogWrapperForm: React.FC<EditOperlogWrapperForm> = (props) => {
         request={async () => {
           const res = await queryDictsByType('sys_common_status');
           return res.data.map((dict) => ({
-            label: dict.dictLabel,
+            label: dict.i18nKey ? t(dict.i18nKey) : dict.dictLabel,
             value: dict.dictValue,
           }));
         }}
@@ -84,7 +85,7 @@ const EditOperlogWrapperForm: React.FC<EditOperlogWrapperForm> = (props) => {
   );
 };
 
-const EditOperlogForm: React.FC<EditOperlogForm> = (props) => {
+const ViewOperlogForm: React.FC<ViewOperlogForm> = (props) => {
   const { trigger, ...rest } = props;
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -95,16 +96,21 @@ const EditOperlogForm: React.FC<EditOperlogForm> = (props) => {
       })}
       <Modal
         open={visible}
-        title="查看操作日志"
+        title={
+          <T
+            id="component.form.view"
+            values={{ title: <T id="page.operlog.title" /> }}
+          />
+        }
         width={800}
         footer={null}
         destroyOnHidden
         onCancel={() => setVisible(false)}
       >
-        <EditOperlogWrapperForm {...rest} />
+        <ViewOperlogWrapperForm {...rest} />
       </Modal>
     </>
   );
 };
 
-export default EditOperlogForm;
+export default ViewOperlogForm;

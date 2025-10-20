@@ -3,13 +3,14 @@ import type { AxiosRequestConfig } from 'axios';
 import cache from '@/utils/cache';
 import { tansParams } from '@/utils/parameter';
 import { Modal, message, notification } from 'antd';
+import { rawT } from '@/locales';
 
 // 是否显示重新登录
 export const isRelogin = { show: false };
 
 // 错误信息
 const ERROR_MESSAGES: Record<string, string> = {
-  '401': '认证失败，无法访问系统资源',
+  '401': rawT('layout.res.message.401'),
   '403': '当前操作没有权限',
   '404': '访问资源不存在',
   default: '系统未知错误，请反馈给管理员',
