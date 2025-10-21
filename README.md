@@ -151,6 +151,86 @@ yarn
 cd web && yarn
 ```
 
+## ⚙️ 项目配置
+
+### 1️⃣ 连接 MySQL 🐬
+
+默认数据库连接信息如下：
+
+- **主机地址**：`127.0.0.1:3306`
+- **用户名**：`root`
+- **密码**：`123456`
+
+> 🔐 **注意**：实际连接配置请以项目根目录下的 `.env` 文件为准，以上仅为开发环境默认值。
+
+### 2️⃣ 连接 Redis 🚀
+
+本项目依赖 Redis 用于缓存、会话管理或消息队列等场景，请确保 Redis 服务已启动并可正常访问。
+
+#### 默认连接配置（开发环境）
+
+- **主机**：`127.0.0.1`
+- **端口**：`6379`
+- **密码**：无（如需密码，请在配置文件中设置）
+
+> **配置位置**：  
+> `src/config/config.dev.ts`（开发环境）  
+> `src/config/config.prod.ts`（生产环境）
+
+> 请勿在生产环境使用默认无密码配置。
+
+### 3️⃣ 创建数据库
+
+本项目使用 Prisma ORM，需创建 **主数据库** 和 **影子数据库（Shadow Database）**：
+
+#### ✅ 主数据库（运行时使用）
+
+- **名称**：`art-admin`
+- **字符集**：`utf8mb4`
+- **排序规则**：`utf8mb4_unicode_ci`
+
+#### 🌫️ 影子数据库（仅开发阶段使用）
+
+- **名称**：建议命名为 `art-admin-shadow`（或其他独立名称）
+- **用途**：Prisma Migrate 在开发时用于安全地预演和校验迁移脚本，**必须为空库**
+- **字符集与排序规则**：同样使用 `utf8mb4` / `utf8mb4_unicode_ci`
+
+> 💡 **说明**：
+>
+> - 影子数据库**不会存储真实数据**，仅用于迁移流程中的临时比对。
+> - 在 `.env` 文件中需分别配置 `DATABASE_URL`（主库）和 `SHADOW_DATABASE_URL`（影子库）。
+> - 生产环境部署时，**无需影子数据库**。
+
+### 4️⃣ 生成 Prisma 客户端
+
+在项目根目录下运行以下命令，基于 `prisma/schema.prisma` 中的模型定义，自动生成类型安全的 Prisma Client：
+
+```bash
+yarn db:g
+# 或
+npm run db:g
+```
+
+### 5️⃣ 执行数据库迁移 🔄
+
+在项目根目录下运行以下命令，将 `schema.prisma` 中定义的数据模型同步到数据库，并生成名为 `inte` 的迁移记录：
+
+```bash
+yarn db:m
+# 或
+npm run db:m
+```
+
+### 6️⃣ 初始化种子数据 🌱
+
+项目提供了种子（seed）脚本，用于向数据库中写入初始数据（如管理员账号、基础配置等）。
+
+在项目根目录下执行以下命令，运行种子脚本：
+
+```bash
+yarn db:seed
+```
+
 ## 🎮 启动服务
 
 ```bash
@@ -172,70 +252,6 @@ cd web && npm run dev
 > ⚠️ 温馨提示：
 >
 > - 生产环境请务必修改默认密码！
-
-## 运行系统
-
-### 后端运行
-
-- 前往 github 下载页面 (ART管理系统) 进行代码拉取。
-- 拉去代码里面包含 React 的前端项目和 nestjs 的后端项目。
-- 分别进入对应项目进行依赖包的安装。yarn 或者 npm install
-- 创建数据库并命名 admin-prisma （排序：utf8mb4_unicode_ci）
-- 执行在后端程序根目录下执行 yarn db:g （prisma 根据模型层生成数据库脚本文件，可在 prisma 官网查询运行部署）
-- 执行初始化数据库文件(根目录下的 admin-prisma.sql)
-- 修改数据库连接，编辑后端项目根目录下的 .env 文件。 DATABASE_URL 是数据库地址，SHADOW_DATABASE_URL 是影子数据库地址（prisma 开发阶段使用的，是个空库就行了）。
-- 启动你的 redis（该项目必须要使用 redis）。
-- 修改后端项目中 src/config/config.dev.ts 你可以在里面更改运行的端口，redis 连接等信息 （里面备注写的非常清楚）。
-- 修改前端项目根目录下的 vite.config.ts 文件，修改 server 配前你需要的前端代理。
-- 前后端均使用 npm dev 或者 yarn dev 进行运行。
-
-### 具体操作
-
-修改数据库配置，编辑后端项目下 .env 文件
-
-```
-  # 文件下的内容会被nest-config自动加载进入环境变量中
-  # 运行环境
-    NODE_ENV="development"
-  # NODE_ENV="production"
-  # 操作的数据库   //  connection_limit=20设置20个连接池 ，pool_timeout=0 禁用连接池超时
-  # 示例       mysql://账号:密码@ip:端口/数据库名称?connection_limit=连接池数量&pool_timeout=连接超时时间(0表示一直等待)
-              # mysql://root:123456@127.0.0.1:3306/admin-prisma?connection_limit=20&pool_timeout=0
-  DATABASE_URL="mysql://root:123456@127.0.0.1:3306/admin-prisma?connection_limit=20&pool_timeout=0"
-
-  # 影子数据库是第二个临时数据库，每次运行 prisma migrate dev 时都会自动创建和删除*，主要用于检测问题，例如架构偏移或生成的迁移的潜在数据丢失。
-  SHADOW_DATABASE_URL="mysql://test_db:123456@203.25.211.232:3306/test_db"
-```
-
-修改 redis 连接，编辑后端项目下 src/config/config.dev.ts
-
-```
-<!-- 缓存redis -->
-  redis: {
-    host: 'localhost',
-    port: '6379',
-    password: '123456',
-    db: 0,
-  },
-```
-
-修改前端代理，编辑前端项目下 vite.config.ts
-
-```
-    server: {
-      port: 80,
-      host: true,
-      open: true,
-      proxy: {
-        // https://cn.vitejs.dev/config/#server-proxy
-        "/dev-api": {
-          target: "http://127.0.0.1:3000",
-          changeOrigin: true,
-          rewrite: (p) => p.replace(/^\/dev-api/, ""),
-        },
-      },
-    },
-```
 
 ## 📄 许可证
 
