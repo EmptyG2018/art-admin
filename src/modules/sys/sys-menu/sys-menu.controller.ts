@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-12 17:35:00
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-13 20:41:54
- * @FilePath: /art-admin/src/modules/sys/sys-menu/sys-menu.controller.ts
- * @Description:
- *
- */
 import {
   Body,
   Controller,

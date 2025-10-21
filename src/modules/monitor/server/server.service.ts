@@ -1,13 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-17 19:47:46
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-18 11:19:08
- * @FilePath: /art-admin/src/modules/monitor/server/server.service.ts
- * @Description: 系统信息
- *
- */
-
 import { Injectable } from '@nestjs/common';
 import * as systeminformation from 'systeminformation';
 @Injectable()
@@ -60,7 +50,7 @@ export class ServerService {
   async getNode() {
     const { version, execPath, argv, uptime, cwd } = process;
     return {
-      title: "Node",
+      title: 'Node',
       version,
       execPath,
       argv: argv.slice(2).join(','),

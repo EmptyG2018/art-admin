@@ -1,13 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-27 22:07:09
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-11 22:45:01
- * @FilePath: /art-admin/src/modules/monitor/login-infor/dto/res-login-infor.dto.ts
- * @Description:
- *
- */
-
 import { AddLoginInforDto } from './req-login-infor.dto';
 
 export class ExportLoginInforDto extends AddLoginInforDto {}

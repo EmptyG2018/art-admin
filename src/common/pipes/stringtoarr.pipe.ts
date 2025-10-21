@@ -1,16 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-10 16:02:38
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-10 16:57:05
- * @FilePath: \art-admin\src\common\pipes\stringtoarr.pipe.ts
- * @Description: 将 ‘,’ 拼接的字符串转化为数组
- *
- */
-/*
-https://docs.nestjs.com/pipes
-*/
-
 import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 
 /* 该管道必须手动实例化 */

@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-11 10:34:07
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-11 10:40:28
- * @FilePath: \art-admin\src\modules\sys\sys-notice\dto\req-sys-notice.dto.ts
- * @Description:
- *
- */
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { DataBaseDto } from 'src/common/dto/data-base.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';

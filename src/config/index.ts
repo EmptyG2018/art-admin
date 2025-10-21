@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-22 19:22:42
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-04-22 21:13:53
- * @FilePath: /art-admin/src/config/index.ts
- * @Description: 环境变量入口
- * 
- */
 /**
  * 导出配置文件
  */

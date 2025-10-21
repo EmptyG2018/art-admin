@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-16 22:31:04
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-16 22:39:53
- * @FilePath: /art-admin/src/modules/monitor/job/job.module.ts
- * @Description: 
- * 
- */
 import { JobService } from './job.service';
 import { JobController } from './job.controller';
 import { Module } from '@nestjs/common';

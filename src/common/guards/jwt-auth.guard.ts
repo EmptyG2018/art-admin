@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-23 15:21:54
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-18 10:16:13
- * @FilePath: /art-admin/src/common/guards/jwt-auth.guard.ts
- * @Description: jwt 校验守卫
- *
- */
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';

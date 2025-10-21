@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-23 19:15:56
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-15 23:16:35
- * @FilePath: /art-admin/src/modules/auth/auth.module.ts
- * @Description:
- *
- */
 import { forwardRef, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';

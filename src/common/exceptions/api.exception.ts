@@ -1,12 +1,3 @@
-/*
- * @Author: Sheng.Jiang
- * @Date: 2021-12-08 19:28:34
- * @LastEditTime: 2022-09-18 11:07:37
- * @LastEditors: Please set LastEditors
- * @Description: 自定义异常
- * @FilePath: /art-admin/src/common/exceptions/api.exception.ts
- * You can you up，no can no bb！！
- */
 import { HttpException } from '@nestjs/common';
 
 export class ApiException extends HttpException {

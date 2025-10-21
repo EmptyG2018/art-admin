@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-22 19:22:42
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-04-24 09:57:22
- * @FilePath: \art-admin\src\config\config.dev.ts
- * @Description: 开发环境配置文件
- *
- */
 export default {
   /**
    * 由于prisma工具的特殊性，每次部署都需要重新生成

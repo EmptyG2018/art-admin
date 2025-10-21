@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-17 14:16:02
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-17 14:48:03
- * @FilePath: \art-admin\src\modules\monitor\server\server.controller.ts
- * @Description:
- *
- */
 import { Controller, Get } from '@nestjs/common';
 import { DataObj } from 'src/common/class/data-obj.class';
 import { ServerService } from './server.service';

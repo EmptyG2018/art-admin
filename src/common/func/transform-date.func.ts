@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-28 23:24:32
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-04-28 23:25:38
- * @FilePath: /art-admin/src/common/func/transform-date.func.ts
- * @Description: 讲时间段转化为符合数据库查询使用的格式
- *
- */
 import dayjs from 'dayjs';
 import { ParamsDto } from '../dto/params.dto';
 

@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-16 19:10:45
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-16 20:06:39
- * @FilePath: /art-admin/src/common/type/data-scope.type.ts
- * @Description: 
- * 
- */
 export type DataScope = {
   deptIds: number[] | undefined;
   userName: string | undefined;

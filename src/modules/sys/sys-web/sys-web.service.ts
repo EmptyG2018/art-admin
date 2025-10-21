@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-17 15:45:25
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-17 20:07:11
- * @FilePath: /art-admin/src/modules/sys/sys-web/sys-web.service.ts
- * @Description:
- *
- */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import Redis from 'ioredis';

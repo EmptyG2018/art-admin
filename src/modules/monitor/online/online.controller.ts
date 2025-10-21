@@ -1,21 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-16 16:11:52
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-18 15:53:39
- * @FilePath: /art-admin/src/modules/monitor/online/online.controller.ts
- * @Description:
- *
- */
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-16 16:11:52
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-16 17:01:09
- * @FilePath: \art-admin\src\modules\monitor\online\online.controller.ts
- * @Description:
- *
- */
 import { Controller, Delete, Get, Param, Query } from '@nestjs/common';
 import { OnlineService } from './online.service';
 import { RequiresPermissions } from 'src/common/decorators/requires-permissions.decorator';

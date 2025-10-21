@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-27 21:55:32
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-11 16:13:31
- * @FilePath: \art-admin\src\modules\monitor\oper-log\oper-log.service.ts
- * @Description: 接口访问日志
- *
- */
 import { Inject, Injectable } from '@nestjs/common';
 import { AddOperLogDto, GetOperLogListDto } from './dto/req-oper-log.dto';
 import { CustomPrismaService, PrismaService } from 'nestjs-prisma';

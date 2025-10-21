@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-30 14:43:37
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-15 15:29:44
- * @FilePath: \art-admin\src\modules\common\excel\excel.decorator.ts
- * @Description: 
- * 
- */
 import 'reflect-metadata';
 import { ExcelOption } from './excel.interface';
 import { EXCEL_ARR_KRY } from './excel.constant';

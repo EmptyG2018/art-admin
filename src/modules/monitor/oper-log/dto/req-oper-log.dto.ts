@@ -1,13 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-27 22:07:09
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-11 16:41:52
- * @FilePath: \art-admin\src\modules\monitor\oper-log\dto\req-oper-log.dto.ts
- * @Description:
- *
- */
-
 import { Transform } from 'class-transformer';
 import { IsObject, IsOptional, IsString } from 'class-validator';
 import { PaginationDto } from 'src/common/dto/pagination.dto';

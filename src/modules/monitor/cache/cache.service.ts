@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-17 11:07:14
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-17 13:52:03
- * @FilePath: \art-admin\src\modules\monitor\cache\cache.service.ts
- * @Description:
- *
- */
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { Injectable } from '@nestjs/common';
 import Redis from 'ioredis';

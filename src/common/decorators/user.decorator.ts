@@ -1,13 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-23 15:27:19
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-16 11:32:35
- * @FilePath: \art-admin\src\common\decorators\user.decorator.ts
- * @Description: 参数获取用户信息装饰器
- *
- */
-
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { UserInfo } from '../type/user-info.type';
 

@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-11 13:32:00
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-18 10:27:01
- * @FilePath: /art-admin/src/modules/sys/sys-role/sys-role.service.ts
- * @Description:
- *
- */
 import { Inject, Injectable } from '@nestjs/common';
 import { CustomPrismaService, PrismaService } from 'nestjs-prisma';
 import { ExtendedPrismaClient } from 'src/shared/prisma/prisma.extension';

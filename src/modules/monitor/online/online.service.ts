@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-17 19:47:46
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-19 00:12:04
- * @FilePath: /meimei-nestjs-admin/admin-prisma-vue3/art-admin/src/modules/monitor/online/online.service.ts
- * @Description: 
- * 
- */
 import { Injectable } from '@nestjs/common';
 import { OnlineList } from './dto/req-online.dto';
 import { InjectRedis } from '@nestjs-modules/ioredis';

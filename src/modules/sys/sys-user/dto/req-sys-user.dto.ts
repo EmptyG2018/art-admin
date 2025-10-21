@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-13 16:22:47
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-15 17:02:32
- * @FilePath: \art-admin\src\modules\sys\sys-user\dto\req-sys-user.dto.ts
- * @Description:
- *
- */
 import { OmitType } from '@nestjs/mapped-types';
 import { Transform, Type } from 'class-transformer';
 import {
@@ -171,7 +162,7 @@ export class UpdataSelfDto {
 export class UpdateSelfPwd {
   /* 用户ID */
   userId?: number;
-  
+
   /* 旧密码 */
   @IsString()
   oldPassword: string;

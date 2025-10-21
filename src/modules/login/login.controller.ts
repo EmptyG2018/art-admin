@@ -1,13 +1,3 @@
-/*
- * @Author: Sheng.Jiang
- * @Date: 2021-12-08 18:30:39
- * @LastEditTime: 2024-05-17 17:08:30
- * @LastEditors: yun.ze 491623426@qq.com
- * @Description: 登录 controller
- * @FilePath: \art-admin\src\modules\login\login.controller.ts
- * You can you up，no can no bb！！
- */
-
 import {
   Body,
   Controller,

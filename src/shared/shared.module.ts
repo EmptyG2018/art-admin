@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-23 08:48:10
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-17 14:06:02
- * @FilePath: \art-admin\src\shared\shared.module.ts
- * @Description: 系统工具模块
- *
- */
 import { Global, Module, ValidationPipe } from '@nestjs/common';
 import { SharedService } from './shared.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';

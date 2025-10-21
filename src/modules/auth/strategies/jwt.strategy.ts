@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-24 08:35:55
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-04-24 11:35:05
- * @FilePath: \art-admin\src\modules\auth\strategies\jwt.strategy.ts
- * @Description:
- *
- */
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';

@@ -1,12 +1,3 @@
-/*
- * @Author: Sheng.Jiang
- * @Date: 2021-12-09 14:30:28
- * @LastEditTime: 2024-05-12 16:53:25
- * @LastEditors: yun.ze 491623426@qq.com
- * @Description: 登录守卫 ，可进行登录日志记录
- * @FilePath: /art-admin/src/common/guards/local-auth.guard.ts
- * You can you up，no can no bb！！
- */
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';

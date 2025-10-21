@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-11 14:49:47
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-11 23:20:22
- * @FilePath: /art-admin/src/modules/monitor/oper-log/oper-log.controller.ts
- * @Description:
- *
- */
 import {
   Body,
   Controller,

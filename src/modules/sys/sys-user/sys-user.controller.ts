@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-20 13:39:36
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-06-27 10:42:21
- * @FilePath: \admin-prisma-vue3\art-admin\src\modules\sys\sys-user\sys-user.controller.ts
- * @Description:
- *
- */
 import {
   Body,
   Controller,

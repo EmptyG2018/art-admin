@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-04-27 21:52:47
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-11 23:04:43
- * @FilePath: /art-admin/src/modules/monitor/monitor.module.ts
- * @Description: 系统管理模块
- *
- */
 import { Module } from '@nestjs/common';
 import { OperLogModule } from './oper-log/oper-log.module';
 import { LoginInforModule } from './login-infor/login-infor.module';

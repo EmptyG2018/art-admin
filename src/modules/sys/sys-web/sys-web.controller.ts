@@ -1,12 +1,3 @@
-/*
- * @Author: yun.ze 491623426@qq.com
- * @Date: 2024-05-17 19:47:46
- * @LastEditors: yun.ze 491623426@qq.com
- * @LastEditTime: 2024-05-17 20:00:47
- * @FilePath: /art-admin/src/modules/sys/sys-web/sys-web.controller.ts
- * @Description:
- *
- */
 import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { SysWebService } from './sys-web.service';
 import { User, UserEnum } from 'src/common/decorators/user.decorator';
